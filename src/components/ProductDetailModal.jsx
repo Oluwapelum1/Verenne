@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Star, Minus, Plus, Heart, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { PRODUCTS, categoryOf, getProduct } from '../data';
-import { EASE, ProductImage, AnimatedPrice, PillButton, TextureBlob } from './ui';
+import { EASE, ProductImage, AnimatedPrice, PillButton, TextureBlob, resolveAsset } from './ui';
 import { lockScroll } from '../lib/scroll';
 
 /**
@@ -85,7 +85,7 @@ function Dossier({ product, onClose, onSwitch }) {
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <img src={product.portrait} alt={`${product.fullName} on skin`} className="h-full w-full object-cover" />
+                    <img src={resolveAsset(product.portrait)} alt={`${product.fullName} on skin`} className="h-full w-full object-cover" />
                   )}
                 </motion.div>
               </AnimatePresence>
@@ -96,7 +96,7 @@ function Dossier({ product, onClose, onSwitch }) {
                   style={{
                     left: `${zoom.x}%`,
                     top: `${zoom.y}%`,
-                    backgroundImage: `url(${product.image}.webp)`,
+                    backgroundImage: `url(${resolveAsset(product.image)}.webp)`,
                     backgroundSize: '300%',
                     backgroundPosition: `${zoom.x}% ${zoom.y}%`
                   }}

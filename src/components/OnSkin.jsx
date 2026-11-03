@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ShoppingBag, Check, ArrowRight, ArrowLeft, Droplets, ShieldCheck, Clock, Plus } from 'lucide-react';
 import { PRODUCTS, getProduct } from '../data';
 import { useCart } from '../context/CartContext';
-import { EASE, PillButton, AnimatedPrice } from './ui';
+import { EASE, PillButton, AnimatedPrice, resolveAsset } from './ui';
 
 /**
  * Haute Editorial Lookbook & Shoppable Campaign Exhibition
@@ -195,7 +195,7 @@ export default function OnSkin({ onOpenProduct }) {
                   className="relative z-10 w-60 sm:w-80 h-72 sm:h-96 flex items-center justify-center select-none"
                 >
                   <img
-                    src={`${prod.image}-600.webp`}
+                    src={`${resolveAsset(prod.image)}-600.webp`}
                     alt={prod.name}
                     className="w-full h-full object-contain drop-shadow-[0_28px_45px_rgba(0,0,0,0.45)] pointer-events-none"
                     loading="lazy"

@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Sparkles, Activity, Sun, Droplets, ShieldCheck, Box } from 'lucide-react';
 import GlassScene from './three/GlassScene';
 import { getProduct } from '../data';
+import { resolveAsset } from './ui';
 
 /**
  * HeroCommercialAdStage
@@ -27,8 +28,8 @@ export default function HeroCommercialAdStage({ onExplore }) {
       name: 'N°01 Éclat Sauvage',
       category: 'Active Botanical Serum',
       tint: '#D97706',
-      image: '/products/eclat-sauvage.webp',
-      srcset: '/products/eclat-sauvage-320.webp 320w, /products/eclat-sauvage-600.webp 600w, /products/eclat-sauvage.webp 1024w',
+      image: resolveAsset('/products/eclat-sauvage.webp'),
+      srcset: `${resolveAsset('/products/eclat-sauvage-320.webp')} 320w, ${resolveAsset('/products/eclat-sauvage-600.webp')} 600w, ${resolveAsset('/products/eclat-sauvage.webp')} 1024w`,
       modelSubtitle: 'Warm Travertine Light · Dew Drop Application',
       clinicalProof: 'CLINICAL EFFICACY · 100% CLEAN BIO-BOTANICAL',
       keyBenefitStat: '+94%',
@@ -39,8 +40,8 @@ export default function HeroCommercialAdStage({ onExplore }) {
       name: 'N°04 Sève Dorée',
       category: 'Nocturnal Alchemy Oil',
       tint: '#7B5CC4',
-      image: '/products/seve-doree.webp',
-      srcset: '/products/seve-doree-320.webp 320w, /products/seve-doree-600.webp 600w, /products/seve-doree.webp 1024w',
+      image: resolveAsset('/products/seve-doree.webp'),
+      srcset: `${resolveAsset('/products/seve-doree-320.webp')} 320w, ${resolveAsset('/products/seve-doree-600.webp')} 600w, ${resolveAsset('/products/seve-doree.webp')} 1024w`,
       modelSubtitle: 'Moroccan Blue Tansy & Bakuchiol Infusion',
       clinicalProof: 'NOCTURNAL RECOVERY · 0% SYNTHETIC RETINOL',
       keyBenefitStat: '+98%',
@@ -51,8 +52,8 @@ export default function HeroCommercialAdStage({ onExplore }) {
       name: 'N°03 Brume Botanique',
       category: 'Alpine Floral Dew Mist',
       tint: '#E5C396',
-      image: '/products/brume-botanique.webp',
-      srcset: '/products/brume-botanique-320.webp 320w, /products/brume-botanique-600.webp 600w, /products/brume-botanique.webp 1024w',
+      image: resolveAsset('/products/brume-botanique.webp'),
+      srcset: `${resolveAsset('/products/brume-botanique-320.webp')} 320w, ${resolveAsset('/products/brume-botanique-600.webp')} 600w, ${resolveAsset('/products/brume-botanique.webp')} 1024w`,
       modelSubtitle: 'Copper-Still Distilled Orange Blossom & Rose',
       clinicalProof: 'IMMEDIATE QUENCH · 100% SINGLE-STILL HYDROSOL',
       keyBenefitStat: '+64%',
@@ -63,8 +64,8 @@ export default function HeroCommercialAdStage({ onExplore }) {
       name: 'N°02 Baume Résineux',
       category: 'Restorative Barrier Salve',
       tint: '#BC7C45',
-      image: '/products/baume-resineux.webp',
-      srcset: '/products/baume-resineux-320.webp 320w, /products/baume-resineux-600.webp 600w, /products/baume-resineux.webp 1024w',
+      image: resolveAsset('/products/baume-resineux.webp'),
+      srcset: `${resolveAsset('/products/baume-resineux-320.webp')} 320w, ${resolveAsset('/products/baume-resineux-600.webp')} 600w, ${resolveAsset('/products/baume-resineux.webp')} 1024w`,
       modelSubtitle: 'Sacred Somali Frankincense & 5 Plant Ceramides',
       clinicalProof: 'PHYSIOLOGICAL BARRIER · SUB-ZERO SHIELD',
       keyBenefitStat: '+72%',

@@ -4,9 +4,19 @@ import { useCart } from '../context/CartContext';
 
 export const EASE = [0.16, 1, 0.3, 1];
 
+/** Safely prepends Vite's base path for GitHub Pages and subfolder hosting */
+export function resolveAsset(path) {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) return path;
+  const baseUrl = import.meta.env.BASE_URL || '/';
+  const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${cleanBase}${cleanPath}`;
+}
+
 /** Responsive product photo (webp 320/600/full) */
 export function ProductImage({ product, className = '', sizes = '(max-width: 768px) 60vw, 30vw', eager = false, alt }) {
-  const base = product.image;
+  const base = resolveAsset(product.image);
   return (
     <img
       src={`${base}-600.webp`}
