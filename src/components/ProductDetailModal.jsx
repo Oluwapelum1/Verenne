@@ -1,10 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, Star, Minus, Plus, Heart, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { PRODUCTS, categoryOf, getProduct } from '../data';
 import { EASE, ProductImage, AnimatedPrice, PillButton, TextureBlob, resolveAsset } from './ui';
 import { lockScroll } from '../lib/scroll';
+
+const GlassScene = lazy(() => import('./three/GlassScene'));
+
+// The bottle is opt-in, and only offered where it can run smoothly
+function supports3D() {
+  if ((navigator.hardwareConcurrency || 8) < 4) return false;
+  try {
+    const canvas = document.createElement('canvas');
+    return Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+  } catch {
+    return false;
+  }
+}
+
+class SceneBoundary extends React.Component {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
 
 /**
  * Product dossier — a full-height sheet. Left: the photograph with a pointer-driven
@@ -25,6 +50,8 @@ function Dossier({ product, onClose, onSwitch }) {
   const [view, setView] = useState('product');
   const [zoom, setZoom] = useState(null);
   const closeRef = useRef(null);
+  const reduced = useReducedMotion();
+  const [can3D] = useState(supports3D);
   const size = product.sizes[sizeIdx];
   const cat = categoryOf(product.id);
   const pairs = PRODUCTS.filter((p) => p.id !== product.id && p.moment === product.moment).slice(0, 2);
@@ -51,7 +78,7 @@ function Dossier({ product, onClose, onSwitch }) {
       <motion.div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
 
       <motion.div
-        className="absolute inset-x-0 bottom-0 top-3 overflow-hidden rounded-t-[32px] border-t border-[var(--border-strong)] bg-[var(--bg-primary)] sm:inset-x-3 sm:top-6"
+        className="absolute inset-x-0 bottom-0 top-3 overflow-hidden rounded-none border-t border-[var(--border-strong)] bg-[var(--bg-primary)] sm:inset-x-3 sm:top-6"
         initial={{ y: '100%' }}
         animate={{ y: 0 }}
         exit={{ y: '100%' }}
@@ -61,7 +88,7 @@ function Dossier({ product, onClose, onSwitch }) {
           ref={closeRef}
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 z-20 flex h-10 items-center gap-2 rounded-full bg-[var(--text-primary)] px-4 text-[12px] text-[var(--accent-ink)]"
+          className="absolute right-4 top-4 z-20 flex h-10 items-center gap-2 rounded-none bg-[var(--text-primary)] px-4 text-[12px] text-[var(--accent-ink)]"
         >
           <X className="h-3.5 w-3.5" /> Close
         </button>
@@ -73,7 +100,6 @@ function Dossier({ product, onClose, onSwitch }) {
               className="absolute inset-0 overflow-hidden"
               onPointerMove={view === 'product' ? onMove : undefined}
               onPointerLeave={() => setZoom(null)}
-              data-cursor={view === 'product' ? 'Zoom' : undefined}
             >
               <AnimatePresence mode="wait">
                 <motion.div key={view} className="absolute inset-0" initial={{ opacity: 0, scale: 1.05 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.7, ease: EASE }}>
@@ -84,6 +110,15 @@ function Dossier({ product, onClose, onSwitch }) {
                       sizes="50vw"
                       className="h-full w-full object-cover"
                     />
+                  ) : view === '3d' ? (
+                    <div className="absolute inset-0 touch-none cursor-grab active:cursor-grabbing">
+                      <SceneBoundary fallback={<ProductImage product={product} eager sizes="50vw" className="h-full w-full object-cover" />}>
+                        <Suspense fallback={<p className="grid h-full place-items-center text-[15px] text-[var(--text-secondary)]">Loading bottle</p>}>
+                          <GlassScene product={product} />
+                        </Suspense>
+                      </SceneBoundary>
+                      <p className="pointer-events-none absolute left-5 top-5 text-[14px] text-[var(--text-secondary)]">Drag to rotate</p>
+                    </div>
                   ) : (
                     <img src={resolveAsset(product.portrait)} alt={`${product.fullName} on skin`} className="h-full w-full object-cover" />
                   )}
@@ -107,13 +142,14 @@ function Dossier({ product, onClose, onSwitch }) {
             <div className="absolute bottom-5 left-5 flex gap-2">
               {[
                 ['product', 'Bottle'],
-                ['portrait', 'On skin']
+                ['portrait', 'On skin'],
+                ...(can3D && !reduced ? [['3d', 'View in 3D']] : [])
               ].map(([id, l]) => (
                 <button
                   key={id}
                   type="button"
                   onClick={() => setView(id)}
-                  className={`rounded-full px-4 py-2 text-[12px] backdrop-blur-md transition-colors ${view === id ? 'bg-white text-black' : 'bg-black/40 text-white hover:bg-black/60'}`}
+                  className={`rounded-none px-4 py-2 text-[12px] backdrop-blur-md transition-colors ${view === id ? 'bg-white text-black' : 'bg-black/40 text-white hover:bg-black/60'}`}
                 >
                   {l}
                 </button>
@@ -147,12 +183,12 @@ function Dossier({ product, onClose, onSwitch }) {
 
             {/* Specs row */}
             <div className="mt-6 grid grid-cols-2 gap-2 border-y border-[var(--border-subtle)] py-4 text-center">
-              <div className="rounded-xl bg-[var(--bg-secondary)]/70 p-2.5">
-                <span className="label block text-[9px]">pH Balance</span>
+              <div className="rounded-none bg-[var(--bg-secondary)]/70 p-2.5">
+                <span className="label block text-[12px]">pH Balance</span>
                 <span className="font-mono text-sm text-[var(--accent)] block mt-0.5">{product.ph || '5.2'}</span>
               </div>
-              <div className="rounded-xl bg-[var(--bg-secondary)]/70 p-2.5">
-                <span className="label block text-[9px]">Finish</span>
+              <div className="rounded-none bg-[var(--bg-secondary)]/70 p-2.5">
+                <span className="label block text-[12px]">Finish</span>
                 <span className="font-mono text-sm text-[var(--text-primary)] block mt-0.5">{product.finish}</span>
               </div>
             </div>
@@ -160,7 +196,7 @@ function Dossier({ product, onClose, onSwitch }) {
             <p className="mt-6 max-w-lg text-[16px] leading-relaxed text-[var(--text-secondary)]">{product.description}</p>
 
             {/* Buy box */}
-            <div className="mt-8 rounded-2xl border border-[var(--border-subtle)] p-5">
+            <div className="mt-8 rounded-none border border-[var(--border-subtle)] p-5">
               <div className="flex items-center justify-between">
                 <div className="flex gap-2" role="radiogroup" aria-label="Size">
                   {product.sizes.map((s, i) => (
@@ -170,7 +206,7 @@ function Dossier({ product, onClose, onSwitch }) {
                       role="radio"
                       aria-checked={i === sizeIdx}
                       onClick={() => setSizeIdx(i)}
-                      className={`rounded-full border px-4 py-2 font-mono text-[11px] transition-colors ${
+                      className={`rounded-none border px-4 py-2 font-mono text-[11px] transition-colors ${
                         i === sizeIdx ? 'border-[var(--text-primary)]' : 'border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-strong)]'
                       }`}
                     >
@@ -211,7 +247,7 @@ function Dossier({ product, onClose, onSwitch }) {
                   <Heart className={`h-4 w-4 ${isWishlisted(product.id) ? 'fill-[var(--accent)] text-[var(--accent)]' : ''}`} />
                 </button>
               </div>
-              <p className="label mt-4">Free delivery over $120 · 30-day returns, even opened</p>
+              <p className="label mt-4">Free delivery over $150 · 30-day returns, even opened</p>
             </div>
 
             {/* Specs */}
@@ -230,7 +266,7 @@ function Dossier({ product, onClose, onSwitch }) {
                 <dt className="label">Key botanicals</dt>
                 <dd className="mt-3 flex flex-wrap gap-2">
                   {product.keyIngredients.map((k) => (
-                    <span key={k} className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-[13px]">
+                    <span key={k} className="rounded-none border border-[var(--border-subtle)] px-3 py-1 text-[13px]">
                       {k}
                     </span>
                   ))}
@@ -255,7 +291,7 @@ function Dossier({ product, onClose, onSwitch }) {
 
             {/* Botanical Synergy Protocol */}
             {product.synergy && (
-              <div className="mt-8 rounded-2xl border border-[var(--border-strong)] bg-[var(--bg-secondary)]/50 p-4">
+              <div className="mt-8 rounded-none border border-[var(--border-strong)] bg-[var(--bg-secondary)]/50 p-4">
                 <div className="flex items-center justify-between">
                   <span className="label flex items-center gap-1.5 text-[var(--accent)]">
                     <Sparkles className="h-3 w-3" /> Recommended Protocol Partner
@@ -274,7 +310,7 @@ function Dossier({ product, onClose, onSwitch }) {
                       setTimeout(() => addToCart(pair, null, 1, null), 150);
                       onClose();
                     }}
-                    className="mt-3 flex items-center justify-between w-full rounded-full border border-[var(--border-strong)] bg-[var(--bg-surface)] px-4 py-2.5 text-[11px] font-mono uppercase tracking-wider text-[var(--text-primary)] transition-all hover:bg-[var(--text-primary)] hover:text-[var(--accent-ink)]"
+                    className="mt-3 flex items-center justify-between w-full rounded-none border border-[var(--border-strong)] bg-[var(--bg-surface)] px-4 py-2.5 text-[11px] font-mono uppercase tracking-wider text-[var(--text-primary)] transition-all hover:bg-[var(--text-primary)] hover:text-[var(--accent-ink)]"
                   >
                     <span>Add {product.name} + {getProduct(product.synergy.pairId).name} Duo</span>
                     <span>${Math.round((size.price + getProduct(product.synergy.pairId).price) * 0.9)}</span>
@@ -288,8 +324,8 @@ function Dossier({ product, onClose, onSwitch }) {
               <p className="label">Pairs well with</p>
               <div className="mt-4 grid grid-cols-2 gap-3">
                 {others.map((p) => (
-                  <button key={p.id} type="button" onClick={() => onSwitch(p)} className="group flex items-center gap-3 rounded-2xl border border-[var(--border-subtle)] p-2 text-left transition-colors hover:border-[var(--border-strong)]">
-                    <img src={`${resolveAsset(p.image)}-320.webp`} alt={p.name} className="h-16 w-14 rounded-t-full rounded-b-lg object-cover" loading="lazy" />
+                  <button key={p.id} type="button" onClick={() => onSwitch(p)} className="group flex items-center gap-3 rounded-none border border-[var(--border-subtle)] p-2 text-left transition-colors hover:border-[var(--border-strong)]">
+                    <img src={`${resolveAsset(p.image)}-320.webp`} alt={p.name} className="h-16 w-14 rounded-none object-cover" loading="lazy" />
                     <span>
                       <span className="block font-serif text-lg leading-tight group-hover:italic">{p.name}</span>
                       <span className="font-mono text-[11px] text-[var(--text-muted)]">${p.price}</span>

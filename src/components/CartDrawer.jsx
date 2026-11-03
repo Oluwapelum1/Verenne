@@ -43,7 +43,7 @@ function Drawer({ onClose }) {
     <div className="fixed inset-0 z-[170]" role="dialog" aria-modal="true" aria-label="Shopping bag">
       <motion.div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
       <motion.aside
-        className="absolute bottom-2 right-2 top-2 flex w-[calc(100%-1rem)] max-w-md flex-col overflow-hidden rounded-[28px] border border-[var(--border-strong)] bg-[var(--bg-primary)]"
+        className="absolute bottom-2 right-2 top-2 flex w-[calc(100%-1rem)] max-w-md flex-col overflow-hidden rounded-none border border-[var(--border-strong)] bg-[var(--bg-primary)]"
         initial={{ x: '110%' }}
         animate={{ x: 0 }}
         exit={{ x: '110%' }}
@@ -97,7 +97,7 @@ function Drawer({ onClose }) {
                   <AnimatePresence initial={false}>
                     {cart.map((item) => (
                       <motion.li key={item.cartItemId} layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex gap-4">
-                        <img src={`${resolveAsset(item.image || `/products/${item.id}`)}-320.webp`} alt={item.name} className="h-24 w-20 shrink-0 rounded-t-full rounded-b-xl object-cover" />
+                        <img src={`${resolveAsset(item.image || `/products/${item.id}`)}-320.webp`} alt={item.name} className="h-24 w-20 shrink-0 rounded-none object-cover" />
                         <div className="flex flex-1 flex-col justify-between">
                           <div className="flex justify-between gap-3">
                             <div>
@@ -132,13 +132,13 @@ function Drawer({ onClose }) {
                   <p className="label">Complete the ritual</p>
                   <div className="mt-3 space-y-2">
                     {ritualSuggestions.map((p) => (
-                      <div key={p.id} className="flex items-center gap-3 rounded-2xl border border-[var(--border-subtle)] p-2">
-                        <img src={`${resolveAsset(p.image)}-320.webp`} alt={p.name} className="h-12 w-10 rounded-t-full rounded-b-md object-cover" />
+                      <div key={p.id} className="flex items-center gap-3 rounded-none border border-[var(--border-subtle)] p-2">
+                        <img src={`${resolveAsset(p.image)}-320.webp`} alt={p.name} className="h-12 w-10 rounded-none object-cover" />
                         <div className="flex-1">
                           <p className="font-serif text-lg leading-none">{p.name}</p>
                           <p className="font-mono text-[11px] text-[var(--text-muted)]">${p.price}</p>
                         </div>
-                        <button type="button" onClick={() => addToCart(p)} className="mr-1 rounded-full border border-[var(--border-strong)] px-3 py-1.5 text-[11px] transition-colors hover:bg-[var(--text-primary)] hover:text-[var(--accent-ink)]">
+                        <button type="button" onClick={() => addToCart(p)} className="mr-1 rounded-none border border-[var(--border-strong)] px-3 py-1.5 text-[11px] transition-colors hover:bg-[var(--text-primary)] hover:text-[var(--accent-ink)]">
                           + Add
                         </button>
                       </div>
@@ -163,9 +163,9 @@ function Drawer({ onClose }) {
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                     placeholder="Promo code — try BOTANICAL15"
-                    className="flex-1 rounded-full border border-[var(--border-subtle)] bg-transparent px-4 py-2.5 text-[13px] uppercase placeholder:normal-case placeholder:text-[var(--text-muted)] focus:border-[var(--border-strong)] focus:outline-none"
+                    className="flex-1 rounded-none border border-[var(--border-subtle)] bg-transparent px-4 py-2.5 text-[13px] uppercase placeholder:normal-case placeholder:text-[var(--text-muted)] focus:border-[var(--border-strong)] focus:outline-none"
                   />
-                  <button type="submit" className="rounded-full border border-[var(--border-strong)] px-4 text-[12px]">Apply</button>
+                  <button type="submit" className="rounded-none border border-[var(--border-strong)] px-4 text-[12px]">Apply</button>
                 </form>
                 {(promoApplied || promoError) && <p className={`text-[12px] ${promoApplied ? 'text-[var(--accent)]' : 'text-red-400'}`}>{promoApplied ? '15% applied' : promoError}</p>}
 

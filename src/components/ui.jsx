@@ -122,7 +122,7 @@ export function PillButton({ children, onClick, variant = 'solid', className = '
     <button
       type={type}
       onClick={onClick}
-      className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3.5 text-[11px] font-medium uppercase tracking-[0.18em] transition-colors duration-500 ${
+      className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden px-7 py-4 text-[15px] font-medium transition-colors duration-500 ${
         solid
           ? 'bg-[var(--text-primary)] text-[var(--accent-ink)]'
           : 'border border-[var(--border-strong)] text-[var(--text-primary)] hover:text-[var(--accent-ink)]'
@@ -131,7 +131,7 @@ export function PillButton({ children, onClick, variant = 'solid', className = '
     >
       <span
         aria-hidden="true"
-        className={`absolute inset-0 translate-y-[101%] rounded-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 ${
+        className={`absolute inset-0 translate-y-[101%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 ${
           solid ? 'bg-[var(--accent)]' : 'bg-[var(--text-primary)]'
         }`}
       />

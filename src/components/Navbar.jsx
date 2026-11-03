@@ -16,14 +16,12 @@ const LINKS = [
 export default function Navbar({ onOpenProduct }) {
   const { totalItemsCount, setIsCartOpen, bagBounce } = useCart();
   const [hidden, setHidden] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [hover, setHover] = useState(null);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (y) => {
     const prev = scrollY.getPrevious() ?? 0;
-    setScrolled(y > 40);
     setHidden(y > 300 && y > prev && !open);
   });
 
@@ -50,16 +48,11 @@ export default function Navbar({ onOpenProduct }) {
         initial={{ y: -80 }}
         animate={{ y: hidden ? -100 : 0 }}
         transition={{ duration: 0.6, ease: EASE }}
-        className="fixed inset-x-0 top-0 z-[120]"
+        className="tone-light fixed inset-x-0 top-0 z-[120] border-b border-[var(--border-strong)]"
       >
         <AnnouncementBar />
-        <div className="px-3 pt-2.5 sm:px-6 sm:pt-3">
-          <nav
-            className={`mx-auto flex items-center justify-between rounded-full px-4 py-2.5 transition-all duration-500 sm:px-5 ${
-              scrolled || open ? 'glass' : 'border border-transparent'
-            }`}
-            aria-label="Main"
-          >
+        <div className="px-5 sm:px-10">
+          <nav className="mx-auto flex h-[68px] max-w-[1600px] items-center justify-between" aria-label="Main">
           <a href="#top" onClick={(e) => go('top', e)} className="group flex shrink-0 items-center" aria-label="Verenne home">
             <VerenneLogo markClassName="h-7 w-7" />
           </a>
@@ -67,7 +60,7 @@ export default function Navbar({ onOpenProduct }) {
           <ul className="hidden items-center gap-7 lg:flex">
             {LINKS.map((l) => (
               <li key={l.id}>
-                <a href={`#${l.id}`} onClick={(e) => go(l.id, e)} className="group relative text-[13px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]">
+                <a href={`#${l.id}`} onClick={(e) => go(l.id, e)} className="group relative text-[15px] transition-colors hover:text-[var(--accent)]">
                   {l.label}
                   <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100" />
                 </a>
@@ -75,26 +68,23 @@ export default function Navbar({ onOpenProduct }) {
             ))}
           </ul>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-5 sm:gap-7">
             <motion.button
               type="button"
               onClick={() => setIsCartOpen(true)}
               animate={bagBounce ? { scale: [1, 1.18, 0.94, 1] } : { scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="flex h-9 items-center gap-2 rounded-full border border-[var(--border-strong)] px-3.5 text-[12px] transition-colors hover:bg-[var(--text-primary)] hover:text-[var(--accent-ink)]"
+              className="text-[15px] transition-colors hover:text-[var(--accent)]"
               aria-label={`Open bag, ${totalItemsCount} items`}
             >
-              Bag
-              <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[var(--text-primary)] px-1 font-mono text-[10px] text-[var(--accent-ink)]">
-                {totalItemsCount}
-              </span>
+              Bag ({totalItemsCount})
             </motion.button>
             <button
               type="button"
               onClick={() => setOpen((o) => !o)}
               aria-expanded={open}
               aria-controls="site-menu"
-              className="flex h-9 items-center gap-2 rounded-full bg-[var(--text-primary)] px-3.5 text-[12px] text-[var(--accent-ink)]"
+              className="flex items-center gap-2 text-[15px] transition-colors hover:text-[var(--accent)]"
             >
               <span className="relative block h-2 w-3.5">
                 <span className={`absolute left-0 h-px w-full bg-current transition-all duration-500 ${open ? 'top-1 rotate-45' : 'top-0'}`} />
@@ -182,7 +172,7 @@ export default function Navbar({ onOpenProduct }) {
               </div>
 
               <div className="relative hidden lg:col-span-3 lg:block">
-                <div className="sticky top-28 aspect-[3/4] overflow-hidden rounded-t-full rounded-b-3xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)]">
+                <div className="sticky top-28 aspect-[3/4] overflow-hidden rounded-none border border-[var(--border-subtle)] bg-[var(--bg-secondary)]">
                   <AnimatePresence mode="popLayout">
                     <motion.div
                       key={(hover || PRODUCTS[0]).id}

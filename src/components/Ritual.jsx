@@ -36,8 +36,8 @@ export default function Ritual() {
         className="pointer-events-none absolute inset-0"
         animate={{
           background: night
-            ? 'radial-gradient(60% 60% at 70% 50%, rgba(123,92,196,0.16), transparent 70%)'
-            : 'radial-gradient(60% 60% at 70% 50%, rgba(226,178,106,0.14), transparent 70%)'
+            ? 'radial-gradient(60% 60% at 70% 50%, rgba(165,82,42,0.2), transparent 70%)'
+            : 'radial-gradient(60% 60% at 70% 50%, rgba(224,147,95,0.14), transparent 70%)'
         }}
         transition={{ duration: 1.4 }}
       />
@@ -62,7 +62,7 @@ export default function Ritual() {
                 role="tab"
                 aria-selected={mode === id}
                 onClick={() => switchMode(id)}
-                className={`relative flex items-center gap-2 rounded-full px-5 py-2 text-[13px] transition-colors ${mode === id ? 'text-[var(--accent-ink)]' : 'text-[var(--text-secondary)]'}`}
+                className={`relative flex items-center gap-2 rounded-none px-5 py-2 text-[13px] transition-colors ${mode === id ? 'text-[var(--accent-ink)]' : 'text-[var(--text-secondary)]'}`}
               >
                 {mode === id && <motion.span layoutId="ritual-pill" className="absolute inset-0 rounded-full bg-[var(--text-primary)]" />}
                 <Icon className="relative h-3.5 w-3.5" />
@@ -146,7 +146,7 @@ export default function Ritual() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -16, scale: 0.96 }}
                 transition={{ duration: 0.55, ease: EASE }}
-                className="h-full w-full overflow-hidden rounded-t-full rounded-b-3xl border border-[var(--border-strong)]"
+                className="h-full w-full overflow-hidden rounded-none border border-[var(--border-strong)]"
               >
                 <img src={`${resolveAsset(current.image)}-600.webp`} alt={current.fullName} className="h-full w-full object-cover" />
               </motion.div>

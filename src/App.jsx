@@ -49,13 +49,13 @@ function Storefront() {
       <Navbar onOpenProduct={openProduct} />
 
       <main>
-        <Hero onOpenProduct={openProduct} />
+        <Hero />
         <Collection category={category} setCategory={setCategory} onOpenProduct={openProduct} />
         <Manifesto />
         <Ritual />
         <Origins />
         <Press />
-        <FAQ />
+        <div className="tone-light"><FAQ /></div>
       </main>
 
       <Footer />

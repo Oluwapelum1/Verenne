@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check, ShieldCheck, Leaf, Sparkles, Globe, Clock, MapPin } from 'lucide-react';
+import { ArrowRight, Check, Leaf, Sparkles, Globe, Clock, MapPin } from 'lucide-react';
 import { scrollToId } from '../lib/scroll';
 import { VerenneLogo, VerenneMark } from './ui';
 
@@ -25,33 +25,28 @@ export default function Footer() {
 
   const sitemap = [
     {
-      title: 'Haute Formulations',
+      title: 'Shop',
       links: [
         { label: 'Cleanse · 4 Formulas', id: 'collection' },
         { label: 'Treat · 4 Formulas', id: 'collection' },
         { label: 'Hydrate · 4 Formulas', id: 'collection' },
         { label: 'Restore · 4 Formulas', id: 'collection' },
-        { label: 'Formulation Matrix', id: 'collection' }
       ]
     },
     {
-      title: 'The Maison',
+      title: 'About',
       links: [
-        { label: 'Living Manifesto', id: 'manifesto' },
-        { label: '72h Field-to-Still', id: 'manifesto' },
+        { label: 'Why Verenne', id: 'manifesto' },
+        { label: 'How we distil', id: 'manifesto' },
         { label: 'Our Growers', id: 'origins' },
         { label: 'Skin Care Steps', id: 'collection' },
-        { label: 'Press & Acclaim', id: 'press' }
       ]
     },
     {
-      title: 'Client Concierge',
+      title: 'Help',
       links: [
-        { label: 'Private Consultations', id: 'faq' },
-        { label: 'Complimentary Shipping', id: 'faq' },
-        { label: '30-Day Ritual Guarantee', id: 'faq' },
-        { label: 'Batch Authentication', id: 'faq' },
-        { label: 'Carbon-Neutral Tracking', id: 'faq' }
+        { label: 'Shipping', id: 'faq' },
+        { label: '30-day returns', id: 'faq' },
       ]
     }
   ];
@@ -67,7 +62,7 @@ export default function Footer() {
               <p className="label text-[var(--accent)] font-semibold tracking-[0.2em]">The Seasonal Gazette</p>
             </div>
             <h3 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light leading-tight">
-              One dispatch per solstice. Harvest notes, private batches, <em className="text-[var(--accent)] italic">nothing else.</em>
+              Four letters a year. Harvest notes, private batches, <em className="text-[var(--accent)] italic">nothing else.</em>
             </h3>
             <p className="text-[13px] text-[var(--text-secondary)] font-light max-w-md leading-relaxed">
               Subscribers receive early access to seasonal copper-still harvests and limited single-estate distillations before public release.
@@ -84,12 +79,12 @@ export default function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address..."
                   disabled={sent}
-                  className="w-full h-13 px-5 rounded-full border border-[var(--border-strong)] bg-[var(--bg-secondary)]/60 text-[14px] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--text-primary)] transition-colors"
+                  className="w-full h-13 px-5 rounded-none border border-[var(--border-strong)] bg-[var(--bg-secondary)]/60 text-[14px] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--text-primary)] transition-colors"
                 />
               </div>
               <button
                 type="submit"
-                className="h-13 px-8 rounded-full bg-[var(--text-primary)] text-[var(--accent-ink)] font-mono text-[11px] uppercase tracking-widest font-semibold flex items-center justify-center gap-2 hover:bg-[var(--accent)] hover:text-black transition-all cursor-pointer shrink-0"
+                className="h-13 px-8 rounded-none bg-[var(--text-primary)] text-[var(--accent-ink)] font-mono text-[11px] uppercase tracking-widest font-semibold flex items-center justify-center gap-2 hover:bg-[var(--accent)] hover:text-black transition-all cursor-pointer shrink-0"
               >
                 {sent ? (
                   <>
@@ -161,15 +156,11 @@ export default function Footer() {
               Integrity Standards
             </p>
             <div className="space-y-3 text-[12px] font-mono text-[var(--text-secondary)]">
-              <div className="flex items-center gap-2 p-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)]/40">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>ISO 16128 Certified</span>
-              </div>
-              <div className="flex items-center gap-2 p-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)]/40">
+              <div className="flex items-center gap-2 p-2.5 rounded-none border border-[var(--border-subtle)] bg-[var(--bg-secondary)]/40">
                 <Leaf className="w-4 h-4 text-[var(--accent)] shrink-0" />
                 <span>100% Recyclable Glass</span>
               </div>
-              <div className="flex items-center gap-2 p-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)]/40">
+              <div className="flex items-center gap-2 p-2.5 rounded-none border border-[var(--border-subtle)] bg-[var(--bg-secondary)]/40">
                 <Sparkles className="w-4 h-4 text-[var(--accent)] shrink-0" />
                 <span>Carbon Neutral Freight</span>
               </div>
@@ -194,7 +185,7 @@ export default function Footer() {
 
           {/* Currency & Language Controls */}
           <div className="flex items-center gap-3 text-[11px] font-mono">
-            <div className="flex items-center gap-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-3 py-1">
+            <div className="flex items-center gap-1 rounded-none border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-3 py-1">
               <Globe className="w-3 h-3 text-[var(--text-muted)]" />
               <button
                 type="button"
