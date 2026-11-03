@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Verenne | Botanical Skincare</title>
+  <script>
+    // GitHub Pages 404 handler: redirects case-mismatches and subroutes back to /Verenne/
+    var path = window.location.pathname;
+    if (path.toLowerCase().indexOf('/verenne') === 0) {
+      var sub = path.replace(/^\/[Vv]erenne\/?/, '');
+      window.location.replace('/Verenne/' + (sub ? sub : '') + window.location.search + window.location.hash);
+    } else {
+      window.location.replace('/Verenne/');
+    }
+  </script>
+</head>
+<body style="background:#0A0A09;color:#E2B26A;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;margin:0;">
+  <p>Loading Verenne...</p>
+</body>
+</html>

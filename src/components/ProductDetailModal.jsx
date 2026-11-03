@@ -10,6 +10,7 @@ const GlassScene = lazy(() => import('./three/GlassScene'));
 
 // The bottle is opt-in, and only offered where it can run smoothly
 function supports3D() {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') return false;
   if ((navigator.hardwareConcurrency || 8) < 4) return false;
   try {
     const canvas = document.createElement('canvas');
