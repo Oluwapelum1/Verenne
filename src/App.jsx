@@ -2,16 +2,11 @@ import React, { useEffect, useState, useCallback } from 'react';
 import Lenis from 'lenis';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CartProvider, useCart } from './context/CartContext';
-import { AuraProvider } from './context/AuraContext';
 import { setLenis } from './lib/scroll';
-import Preloader from './components/Preloader';
-import Cursor from './components/Cursor';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Manifesto from './components/Manifesto';
-import Categories from './components/Categories';
 import Collection from './components/Collection';
-import OnSkin from './components/OnSkin';
 import Ritual from './components/Ritual';
 import Origins from './components/Origins';
 import Press from './components/Press';
@@ -19,7 +14,6 @@ import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import ProductDetailModal from './components/ProductDetailModal';
-import AuraSwitcher from './components/AuraSwitcher';
 import { FlyToCartOverlay, EASE } from './components/ui';
 
 function Storefront() {
@@ -50,18 +44,14 @@ function Storefront() {
 
   return (
     <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
-      <Preloader />
-      <Cursor />
       <div className="grain" aria-hidden="true" />
 
       <Navbar onOpenProduct={openProduct} />
 
       <main>
         <Hero onOpenProduct={openProduct} />
-        <Manifesto />
-        <Categories setCategory={setCategory} />
         <Collection category={category} setCategory={setCategory} onOpenProduct={openProduct} />
-        <OnSkin onOpenProduct={openProduct} />
+        <Manifesto />
         <Ritual />
         <Origins />
         <Press />
@@ -98,11 +88,8 @@ function Storefront() {
 
 export default function App() {
   return (
-    <AuraProvider>
-      <CartProvider>
-        <Storefront />
-        <AuraSwitcher />
-      </CartProvider>
-    </AuraProvider>
+    <CartProvider>
+      <Storefront />
+    </CartProvider>
   );
 }

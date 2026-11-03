@@ -3,10 +3,8 @@ export const asset = (p) => `${BASE}${p.startsWith('/') ? p : `/${p}`}`;
 
 /**
  * VERENNE — curated catalogue
- * Six formulations, each backed by real photography (/public/products),
+ * Sixteen formulations, each backed by real photography (/public/products),
  * an on-skin portrait (/public/products/model_*.jpg) and a ritual film (/public/videos).
- *
- * `glass` drives the WebGL bottle in the hero (shape + liquid colour).
  */
 export const PRODUCTS = [
   {
@@ -43,7 +41,7 @@ export const PRODUCTS = [
     synergy: {
       pairId: 'brume-botanique',
       label: 'The Hydra-Lipid Protocol',
-      benefit: '+48% deeper lipid penetration when pressed into damp skin'
+      benefit: 'Press into damp skin so the oil spreads more easily'
     },
     description:
       'Eighteen cold-pressed seeds and wild everlasting flower, folded into a single golden drop. Sinks in like sunlight on warm stone.'
@@ -121,7 +119,7 @@ export const PRODUCTS = [
     synergy: {
       pairId: 'eclat-sauvage',
       label: 'The Living Dew Matrix',
-      benefit: 'Pre-saturates epidermal channels to triple serum distribution'
+      benefit: 'Dampens skin first so the serum spreads evenly'
     },
     description:
       'Copper-still distilled orange blossom and heritage roses with fermented birch sap. A cloud of morning garden, on demand.'
@@ -152,7 +150,7 @@ export const PRODUCTS = [
     keyIngredients: ['Moroccan blue tansy', 'Bakuchiol', 'Alpine edelweiss', 'Evening primrose'],
     benefits: ['Smoother texture by morning', 'Calms visible redness', 'Gentle retinol alternative'],
     howToUse: 'Press 4 drops over face as the final step of your evening ritual.',
-    ph: '5.4 (Dermal restorative)',
+    ph: '5.4',
     bioactivePct: '99.1%',
     absorptionSeconds: 22,
     finish: 'Cashmere-soft matte velvet',
@@ -160,7 +158,7 @@ export const PRODUCTS = [
     synergy: {
       pairId: 'baume-resineux',
       label: 'The Nocturnal Shield Duo',
-      benefit: 'Seals active chamazulene against transepidermal loss during sleep'
+      benefit: 'Seals in moisture overnight'
     },
     description:
       'Blue tansy, edelweiss and bakuchiol in violet glass. Works quietly while you sleep, and is gone by the time you wake.'
@@ -274,7 +272,7 @@ export const PRODUCTS = [
     synergy: {
       pairId: 'brume-botanique',
       label: 'The Double Cloud Cleansing Ritual',
-      benefit: 'Locks in cellular moisture immediately post-rinse'
+      benefit: 'Holds in moisture straight after rinsing'
     },
     description:
       'A cushiony botanical milk that dissolves the urban day without disrupting the delicate microbiome. Skin feels rinsed clean, yet deeply cushioned.'
@@ -381,13 +379,13 @@ export const PRODUCTS = [
     texture: 'Luminescent ruby nectar fluid',
     notes: ['Wild hibiscus', 'Blood orange', 'Pink pepper'],
     keyIngredients: ['Fermented hibiscus flower acids', 'Lactic acid 8%', 'Pomegranate enzymes', 'Snow mushroom'],
-    benefits: ['Gently dissolves cellular buildup', 'Reveals glass-like surface luminosity', 'Smoothes textural irregularities overnight'],
+    benefits: ['Gently clears dead skin buildup', 'Reveals glass-like surface luminosity', 'Smoothes textural irregularities overnight'],
     howToUse: 'Dispense 3–4 drops onto fingertips at twilight. Press into clean skin before oils. Use 3 nights per week.',
     ph: '3.8 (Precision bio-exfoliation)',
     bioactivePct: '98.7%',
     absorptionSeconds: 12,
-    finish: 'Glass-like epidermal reflection',
-    concerns: ['Textural roughness', 'Hyperpigmentation', 'Cellular sluggishness'],
+    finish: 'Smooth, glassy',
+    concerns: ['Textural roughness', 'Hyperpigmentation', 'Tired-looking skin'],
     synergy: {
       pairId: 'seve-doree',
       label: 'The Nocturnal Renewal Cascade',
@@ -417,23 +415,23 @@ export const PRODUCTS = [
     glass: { shape: 'dropper', color: '#14465F', liquid: '#2B7FA8' },
     image: asset('/products/cuivre-peptides'),
     portrait: asset('/products/model_serum_shower.jpg'),
-    texture: 'Azure biophotonic peptide concentrate',
+    texture: 'Blue peptide concentrate',
     notes: ['Marine salt', 'Crushed leaves', 'Ozone'],
     keyIngredients: ['GHK-Cu Copper Tripeptide-1 (2%)', 'Micro-algae chlorella', 'Palmitoyl Tripeptide-38', 'Botanical hyaluronic acid'],
-    benefits: ['Signals firming collagen architecture', 'Enhances dermal tensile elasticity', 'Revitalizes tired cellular matrices'],
+    benefits: ['Helps skin feel firmer', 'Supports elasticity', 'Refreshes tired-looking skin'],
     howToUse: 'Apply 3 drops morning and evening directly after cleansing or misting. Pat gently until absorbed.',
     ph: '5.8 (Peptide stability window)',
     bioactivePct: '99.5%',
     absorptionSeconds: 16,
     finish: 'High-density firming bounce',
-    concerns: ['Loss of firmness', 'Dermal laxity', 'Deep expression contours'],
+    concerns: ['Loss of firmness', 'Sagging skin', 'Deep expression contours'],
     synergy: {
       pairId: 'creme-radieuse',
       label: 'The Architectural Matrix Infusion',
       benefit: 'Seals active peptide chains beneath a biome-supportive lipid veil'
     },
     description:
-      'A true sapphire-toned cellular treatment containing 2% pure bio-copper peptide. Directly communicates with fibroblast receptors to restore skin bounce and elasticity.'
+      'A sapphire-toned serum with 2% copper peptide, made to help skin feel firmer and more elastic.'
   },
   {
     id: 'essence-fleurie',
@@ -459,17 +457,17 @@ export const PRODUCTS = [
     texture: 'Silky micro-viscous hydration nectar',
     notes: ['Linden blossom', 'Green tea', 'Silver birch'],
     keyIngredients: ['Fermented birch sap', 'Tremella mushroom poly-saccharides', 'Linden flower distillate', 'Ectoin 1%'],
-    benefits: ['Increases epidermal water content by 64%', 'Protects against environmental dehydration shock', 'Multiplies absorption of subsequent serums'],
+    benefits: ['Hydrates skin as soon as it goes on', 'Protects against environmental dehydration shock', 'Prepares skin for the serum that follows'],
     howToUse: 'Pour a generous splash into palms and pat firmly into face and neck until skin feels springy and quenched.',
-    ph: '5.1 (Cellular equilibrium)',
+    ph: '5.1',
     bioactivePct: '99.2%',
     absorptionSeconds: 10,
     finish: 'Deeply saturated plump quench',
-    concerns: ['Chronic dehydration', 'Cellular trans-epidermal water loss', 'Air-conditioning dryness'],
+    concerns: ['Chronic dehydration', 'Moisture loss', 'Air-conditioning dryness'],
     synergy: {
       pairId: 'eclat-sauvage',
       label: 'The Aqua-Lipidic Infusion',
-      benefit: 'Emulsifies instantly on skin for unprecedented lipid bioavailability'
+      benefit: 'Blends easily with oils on skin'
     },
     description:
       'Tapped directly from spring birch groves in Scandinavia and blended with fermented tremella mushrooms. Delivers a profound wave of moisture that stays locked inside cells.'
@@ -508,7 +506,7 @@ export const PRODUCTS = [
     synergy: {
       pairId: 'creme-radieuse',
       label: 'The Photoprotective Daylight Barrier',
-      benefit: 'Doubles dermal defense against ultraviolet and free radical degradation'
+      benefit: 'Pairs with your daily SPF step in the morning'
     },
     description:
       'An ultra-fluid mineral sun veil that melts invisibly into all complexions. High-altitude alpine edelweiss defends against free radicals while non-nano zinc shields skin all day.'
@@ -537,7 +535,7 @@ export const PRODUCTS = [
     texture: 'Rich molten wax butter that wraps the skin in comfort',
     notes: ['Wild honeycomb', 'Benzoin tears', 'Myrrh'],
     keyIngredients: ['Artisanal raw propolis', 'Avocado phytosterols', 'Murumuru butter', 'Helichrysum CO₂'],
-    benefits: ['Rebuilds cracked epidermal lipid barriers', 'Seals wounded wind-chapped skin overnight', 'Accelerates barrier repair by 72%'],
+    benefits: ['Rebuilds cracked epidermal lipid barriers', 'Seals wounded wind-chapped skin overnight', 'Comforts a stressed skin barrier'],
     howToUse: 'Warm a dime-sized amount between clean palms until clear. Gently press into dry, sensitive, or compromised zones before sleep.',
     ph: 'Waterless anhydrous balm',
     bioactivePct: '100%',
@@ -547,7 +545,7 @@ export const PRODUCTS = [
     synergy: {
       pairId: 'baume-resineux',
       label: 'The Intensive Recovery Cocoon',
-      benefit: 'Creates an impermeable natural breathable seal over traumatized skin'
+      benefit: 'Adds a protective layer over dry, irritated skin'
     },
     description:
       'Harvested sustainably from ancient Corsican beehives and blended with concentrated phytosterols. Heals windburn, flaking and compromised skin overnight with zero irritation.'
@@ -586,7 +584,7 @@ export const PRODUCTS = [
     synergy: {
       pairId: 'seve-doree',
       label: 'The Complete Eye & Face Restorative',
-      benefit: 'Synergizes bakuchiol cell renewal with targeted micro-vascular drainage'
+      benefit: 'Pairs a night treatment with gentle eye care'
     },
     description:
       'Formulated specifically for the delicate 0.5mm skin around the eye. Wild arnica stimulates lymphatic drainage while bio-ceramides plump fine expression lines.'
@@ -639,36 +637,36 @@ export const CATEGORIES = [
   {
     id: 'all',
     label: 'All Formulations',
-    title: 'The Full 16 Formulations',
-    blurb: 'Sixteen active botanical formulations. Four specialized disciplines.',
+    title: 'All 16 formulations',
+    blurb: 'Four steps, four formulas each. Pick a step or browse them all.',
     ids: PRODUCTS.map((p) => p.id)
   },
   {
     id: 'cleanse',
     label: 'Cleanse',
     title: 'Purify & Clarify',
-    blurb: 'Lift impurities and sunscreen without disrupting the acid mantle.',
+    blurb: 'Remove impurities and sunscreen without stripping your skin.',
     ids: ['argile-purifiante', 'lait-nectar', 'gel-glaciaire', 'huile-soyeuse']
   },
   {
     id: 'treat',
     label: 'Treat',
-    title: 'Cellular Actives',
-    blurb: 'High-potency botanical serums, peptides and overnight elixirs.',
+    title: 'Targeted treatments',
+    blurb: 'Concentrated serums, peptides and overnight treatments.',
     ids: ['eclat-sauvage', 'seve-doree', 'resurfacing-nectar', 'cuivre-peptides']
   },
   {
     id: 'hydrate',
     label: 'Hydrate',
     title: 'Hydration Veils',
-    blurb: 'Cellular waters, snow-mushroom lotions and weightless SPF protection.',
+    blurb: 'Mists, lotions and a weightless daily SPF.',
     ids: ['brume-botanique', 'creme-radieuse', 'essence-fleurie', 'voile-hydratant']
   },
   {
     id: 'restore',
     label: 'Restore',
     title: 'Barrier Cocoon',
-    blurb: 'Deep lipid salves, nocturnal wax butters and orbital eye melts.',
+    blurb: 'Rich balms, night butters and eye care.',
     ids: ['baume-resineux', 'cire-nocturne', 'baume-regard', 'onguent-protecteur']
   }
 ];
@@ -731,19 +729,9 @@ export const RITUAL = {
 
 export const PRESS = [
   {
-    quote: 'Quiet luxury in its truest sense — Old World apothecary with a modern hand.',
-    author: 'Vogue France',
-    role: 'Beauty Edit'
-  },
-  {
     quote: 'Éclat Sauvage replaced three steps in my routine. My skin has never looked calmer.',
     author: 'Elena R.',
     role: 'Customer, Zürich'
-  },
-  {
-    quote: 'Refined botanical alchemy. The violet glass alone deserves a place on the shelf.',
-    author: 'Wallpaper*',
-    role: 'Design Awards'
   },
   {
     quote: 'The first balm that actually survived a Swiss winter on my face.',
@@ -763,7 +751,7 @@ export const FAQS = [
   },
   {
     q: 'Do you ship worldwide?',
-    a: 'Yes — carbon-neutral delivery to 40+ countries. Complimentary on orders over $120.'
+    a: 'Yes — carbon-neutral delivery to 40+ countries. Free on orders over $150.'
   },
   {
     q: 'Can I return an opened product?',

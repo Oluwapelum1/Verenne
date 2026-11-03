@@ -8,7 +8,7 @@ export default function FAQ() {
     <section id="faq" className="px-5 py-24 sm:px-10 sm:py-32" aria-labelledby="faq-title">
       <div className="mx-auto grid max-w-[1600px] grid-cols-1 gap-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <p className="label">(08) — Questions</p>
+          <p className="label">Questions</p>
           <h2 id="faq-title" className="mt-4 font-serif text-[clamp(2.6rem,5vw,4.5rem)] leading-[0.95]">
             Asked, <em className="text-[var(--accent)]">answered.</em>
           </h2>

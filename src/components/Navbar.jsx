@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-motion';
 import { useCart } from '../context/CartContext';
-import { useAura } from '../context/AuraContext';
 import { PRODUCTS } from '../data';
 import { EASE, ProductImage, VerenneLogo } from './ui';
 import AnnouncementBar from './AnnouncementBar';
@@ -9,29 +8,17 @@ import { scrollToId, lockScroll } from '../lib/scroll';
 
 const LINKS = [
   { label: 'Collection', id: 'collection' },
-  { label: 'Categories', id: 'categories' },
   { label: 'Ritual', id: 'ritual' },
   { label: 'Origins', id: 'origins' },
-  { label: 'Journal', id: 'faq' }
+  { label: 'FAQ', id: 'faq' }
 ];
-
-function useClock() {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 30_000);
-    return () => clearInterval(t);
-  }, []);
-  return new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' }).format(now);
-}
 
 export default function Navbar({ onOpenProduct }) {
   const { totalItemsCount, setIsCartOpen, bagBounce } = useCart();
-  const { currentAura, setIsOpen: setIsAuraOpen } = useAura();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [hover, setHover] = useState(null);
-  const time = useClock();
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (y) => {
@@ -51,7 +38,8 @@ export default function Navbar({ onOpenProduct }) {
     };
   }, [open]);
 
-  const go = (id) => {
+  const go = (id, e) => {
+    e?.preventDefault();
     setOpen(false);
     setTimeout(() => scrollToId(id), 450);
   };
@@ -72,32 +60,22 @@ export default function Navbar({ onOpenProduct }) {
             }`}
             aria-label="Main"
           >
-          <button type="button" onClick={() => go('top')} className="group flex items-center transition-transform hover:scale-[1.02] cursor-pointer" data-cursor="Top">
-            <VerenneLogo markClassName="h-7 w-7 transition-transform group-hover:rotate-12 duration-500" />
-          </button>
+          <a href="#top" onClick={(e) => go('top', e)} className="group flex shrink-0 items-center" aria-label="Verenne home">
+            <VerenneLogo markClassName="h-7 w-7" />
+          </a>
 
           <ul className="hidden items-center gap-7 lg:flex">
-            {LINKS.slice(0, 4).map((l) => (
+            {LINKS.map((l) => (
               <li key={l.id}>
-                <button type="button" onClick={() => go(l.id)} className="group relative text-[13px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]">
+                <a href={`#${l.id}`} onClick={(e) => go(l.id, e)} className="group relative text-[13px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]">
                   {l.label}
                   <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100" />
-                </button>
+                </a>
               </li>
             ))}
           </ul>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <span className="label hidden lg:inline">Grasse {time}</span>
-            <button
-              type="button"
-              onClick={() => setIsAuraOpen(true)}
-              className="flex items-center gap-1.5 rounded-full border border-[var(--border-strong)] px-3 h-9 text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-primary)] transition-colors cursor-pointer"
-              title="Calibrate atmospheric light"
-            >
-              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: currentAura.color }} />
-              <span>{currentAura.name}</span>
-            </button>
             <motion.button
               type="button"
               onClick={() => setIsCartOpen(true)}
@@ -151,9 +129,9 @@ export default function Navbar({ onOpenProduct }) {
                 <ul className="space-y-1">
                   {LINKS.map((l, i) => (
                     <li key={l.id} className="overflow-hidden">
-                      <motion.button
-                        type="button"
-                        onClick={() => go(l.id)}
+                      <motion.a
+                        href={`#${l.id}`}
+                        onClick={(e) => go(l.id, e)}
                         initial={{ y: '100%' }}
                         animate={{ y: 0 }}
                         transition={{ delay: 0.3 + i * 0.05, duration: 0.8, ease: EASE }}
@@ -161,7 +139,7 @@ export default function Navbar({ onOpenProduct }) {
                       >
                         <span className="font-mono text-[11px] text-[var(--text-muted)]">0{i + 1}</span>
                         <span className="transition-transform duration-500 group-hover:translate-x-2 group-hover:italic">{l.label}</span>
-                      </motion.button>
+                      </motion.a>
                     </li>
                   ))}
                 </ul>
@@ -188,7 +166,6 @@ export default function Navbar({ onOpenProduct }) {
                           onOpenProduct(p);
                         }}
                         className="group flex w-full items-center justify-between gap-4 py-4 text-left"
-                        data-cursor="Open"
                       >
                         <span className="flex items-baseline gap-4">
                           <span className="font-mono text-[11px] text-[var(--text-muted)]">{p.no}</span>

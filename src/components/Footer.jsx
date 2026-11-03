@@ -39,8 +39,8 @@ export default function Footer() {
       links: [
         { label: 'Living Manifesto', id: 'manifesto' },
         { label: '72h Field-to-Still', id: 'manifesto' },
-        { label: 'Swiss Violet Glass', id: 'origins' },
-        { label: 'Botanical Compendium', id: 'categories' },
+        { label: 'Our Growers', id: 'origins' },
+        { label: 'Skin Care Steps', id: 'collection' },
         { label: 'Press & Acclaim', id: 'press' }
       ]
     },
@@ -118,7 +118,7 @@ export default function Footer() {
           <div className="lg:col-span-4 space-y-6">
             <VerenneLogo markClassName="h-8 w-8" />
             <p className="text-[13px] text-[var(--text-secondary)] font-light leading-relaxed max-w-sm">
-              Maison Verenne is an independent haute-botanique apothecary founded on the discipline of slow copper distillation, single-origin cold-pressed lipids, and biophotonic Swiss violet glass.
+              Verenne is an independent botanical skincare house in Grasse, built on slow copper distillation, single-origin plant oils and dark glass.
             </p>
 
             <div className="space-y-2 pt-2">

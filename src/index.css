@@ -32,7 +32,7 @@
   --bg-surface-elevated: #1E1E1B;
   --text-primary: #EDE7DC;
   --text-secondary: #A7A196;
-  --text-muted: #6B675F;
+  --text-muted: #8F897E;
   --border-subtle: rgba(237, 231, 220, 0.08);
   --border-strong: rgba(237, 231, 220, 0.18);
   --accent: #E2B26A;
@@ -199,12 +199,6 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 .lenis.lenis-stopped { overflow: hidden; }
-
-/* Custom cursor: hide native cursor only on fine pointers */
-@media (pointer: fine) {
-  html.has-cursor, html.has-cursor * { cursor: none !important; }
-  html.has-cursor input, html.has-cursor textarea { cursor: text !important; }
-}
 
 /* Reduced motion: decorative loops are toned down case-by-case
    (nested in each rule above); JS motion uses framer's useReducedMotion. */

@@ -45,7 +45,7 @@ export default function Ritual() {
       <div className="relative mx-auto grid max-w-[1600px] grid-cols-1 items-center gap-16 lg:grid-cols-12">
         {/* Copy + steps */}
         <div className="lg:col-span-5">
-          <p className="label">(05) — The ritual</p>
+          <p className="label">The ritual</p>
           <h2 id="ritual-title" className="mt-4 font-serif text-[clamp(2.6rem,5vw,4.5rem)] leading-[0.95]">
             Four steps. <br />
             <em className="text-[var(--accent)]">{night ? 'Twice at night.' : 'Every morning.'}</em>

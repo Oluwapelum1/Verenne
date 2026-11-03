@@ -5,8 +5,8 @@ import { PRESS } from '../data';
 export default function Press() {
   const row = [...PRESS, ...PRESS];
   return (
-    <section className="overflow-hidden border-y border-[var(--border-subtle)] py-20" aria-label="Press and reviews">
-      <p className="label mb-10 px-5 sm:px-10">(07) — Said about us · 4.9 average from 594 reviews</p>
+    <section id="press" className="overflow-hidden border-y border-[var(--border-subtle)] py-20" aria-label="Press and reviews">
+      <p className="label mb-10 px-5 sm:px-10">Said about us · 4.9 average from 594 reviews</p>
       <div className="marquee-track flex w-max gap-16" style={{ '--marquee-speed': '70s' }}>
         {row.map((q, i) => (
           <figure key={i} className="flex w-[80vw] max-w-[640px] shrink-0 items-start gap-6 sm:w-[46vw]" aria-hidden={i >= PRESS.length}>

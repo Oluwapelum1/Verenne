@@ -145,19 +145,15 @@ function Dossier({ product, onClose, onSwitch }) {
               {product.rating} · {product.reviewsCount} reviews
             </div>
 
-            {/* Telemetry specs row */}
-            <div className="mt-6 grid grid-cols-3 gap-2 border-y border-[var(--border-subtle)] py-4 text-center">
+            {/* Specs row */}
+            <div className="mt-6 grid grid-cols-2 gap-2 border-y border-[var(--border-subtle)] py-4 text-center">
               <div className="rounded-xl bg-[var(--bg-secondary)]/70 p-2.5">
                 <span className="label block text-[9px]">pH Balance</span>
                 <span className="font-mono text-sm text-[var(--accent)] block mt-0.5">{product.ph || '5.2'}</span>
               </div>
               <div className="rounded-xl bg-[var(--bg-secondary)]/70 p-2.5">
-                <span className="label block text-[9px]">Bio-Active</span>
-                <span className="font-mono text-sm text-[var(--text-primary)] block mt-0.5">{product.bioactivePct || '99%'}</span>
-              </div>
-              <div className="rounded-xl bg-[var(--bg-secondary)]/70 p-2.5">
-                <span className="label block text-[9px]">Absorption</span>
-                <span className="font-mono text-sm text-[var(--text-primary)] block mt-0.5">{product.absorptionSeconds || 15}s</span>
+                <span className="label block text-[9px]">Finish</span>
+                <span className="font-mono text-sm text-[var(--text-primary)] block mt-0.5">{product.finish}</span>
               </div>
             </div>
 
