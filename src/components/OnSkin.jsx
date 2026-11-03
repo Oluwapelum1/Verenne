@@ -225,8 +225,8 @@ export default function OnSkin({ onOpenProduct }) {
                       >
                         <div className="flex items-center gap-3">
                           <img
-                            src={`${prod.image}-320.webp`}
-                            alt=""
+                            src={`${resolveAsset(prod.image)}-320.webp`}
+                            alt={prod.name}
                             className="w-11 h-11 rounded-lg object-cover bg-white/5 border border-white/10 shrink-0"
                           />
                           <div className="flex-1 min-w-0">

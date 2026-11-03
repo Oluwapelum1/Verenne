@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Sparkles } from 'lucide-react';
 import { CATEGORIES, getProduct } from '../data';
-import { EASE } from './ui';
+import { EASE, resolveAsset } from './ui';
 import { scrollToId } from '../lib/scroll';
 
 const SKIN_CONCERNS = [
@@ -137,7 +137,7 @@ export default function Categories({ setCategory }) {
                         transition={{ type: 'spring', stiffness: 200, damping: 18 }}
                         style={{ zIndex: products.length - k }}
                       >
-                        <img src={`${p.image}-320.webp`} alt="" className="h-full w-full object-cover" loading="lazy" />
+                        <img src={`${resolveAsset(p.image)}-320.webp`} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
                       </motion.span>
                     ))}
                     <span className="ml-6 grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[var(--border-strong)] transition-all duration-500 group-hover:rotate-45 group-hover:bg-[var(--text-primary)] group-hover:text-[var(--accent-ink)]">

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon } from 'lucide-react';
 import { RITUAL, getProduct } from '../data';
 import { useCart } from '../context/CartContext';
-import { EASE, PillButton } from './ui';
+import { EASE, PillButton, resolveAsset } from './ui';
 
 /**
  * Ritual — a dial that turns from dawn to dusk.
@@ -130,7 +130,7 @@ export default function Ritual() {
                 transition={{ delay: 0.5 + i * 0.08, duration: 0.6, ease: EASE }}
               >
                 <span className={`block h-14 w-14 overflow-hidden rounded-full border-2 transition-colors sm:h-16 sm:w-16 ${on ? 'border-[var(--text-primary)]' : 'border-[var(--border-subtle)]'}`}>
-                  <img src={`${p.image}-320.webp`} alt="" className="h-full w-full object-cover" loading="lazy" />
+                  <img src={`${resolveAsset(p.image)}-320.webp`} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
                 </span>
                 <span className="label mt-2 block text-center">{String(i + 1).padStart(2, '0')}</span>
               </motion.button>
@@ -148,7 +148,7 @@ export default function Ritual() {
                 transition={{ duration: 0.55, ease: EASE }}
                 className="h-full w-full overflow-hidden rounded-t-full rounded-b-3xl border border-[var(--border-strong)]"
               >
-                <img src={`${current.image}-600.webp`} alt={current.fullName} className="h-full w-full object-cover" />
+                <img src={`${resolveAsset(current.image)}-600.webp`} alt={current.fullName} className="h-full w-full object-cover" />
               </motion.div>
             </AnimatePresence>
           </div>

@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Play, Sparkles, LayoutGrid, Disc3, Check } from 'lucide-react';
 import { PRODUCTS, CATEGORIES, getProduct } from '../data';
 import { useCart } from '../context/CartContext';
-import { EASE, ProductImage, SplitChars, AnimatedPrice, PillButton, TextureBlob } from './ui';
+import { EASE, ProductImage, SplitChars, AnimatedPrice, PillButton, TextureBlob, resolveAsset } from './ui';
 
 /**
  * The Collection — dual-experience catalogue:
@@ -421,7 +421,7 @@ export default function Collection({ category, setCategory, onOpenProduct }) {
                     className={`group flex shrink-0 items-center gap-3 rounded-full border py-1 pl-1 pr-4 transition-colors ${i === active ? 'border-[var(--text-primary)]' : 'border-[var(--border-subtle)] hover:border-[var(--border-strong)]'
                       }`}
                   >
-                    <img src={`${p.image}-320.webp`} alt="" className="h-8 w-8 rounded-full object-cover" loading="lazy" />
+                    <img src={`${resolveAsset(p.image)}-320.webp`} alt={p.name} className="h-8 w-8 rounded-full object-cover" loading="lazy" />
                     <span className={`text-[13px] ${i === active ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}>{p.name}</span>
                   </button>
                 ))}

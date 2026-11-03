@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Plus, ArrowRight, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { EASE, AnimatedPrice, PillButton } from './ui';
+import { EASE, AnimatedPrice, PillButton, resolveAsset } from './ui';
 import { lockScroll } from '../lib/scroll';
 
 export default function CartDrawer() {
@@ -97,7 +97,7 @@ function Drawer({ onClose }) {
                   <AnimatePresence initial={false}>
                     {cart.map((item) => (
                       <motion.li key={item.cartItemId} layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex gap-4">
-                        <img src={`${item.image || `/products/${item.id}`}-320.webp`} alt="" className="h-24 w-20 shrink-0 rounded-t-full rounded-b-xl object-cover" />
+                        <img src={`${resolveAsset(item.image || `/products/${item.id}`)}-320.webp`} alt={item.name} className="h-24 w-20 shrink-0 rounded-t-full rounded-b-xl object-cover" />
                         <div className="flex flex-1 flex-col justify-between">
                           <div className="flex justify-between gap-3">
                             <div>
@@ -133,7 +133,7 @@ function Drawer({ onClose }) {
                   <div className="mt-3 space-y-2">
                     {ritualSuggestions.map((p) => (
                       <div key={p.id} className="flex items-center gap-3 rounded-2xl border border-[var(--border-subtle)] p-2">
-                        <img src={`${p.image}-320.webp`} alt="" className="h-12 w-10 rounded-t-full rounded-b-md object-cover" />
+                        <img src={`${resolveAsset(p.image)}-320.webp`} alt={p.name} className="h-12 w-10 rounded-t-full rounded-b-md object-cover" />
                         <div className="flex-1">
                           <p className="font-serif text-lg leading-none">{p.name}</p>
                           <p className="font-mono text-[11px] text-[var(--text-muted)]">${p.price}</p>

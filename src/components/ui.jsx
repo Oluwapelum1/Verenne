@@ -8,8 +8,9 @@ export const EASE = [0.16, 1, 0.3, 1];
 export function resolveAsset(path) {
   if (!path) return '';
   if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) return path;
-  const baseUrl = import.meta.env.BASE_URL || '/';
+  const baseUrl = (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) || '/';
   const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  if (cleanBase && path.startsWith(cleanBase)) return path;
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   return `${cleanBase}${cleanPath}`;
 }
@@ -161,7 +162,7 @@ export function FlyToCartOverlay() {
         transition={{ duration: 0.8, ease: EASE }}
         className="absolute -left-8 -top-10 h-20 w-16 overflow-hidden rounded-t-full rounded-b-lg border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-2xl"
       >
-        {img && <img src={`${img}-320.webp`} alt="" className="h-full w-full object-cover" />}
+        {img && <img src={`${resolveAsset(img)}-320.webp`} alt="" className="h-full w-full object-cover" />}
       </motion.div>
     </div>
   );

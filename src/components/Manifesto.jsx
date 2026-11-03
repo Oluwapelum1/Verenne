@@ -7,10 +7,9 @@ import { getProduct } from '../data';
 const TEXT = 'We make {img:eclat-sauvage} sixteen formulations and nothing else. Wild flora, {img:brume-botanique} distilled in copper within hours of picking, bottled in {img:seve-doree} violet glass. Slow by design — because skin is too.';
 
 function Word({ children, range, progress }) {
-  const opacity = useTransform(progress, range, [0.12, 1]);
-  const blur = useTransform(progress, range, ['blur(6px)', 'blur(0px)']);
+  const opacity = useTransform(progress, range, [0.38, 1]);
   return (
-    <motion.span style={{ opacity, filter: blur }} className="mr-[0.22em] inline-block">
+    <motion.span style={{ opacity }} className="mr-[0.22em] inline-block transition-opacity duration-300">
       {children}
     </motion.span>
   );
@@ -18,10 +17,12 @@ function Word({ children, range, progress }) {
 
 function Chip({ id, range, progress }) {
   const p = getProduct(id);
-  const width = useTransform(progress, range, ['0em', '1.9em']);
+  const width = useTransform(progress, range, ['0.8em', '1.9em']);
+  const opacity = useTransform(progress, range, [0.5, 1]);
+  if (!p) return null;
   return (
-    <motion.span style={{ width }} className="mr-[0.22em] inline-block h-[0.78em] translate-y-[0.06em] overflow-hidden rounded-full align-baseline">
-      <img src={`${p.image}-320.webp`} alt="" className="h-full w-[1.9em] max-w-none object-cover" loading="lazy" />
+    <motion.span style={{ width, opacity }} className="mr-[0.22em] inline-block h-[0.78em] translate-y-[0.06em] overflow-hidden rounded-full align-baseline border border-[var(--border-strong)] bg-[var(--bg-secondary)]">
+      <img src={`${p.image}-320.webp`} alt={p.name} className="h-full w-[1.9em] max-w-none object-cover" loading="eager" />
     </motion.span>
   );
 }

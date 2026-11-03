@@ -293,7 +293,7 @@ function Dossier({ product, onClose, onSwitch }) {
               <div className="mt-4 grid grid-cols-2 gap-3">
                 {others.map((p) => (
                   <button key={p.id} type="button" onClick={() => onSwitch(p)} className="group flex items-center gap-3 rounded-2xl border border-[var(--border-subtle)] p-2 text-left transition-colors hover:border-[var(--border-strong)]">
-                    <img src={`${p.image}-320.webp`} alt="" className="h-16 w-14 rounded-t-full rounded-b-lg object-cover" loading="lazy" />
+                    <img src={`${resolveAsset(p.image)}-320.webp`} alt={p.name} className="h-16 w-14 rounded-t-full rounded-b-lg object-cover" loading="lazy" />
                     <span>
                       <span className="block font-serif text-lg leading-tight group-hover:italic">{p.name}</span>
                       <span className="font-mono text-[11px] text-[var(--text-muted)]">${p.price}</span>
