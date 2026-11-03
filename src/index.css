@@ -1,0 +1,219 @@
+@import "tailwindcss";
+@source not "../_backup_v1_src";
+
+@theme {
+  --font-serif: 'Instrument Serif', 'Times New Roman', serif;
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  --color-ink: #0A0A09;
+  --color-ink-2: #111110;
+  --color-ink-3: #181816;
+  --color-bone: #EDE7DC;
+  --color-bone-dim: #A7A196;
+  --color-ash: #6B675F;
+  --color-gold: #E2B26A;
+  --color-ember: #C8782A;
+  --color-violet: #7B5CC4;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+/* ------------------------------------------------------------------ */
+/* Atmospheric Light Palettes — Dusk, Mist, Nocturne, Peony           */
+/* ------------------------------------------------------------------ */
+:root,
+[data-aura="dusk"] {
+  color-scheme: dark;
+  --bg-primary: #0A0A09;
+  --bg-secondary: #111110;
+  --bg-surface: #161614;
+  --bg-surface-elevated: #1E1E1B;
+  --text-primary: #EDE7DC;
+  --text-secondary: #A7A196;
+  --text-muted: #6B675F;
+  --border-subtle: rgba(237, 231, 220, 0.08);
+  --border-strong: rgba(237, 231, 220, 0.18);
+  --accent: #E2B26A;
+  --accent-ink: #0A0A09;
+  --tint: #C8782A;
+}
+
+[data-aura="mist"] {
+  color-scheme: light;
+  --bg-primary: #F4F0E6;
+  --bg-secondary: #EBE5D8;
+  --bg-surface: #FCFAF6;
+  --bg-surface-elevated: #FFFFFF;
+  --text-primary: #19211B;
+  --text-secondary: #4A564C;
+  --text-muted: #78857A;
+  --border-subtle: rgba(25, 33, 27, 0.09);
+  --border-strong: rgba(25, 33, 27, 0.22);
+  --accent: #253928;
+  --accent-ink: #FCFAF6;
+  --tint: #4E6852;
+}
+
+[data-aura="nocturne"] {
+  color-scheme: dark;
+  --bg-primary: #080A12;
+  --bg-secondary: #0E121E;
+  --bg-surface: #141A2B;
+  --bg-surface-elevated: #1B2238;
+  --text-primary: #EDF2F7;
+  --text-secondary: #A0AEC0;
+  --text-muted: #64748B;
+  --border-subtle: rgba(237, 242, 247, 0.09);
+  --border-strong: rgba(237, 242, 247, 0.22);
+  --accent: #818CF8;
+  --accent-ink: #080A12;
+  --tint: #6366F1;
+}
+
+[data-aura="peony"] {
+  color-scheme: dark;
+  --bg-primary: #120A0D;
+  --bg-secondary: #1A1014;
+  --bg-surface: #24161C;
+  --bg-surface-elevated: #2F1E25;
+  --text-primary: #FDF2F4;
+  --text-secondary: #D4A3AF;
+  --text-muted: #9E7480;
+  --border-subtle: rgba(253, 242, 244, 0.09);
+  --border-strong: rgba(253, 242, 244, 0.22);
+  --accent: #F472B6;
+  --accent-ink: #120A0D;
+  --tint: #E11D48;
+}
+
+@layer base {
+  html {
+    background: var(--bg-primary);
+    scrollbar-color: rgba(237, 231, 220, 0.18) transparent;
+    scrollbar-width: thin;
+  }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Utilities                                                          */
+/* ------------------------------------------------------------------ */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+@utility hairline {
+  border-color: var(--border-subtle);
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(237, 231, 220, 0.28);
+}
+
+@utility glass {
+  background: rgba(22, 22, 20, 0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Film grain overlay — fixed, GPU-cheap, sits over everything */
+.grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 3%); }
+}
+
+/* Infinite marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee var(--marquee-speed, 40s) linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Slow spin for rotating badges */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.spin-slow {
+  animation: spin-slow 24s linear infinite;
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Custom cursor: hide native cursor only on fine pointers */
+@media (pointer: fine) {
+  html.has-cursor, html.has-cursor * { cursor: none !important; }
+  html.has-cursor input, html.has-cursor textarea { cursor: text !important; }
+}
+
+/* Reduced motion: decorative loops are toned down case-by-case
+   (nested in each rule above); JS motion uses framer's useReducedMotion. */
+.grain {
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+.marquee-track {
+  @media (prefers-reduced-motion: reduce) { animation-duration: 160s; }
+}
+.spin-slow {
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
