@@ -1,10 +1,14 @@
 {%- comment -%}
   Verenne Luxury Hero Section
-  Haute-Botanique split editorial layout with large Bodoni typography and studio imagery
+  Haute-Botanique split editorial layout with large serif typography and studio imagery
 {%- endcomment -%}
 
-<section class="verenne-hero" aria-labelledby="verenne-hero-heading-{{ section.id }}">
+<section class="verenne-hero" aria-labelledby="verenne-hero-heading-{{ section.id }}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="verenne-hero-content">
+    {%- if section.settings.caption != blank -%}
+      <p class="verenne-caption">{{ section.settings.caption | escape }}</p>
+    {%- endif -%}
+
     <h1 id="verenne-hero-heading-{{ section.id }}" class="verenne-hero-title">
       {{ section.settings.heading | escape }}
       {%- if section.settings.heading_italic != blank -%}
@@ -22,7 +26,7 @@
       <div class="verenne-hero-actions">
         {%- if section.settings.button_text != blank and section.settings.button_link != blank -%}
           <a href="{{ section.settings.button_link }}" class="verenne-pill-btn">
-            {{ section.settings.button_text | escape }}
+            {{ section.settings.button_text | escape }} →
           </a>
         {%- endif -%}
 
@@ -37,6 +41,7 @@
 
   <div class="verenne-hero-media">
     {%- if section.settings.image != blank -%}
+      {%- assign hero_alt = section.settings.image.alt | default: section.settings.heading | escape -%}
       {{
         section.settings.image
         | image_url: width: 1400
@@ -45,13 +50,12 @@
           fetchpriority: 'high',
           widths: '600, 900, 1200, 1400',
           sizes: '(min-width: 990px) 45vw, 100vw',
-          alt: section.settings.image.alt
+          alt: hero_alt,
+          class: 'verenne-hero-img'
       }}
     {%- else -%}
-      <div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:500px;background:#241B14;color:#A39585;text-align:center;padding:2rem;">
-        <p style="font-family:var(--font-heading-family);font-size:1.5rem;letter-spacing:0.05em;">
-          Select a high-resolution hero image in the theme editor
-        </p>
+      <div class="verenne-hero-placeholder">
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg verenne-placeholder-svg' }}
       </div>
     {%- endif -%}
   </div>
@@ -62,6 +66,12 @@
   "name": "Verenne Hero",
   "class": "section-verenne-hero",
   "settings": [
+    {
+      "type": "text",
+      "id": "caption",
+      "default": "HAUTE-BOTANIQUE FORMULATIONS",
+      "label": "Caption eyebrow"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -94,7 +104,7 @@
     {
       "type": "text",
       "id": "secondary_text",
-      "default": "Our story",
+      "default": "Read The Manifesto",
       "label": "Secondary button text"
     },
     {
@@ -105,19 +115,33 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Hero photograph"
+      "label": "Hero studio image"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
     }
   ],
   "presets": [
     {
-      "name": "Verenne Hero",
-      "settings": {
-        "heading": "Botanical skincare,",
-        "heading_italic": "made slowly.",
-        "button_text": "Shop the collection"
-      }
+      "name": "Verenne Hero"
     }
   ]
 }
 {% endschema %}
-

@@ -1,118 +1,156 @@
 {%- comment -%}
   Verenne Featured Collection
-  Renders real Shopify products from the selected collection in the luxury grid layout
+  Renders real Shopify products or graceful onboarding placeholders
 {%- endcomment -%}
 
-<section class="verenne-collection-section" aria-labelledby="verenne-collection-heading-{{ section.id }}">
+<section class="verenne-collection-section" aria-labelledby="verenne-collection-heading-{{ section.id }}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="verenne-section-header">
     <div>
-      {%- if section.settings.eyebrow != blank -%}
-        <div class="verenne-section-eyebrow">
-          <span class="verenne-section-eyebrow-dot" aria-hidden="true"></span>
-          <span>{{ section.settings.eyebrow | escape }}</span>
-        </div>
+      {%- if section.settings.caption != blank -%}
+        <p class="verenne-caption">{{ section.settings.caption | escape }}</p>
       {%- endif -%}
 
-      <h2 id="verenne-collection-heading-{{ section.id }}" class="verenne-section-title">
+      <h2 id="verenne-collection-heading-{{ section.id }}" class="verenne-heading" style="font-size: clamp(2rem, 3.8vw, 3.2rem); margin-top: 0.5rem;">
         {{ section.settings.title | escape }}
       </h2>
     </div>
 
     {%- if section.settings.show_view_all and section.settings.collection != blank -%}
       <a href="{{ section.settings.collection.url }}" class="verenne-pill-btn verenne-pill-btn--outline">
-        {{ 'sections.featured_collection.view_all' | t }} &rarr;
+        View All Formulations &rarr;
       </a>
     {%- endif -%}
   </div>
 
-  <div class="verenne-product-grid">
-    {%- assign current_collection = collections[section.settings.collection] -%}
-    {%- assign products_to_display = current_collection.products | default: collections.all.products -%}
+  {%- assign current_collection = collections[section.settings.collection] -%}
+  {%- assign products_to_display = current_collection.products | default: collections.all.products -%}
 
-    {%- for product in products_to_display limit: section.settings.products_to_show -%}
-      <article class="verenne-product-card">
-        <a href="{{ product.url }}" class="verenne-card-media" aria-label="{{ product.title | escape }}">
-          {%- if product.featured_image != blank -%}
-            {{
-              product.featured_image
-              | image_url: width: 800
-              | image_tag:
-                loading: 'lazy',
-                widths: '320, 600, 800',
-                sizes: '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw',
-                alt: product.featured_image.alt | default: product.title
-            }}
-          {%- else -%}
-            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#A39585;background:#2C2119;">
-              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-            </div>
-          {%- endif -%}
-        </a>
-
-        <div class="verenne-card-details">
-          <div class="verenne-card-meta">
-            <span>{{ product.type | default: 'Formula' }}</span>
-            {%- if product.available -%}
-              <span style="color: var(--verenne-gold); font-size: 0.7rem;">In stock</span>
+  <div class="verenne-product-grid" style="grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);">
+    {%- if products_to_display.size > 0 -%}
+      {%- for product in products_to_display limit: section.settings.products_to_show -%}
+        <article class="verenne-product-card">
+          <a href="{{ product.url }}" class="verenne-card-media" aria-label="{{ product.title | escape }}">
+            {%- if product.featured_image != blank -%}
+              {%- assign card_alt = product.featured_image.alt | default: product.title | escape -%}
+              {{
+                product.featured_image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '320, 600, 800',
+                  sizes: '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw',
+                  alt: card_alt,
+                  class: 'verenne-card-img'
+              }}
             {%- else -%}
-              <span style="color: var(--verenne-text-muted); font-size: 0.7rem;">Sold out</span>
+              <div class="verenne-card-placeholder">
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg verenne-placeholder-svg' }}
+              </div>
             {%- endif -%}
-          </div>
+          </a>
 
-          <h3 class="verenne-card-title">
-            <a href="{{ product.url }}" style="text-decoration: none; color: inherit;">
-              {{ product.title | escape }}
-            </a>
-          </h3>
-
-          <div class="verenne-card-price">
-            {{ product.price | money }}
-          </div>
-
-          {%- form 'product', product -%}
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-            <button
-              type="submit"
-              name="add"
-              class="verenne-card-btn"
-              {% unless product.available %}disabled{% endunless %}
-            >
-              {%- if product.available -%}
-                + Add to Bag
-              {%- else -%}
-                Sold Out
+          <div class="verenne-card-details">
+            <div class="verenne-card-meta">
+              <span>{{ product.type | default: 'Botanical Formulation' }}</span>
+              {%- if section.settings.show_stock_badge -%}
+                {%- if product.available -%}
+                  <span style="color: var(--verenne-gold); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase;">In stock</span>
+                {%- else -%}
+                  <span style="color: var(--verenne-text-muted); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase;">Allocated</span>
+                {%- endif -%}
               {%- endif -%}
-            </button>
-          {%- endform -%}
-        </div>
-      </article>
-    {%- else -%}
-      {%- comment -%} Empty placeholder state when no products exist in the store {%- endcomment -%}
-      {%- for i in (1..4) -%}
-        <div class="verenne-product-card" style="padding: 2rem; text-align: center;">
-          <p style="color: var(--verenne-text-muted); font-size: 0.9rem;">No products found in this collection</p>
-        </div>
+            </div>
+
+            <h3 class="verenne-card-title">
+              <a href="{{ product.url }}">{{ product.title | escape }}</a>
+            </h3>
+
+            <div class="verenne-card-price">
+              <span>{{ product.price | money }}</span>
+              {%- if product.compare_at_price > product.price -%}
+                <s style="color: var(--verenne-text-muted); font-size: 0.85em; margin-left: 0.5rem;">
+                  {{ product.compare_at_price | money }}
+                </s>
+              {%- endif -%}
+            </div>
+
+            <form method="post" action="{{ routes.cart_add_url }}" class="verenne-card-form">
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <button
+                type="submit"
+                class="verenne-card-btn"
+                {% unless product.available %}disabled{% endunless %}
+              >
+                {%- if product.available -%}
+                  + Add to Bag
+                {%- else -%}
+                  Sold Out
+                {%- endif -%}
+              </button>
+            </form>
+          </div>
+        </article>
       {%- endfor -%}
-    {%- endfor -%}
+    {%- else -%}
+      {%- comment -%}
+        Shopify Theme Store Onboarding Fallback:
+        Never display empty spaces when a store has no products yet.
+      {%- endcomment -%}
+      {%- assign dummy_names = "N°01 Éclat Sauvage,N°02 Baume Résineux,N°03 Brume Botanique,N°05 Argile Purifiante,N°04 Élixir Nocturne,N°07 Baume Régénérant" | split: "," -%}
+      {%- assign dummy_types = "Active Serum,Ceramide Salve,Damask Hydrosol,Botanical Clay,Cellular Elixir,Lipid Balm" | split: "," -%}
+      {%- assign dummy_prices = "$118,$94,$68,$68,$160,$128" | split: "," -%}
+
+      {%- for i in (1..section.settings.products_to_show) -%}
+        {%- assign idx = forloop.index0 | modulo: 6 -%}
+        {%- assign cycle_num = forloop.index0 | modulo: 6 | plus: 1 -%}
+        <article class="verenne-product-card">
+          <div class="verenne-card-media">
+            <div class="verenne-card-placeholder">
+              {% capture ph_name %}product-{{ cycle_num }}{% endcapture %}
+              {{ ph_name | placeholder_svg_tag: 'placeholder-svg verenne-placeholder-svg' }}
+            </div>
+          </div>
+
+          <div class="verenne-card-details">
+            <div class="verenne-card-meta">
+              <span>{{ dummy_types[idx] }}</span>
+              <span style="color: var(--verenne-gold); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase;">Demo Preview</span>
+            </div>
+
+            <h3 class="verenne-card-title">
+              <a href="#">{{ dummy_names[idx] }}</a>
+            </h3>
+
+            <div class="verenne-card-price">
+              <span>{{ dummy_prices[idx] }}</span>
+            </div>
+
+            <button type="button" class="verenne-card-btn" disabled>
+              + Add to Bag
+            </button>
+          </div>
+        </article>
+      {%- endfor -%}
+    {%- endif -%}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Verenne Collection Grid",
+  "name": "Featured Collection",
   "class": "section-verenne-collection",
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "default": "(01) · Curated Catalogue",
-      "label": "Section eyebrow label"
+      "id": "caption",
+      "default": "(02) — THE COMPENDIUM",
+      "label": "Caption eyebrow"
     },
     {
       "type": "text",
       "id": "title",
-      "default": "The Formulations",
-      "label": "Heading"
+      "default": "Sixteen Active Formulations",
+      "label": "Heading title"
     },
     {
       "type": "collection",
@@ -123,28 +161,57 @@
       "type": "range",
       "id": "products_to_show",
       "min": 2,
-      "max": 16,
-      "step": 2,
-      "default": 8,
-      "label": "Maximum products to show"
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Products to display"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Columns on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stock_badge",
+      "default": true,
+      "label": "Show stock badge"
     },
     {
       "type": "checkbox",
       "id": "show_view_all",
       "default": true,
-      "label": "Enable \"View all\" button"
+      "label": "Show 'View all' link"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
     }
   ],
   "presets": [
     {
-      "name": "Verenne Collection Grid",
-      "settings": {
-        "eyebrow": "(01) · Curated Catalogue",
-        "title": "The Formulations",
-        "products_to_show": 8
-      }
+      "name": "Verenne Featured Collection"
     }
   ]
 }
 {% endschema %}
-

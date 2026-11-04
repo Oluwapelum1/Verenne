@@ -21,6 +21,18 @@
       {%- for block in section.blocks -%}
         <li class="verenne-origin-item" {{ block.shopify_attributes }}>
           <div class="verenne-origin-title-col">
+            {%- if block.settings.image != blank -%}
+              <div class="verenne-origin-media">
+                {{
+                  block.settings.image
+                  | image_url: width: 400
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'verenne-origin-img',
+                    alt: block.settings.common_name | escape
+                }}
+              </div>
+            {%- endif -%}
             <h3 class="verenne-origin-common">{{ block.settings.common_name | escape }}</h3>
             <p class="verenne-origin-latin">{{ block.settings.latin_name | escape }}</p>
           </div>
@@ -105,6 +117,11 @@
       "name": "Botanical Provenance",
       "settings": [
         {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Botanical photo"
+        },
+        {
           "type": "text",
           "id": "common_name",
           "label": "Common Name",
@@ -186,4 +203,3 @@
   ]
 }
 {% endschema %}
-

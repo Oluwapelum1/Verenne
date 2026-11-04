@@ -37,10 +37,8 @@
 
         <!-- Dawn Steps List -->
         <ol class="verenne-ritual-steps" id="verenne-steps-dawn">
-          {%- assign dawn_count = 0 -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'step_dawn' -%}
-              {%- assign dawn_count = dawn_count | plus: 1 -%}
               <li class="verenne-ritual-step-item{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
                 <button type="button" class="verenne-ritual-step-btn" onclick="selectVerenneRitualStep('dawn', {{ forloop.index0 }})">
                   <span class="verenne-step-time">{{ block.settings.time | escape }}</span>
@@ -95,16 +93,29 @@
           <div class="verenne-dial-ring verenne-dial-ring--outer"></div>
           <div class="verenne-dial-ring verenne-dial-ring--inner"></div>
           
-          <!-- Sun / Moon Center Motif -->
+          <!-- Center Media / Visual -->
           <div class="verenne-dial-center" id="verenne-dial-center">
-            <span class="verenne-dial-crest">VERENNE</span>
-            <span class="verenne-dial-status" id="verenne-dial-mode-text">AM RITUAL</span>
-            <div class="verenne-dial-dots">
-              <span class="dot active"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
-            </div>
+            {%- if section.settings.dial_image != blank -%}
+              <div class="verenne-dial-img-wrap">
+                {{
+                  section.settings.dial_image
+                  | image_url: width: 600
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'verenne-dial-img',
+                    alt: section.settings.heading | escape
+                }}
+              </div>
+            {%- else -%}
+              <span class="verenne-dial-crest">VERENNE</span>
+              <span class="verenne-dial-status" id="verenne-dial-mode-text">AM RITUAL</span>
+              <div class="verenne-dial-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            {%- endif -%}
           </div>
         </div>
       </div>
@@ -142,7 +153,6 @@
       item.classList.toggle('active', i === index);
     });
     
-    // Update active dot in dial
     const dots = document.querySelectorAll('.verenne-dial-dots .dot');
     dots.forEach((dot, i) => {
       dot.classList.toggle('active', i === index);
@@ -194,6 +204,11 @@
       "id": "dusk_tab_label",
       "label": "Dusk tab label",
       "default": "Dusk"
+    },
+    {
+      "type": "image_picker",
+      "id": "dial_image",
+      "label": "Central ritual photo"
     },
     {
       "type": "collection",
@@ -376,4 +391,3 @@
   ]
 }
 {% endschema %}
-

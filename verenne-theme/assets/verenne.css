@@ -1704,3 +1704,80 @@ select.verenne-input option {
   line-height: 1.8;
   color: var(--verenne-text-dim);
 }
+
+/* ==========================================================================
+   THEME STORE PLACEHOLDER & SVG STYLING
+   ========================================================================== */
+.placeholder-svg.verenne-placeholder-svg {
+  width: 100%;
+  height: 100%;
+  background-color: #241B14;
+  fill: rgba(239, 231, 218, 0.18);
+  display: block;
+}
+
+.verenne-hero-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 540px;
+  background-color: #241B14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.verenne-hero-placeholder svg {
+  width: 100%;
+  height: 100%;
+  max-height: 540px;
+  opacity: 0.35;
+}
+
+.verenne-card-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  background-color: #241B14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.verenne-card-placeholder svg {
+  width: 65%;
+  height: 65%;
+  opacity: 0.35;
+}
+
+.verenne-origin-media {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  max-width: 240px;
+  border: 1px solid var(--verenne-border-subtle);
+}
+
+.verenne-origin-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.verenne-dial-img-wrap {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--verenne-border-subtle);
+}
+
+.verenne-dial-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
