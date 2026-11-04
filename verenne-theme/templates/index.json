@@ -275,18 +275,6 @@
         "padding_bottom": 80
       }
     },
-    "journal": {
-      "type": "verenne-featured-blog",
-      "settings": {
-        "caption": "(03) — ARCHIVAL DISPATCHES",
-        "heading": "The Botanical Journal",
-        "subtext": "Essays on bio-chromatography, seasonal harvests, and formulation science.",
-        "post_limit": 3,
-        "show_view_all": true,
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
-    },
     "faq": {
       "type": "verenne-faq",
       "blocks": {
@@ -343,7 +331,6 @@
     "statutes",
     "origins",
     "press",
-    "journal",
     "faq"
   ]
 }

@@ -1950,3 +1950,478 @@ select.verenne-input option {
   height: 100%;
   object-fit: cover;
 }
+
+/* ==========================================================================
+   AUTHENTIC WEB APP TYPOGRAPHY & ATMOSPHERIC CONTRAST SYSTEM
+   ========================================================================== */
+:root {
+  --font-heading-family: 'Bodoni Moda', 'Times New Roman', serif;
+  --font-body-family: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+}
+
+/* Atmospheric Tone-Light (Travertine limestone & Deep Ink) */
+.tone-light {
+  color-scheme: light;
+  background-color: #E9E1D4 !important;
+  color: #1F1610 !important;
+  --verenne-bg-obsidian: #E9E1D4;
+  --verenne-bg-surface: #DDD3C3;
+  --verenne-text-bone: #1F1610;
+  --verenne-text-dim: #4A3B2C;
+  --verenne-text-muted: #6B5D4F;
+  --verenne-gold: #99481F;
+  --verenne-border-subtle: rgba(31, 22, 16, 0.16);
+  --verenne-border-strong: rgba(31, 22, 16, 0.32);
+}
+
+.tone-light h1,
+.tone-light h2,
+.tone-light h3,
+.tone-light h4,
+.tone-light .verenne-heading,
+.tone-light .verenne-hero-title,
+.tone-light .verenne-collection-title,
+.tone-light .verenne-faq-title,
+.tone-light .verenne-editorial-name,
+.tone-light .verenne-editorial-price,
+.tone-light .verenne-faq-question {
+  color: #1F1610 !important;
+}
+
+.tone-light p,
+.tone-light .verenne-body,
+.tone-light .verenne-hero-subtext,
+.tone-light .verenne-collection-blurb,
+.tone-light .verenne-editorial-subtitle,
+.tone-light .verenne-faq-subtext,
+.tone-light .verenne-faq-answer p {
+  color: #4A3B2C !important;
+  font-weight: 450;
+}
+
+.tone-light .verenne-caption {
+  color: #99481F !important;
+}
+
+.tone-light .verenne-caption::before {
+  background-color: #99481F !important;
+}
+
+.tone-light .verenne-faq-title em {
+  color: #99481F !important;
+}
+
+.tone-light .verenne-faq-item[open] .verenne-faq-question {
+  color: #99481F !important;
+}
+
+.tone-light .verenne-faq-toggle-icon {
+  border-color: rgba(31, 22, 16, 0.35) !important;
+  color: #1F1610 !important;
+}
+
+.tone-light .verenne-faq-item[open] .verenne-faq-toggle-icon {
+  border-color: #99481F !important;
+  color: #99481F !important;
+}
+
+.tone-light .verenne-faq-item {
+  border-bottom: 1px solid rgba(31, 22, 16, 0.16) !important;
+}
+
+.tone-light .verenne-faq-accordion {
+  border-top: 1px solid rgba(31, 22, 16, 0.16) !important;
+}
+
+.tone-light .verenne-cat-btn {
+  color: #554739 !important;
+  border-bottom: 2px solid transparent;
+}
+
+.tone-light .verenne-cat-btn:hover {
+  color: #1F1610 !important;
+}
+
+.tone-light .verenne-cat-btn.active {
+  color: #99481F !important;
+  border-bottom: 2px solid #99481F !important;
+}
+
+.tone-light .verenne-editorial-card {
+  border: 1px solid rgba(31, 22, 16, 0.14) !important;
+  background-color: #F2ECE2 !important;
+}
+
+.tone-light .verenne-editorial-add-btn {
+  color: #99481F !important;
+}
+
+.tone-light .verenne-editorial-add-btn:hover {
+  color: #1F1610 !important;
+}
+
+.tone-light .verenne-pill-btn--primary {
+  background-color: #99481F !important;
+  color: #FAF6EE !important;
+  border-color: #99481F !important;
+}
+
+.tone-light .verenne-pill-btn--primary:hover {
+  background-color: #7A3514 !important;
+  border-color: #7A3514 !important;
+}
+
+.tone-light .verenne-pill-btn--outline {
+  border-color: rgba(31, 22, 16, 0.35) !important;
+  color: #1F1610 !important;
+}
+
+.tone-light .verenne-pill-btn--outline:hover {
+  background-color: rgba(31, 22, 16, 0.08) !important;
+}
+
+/* ==========================================================================
+   VERENNE PRODUCT DETAIL MODAL & 3D FLACON
+   ========================================================================== */
+.verenne-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: rgba(10, 8, 6, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s var(--verenne-ease-expo), visibility 0.35s;
+}
+
+.verenne-modal-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.verenne-modal-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 1140px;
+  max-height: 92vh;
+  background-color: #1A130E;
+  color: #FAF6EE;
+  border: 1px solid rgba(239, 231, 218, 0.22);
+  overflow-y: auto;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+  transform: translateY(20px);
+  transition: transform 0.4s var(--verenne-ease-expo);
+}
+
+.verenne-modal-backdrop.active .verenne-modal-dialog {
+  transform: translateY(0);
+}
+
+.verenne-modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  z-index: 10;
+  background: transparent;
+  border: none;
+  font-size: 2.2rem;
+  line-height: 1;
+  color: #FAF6EE;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  transition: opacity 0.2s;
+}
+
+.verenne-modal-close-btn:hover {
+  opacity: 0.7;
+}
+
+.verenne-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .verenne-modal-grid {
+    grid-template-columns: 1.1fr 1fr;
+    min-height: 640px;
+  }
+}
+
+.verenne-modal-media-col {
+  position: relative;
+  background-color: #241B14;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 440px;
+}
+
+.verenne-modal-viewport {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 380px;
+}
+
+.verenne-modal-view-panel {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.verenne-modal-view-panel.active {
+  display: flex;
+}
+
+.verenne-modal-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 3D Flacon Interactive Container */
+.verenne-3d-scene {
+  perspective: 900px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.verenne-3d-scene:active {
+  cursor: grabbing;
+}
+
+.verenne-3d-flacon {
+  position: relative;
+  width: 130px;
+  height: 270px;
+  transform-style: preserve-3d;
+  transition: transform 0.05s linear;
+}
+
+.flacon-cap {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #111 0%, #2A2A2A 50%, #050505 100%);
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.flacon-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  border-radius: 10px;
+  background-color: #C8782A;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(0, 0, 0, 0.4), inset 2px 0 6px rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.flacon-label {
+  background: #FAF7F2;
+  border: 1px solid #C9A05A;
+  padding: 1.25rem 0.75rem;
+  width: 90%;
+  text-align: center;
+  color: #111110;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.flacon-crest {
+  display: block;
+  font-family: var(--font-body-family);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #111;
+  margin-bottom: 0.5rem;
+}
+
+.flacon-name {
+  display: block;
+  font-family: var(--font-heading-family);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: #1F1610;
+  margin-bottom: 0.4rem;
+}
+
+.flacon-origin {
+  display: block;
+  font-family: var(--font-body-family);
+  font-size: 0.55rem;
+  letter-spacing: 0.16em;
+  color: #777;
+}
+
+.verenne-3d-hint {
+  position: absolute;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--verenne-text-muted);
+  pointer-events: none;
+}
+
+/* Modal View Switcher Tabs */
+.verenne-modal-view-tabs {
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.35);
+  padding: 0.5rem;
+  gap: 0.5rem;
+  border-top: 1px solid rgba(239, 231, 218, 0.1);
+}
+
+.verenne-modal-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid rgba(239, 231, 218, 0.15);
+  color: var(--verenne-text-dim);
+  font-family: var(--font-body-family);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.65rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.verenne-modal-tab-btn:hover {
+  border-color: rgba(239, 231, 218, 0.4);
+  color: var(--verenne-text-bone);
+}
+
+.verenne-modal-tab-btn.active {
+  background-color: #FAF6EE;
+  color: #1A130E;
+  border-color: #FAF6EE;
+}
+
+/* Modal Info Column */
+.verenne-modal-info-col {
+  padding: 2.5rem 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 900px) {
+  .verenne-modal-info-col {
+    padding: 3.5rem 3rem 4rem;
+  }
+}
+
+.verenne-modal-title {
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  line-height: 1.05;
+  color: #FAF6EE;
+  margin: 0.5rem 0 0.35rem 0;
+}
+
+.verenne-modal-latin {
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--verenne-gold);
+  margin: 0 0 1rem 0;
+}
+
+.verenne-modal-price {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #FAF6EE;
+  margin: 0 0 1.5rem 0;
+}
+
+.verenne-modal-desc {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--verenne-text-dim);
+  margin: 0 0 1.75rem 0;
+}
+
+.verenne-modal-spec-block {
+  border-top: 1px solid rgba(239, 231, 218, 0.12);
+  padding: 1rem 0;
+}
+
+.verenne-modal-spec-title {
+  font-family: var(--font-body-family);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--verenne-gold);
+  margin: 0 0 0.4rem 0;
+}
+
+.verenne-modal-spec-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--verenne-text-dim);
+  margin: 0;
+}
+
+.verenne-modal-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0 2rem 0;
+  background-color: #241B14;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(239, 231, 218, 0.12);
+}
+
+.metric-label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--verenne-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.metric-val {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--verenne-gold);
+}
+
+.verenne-modal-add-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 1.1rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+}

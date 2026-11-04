@@ -1,9 +1,10 @@
 {%- comment -%}
   Verenne Featured Collection
   Full 16 Haute-Botanique Formulations from the Verenne Archive
+  Includes Product Detail Modal with Bottle, On-Skin Model Portrait, and Interactive 3D Flacon
 {%- endcomment -%}
 
-<section id="collection" class="verenne-collection-section" aria-labelledby="verenne-collection-heading-{{ section.id }}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+<section id="collection" class="verenne-collection-section tone-light" aria-labelledby="verenne-collection-heading-{{ section.id }}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="verenne-collection-container">
     <div class="verenne-collection-header">
       <div>
@@ -20,7 +21,7 @@
         </p>
       </div>
 
-      <!-- Category Filter Tabs (from Web App) -->
+      <!-- Category Filter Tabs -->
       <div class="verenne-category-tabs" role="group" aria-label="Filter by category">
         <button type="button" class="verenne-cat-btn active" onclick="filterVerenneCategory('all', this)">All Formulations</button>
         <button type="button" class="verenne-cat-btn" onclick="filterVerenneCategory('cleanse', this)">Cleanse</button>
@@ -35,11 +36,12 @@
       <!-- 01 Eclat Sauvage -->
       <li class="verenne-grid-item" data-category="treat">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'eclat-sauvage.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°01 Éclat Sauvage — Active botanical serum' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(0)" role="button" tabindex="0" aria-label="View N°01 Éclat Sauvage in detail">
+            <img src="{{ 'eclat-sauvage.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°01 Éclat Sauvage — Active botanical serum" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Éclat Sauvage</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(0)">Éclat Sauvage</h3>
             <p class="verenne-editorial-subtitle">Active botanical serum</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$118</span>
@@ -52,11 +54,12 @@
       <!-- 02 Baume Resineux -->
       <li class="verenne-grid-item" data-category="restore">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'baume-resineux.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°02 Baume Résineux — Frankincense & ceramide salve' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(1)" role="button" tabindex="0" aria-label="View N°02 Baume Résineux in detail">
+            <img src="{{ 'baume-resineux.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°02 Baume Résineux — Frankincense & ceramide salve" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Baume Résineux</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(1)">Baume Résineux</h3>
             <p class="verenne-editorial-subtitle">Frankincense & ceramide salve</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$94</span>
@@ -69,11 +72,12 @@
       <!-- 03 Brume Botanique -->
       <li class="verenne-grid-item" data-category="hydrate">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'brume-botanique.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°03 Brume Botanique — Neroli & damask rose hydrosol' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(2)" role="button" tabindex="0" aria-label="View N°03 Brume Botanique in detail">
+            <img src="{{ 'brume-botanique.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°03 Brume Botanique — Neroli & damask rose hydrosol" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Brume Botanique</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(2)">Brume Botanique</h3>
             <p class="verenne-editorial-subtitle">Neroli & damask rose hydrosol</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$68</span>
@@ -86,11 +90,12 @@
       <!-- 04 Seve Doree -->
       <li class="verenne-grid-item" data-category="treat">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'seve-doree.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°04 Sève Dorée — Overnight renewal elixir' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(3)" role="button" tabindex="0" aria-label="View N°04 Sève Dorée in detail">
+            <img src="{{ 'seve-doree.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°04 Sève Dorée — Overnight renewal elixir" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Sève Dorée</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(3)">Sève Dorée</h3>
             <p class="verenne-editorial-subtitle">Overnight renewal elixir</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$135</span>
@@ -103,11 +108,12 @@
       <!-- 05 Argile Purifiante -->
       <li class="verenne-grid-item" data-category="cleanse">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'argile-purifiante.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°05 Argile Purifiante — Botanical clay cleanser' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(4)" role="button" tabindex="0" aria-label="View N°05 Argile Purifiante in detail">
+            <img src="{{ 'argile-purifiante.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°05 Argile Purifiante — Botanical clay cleanser" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Argile Purifiante</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(4)">Argile Purifiante</h3>
             <p class="verenne-editorial-subtitle">Botanical clay cleanser</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$58</span>
@@ -120,11 +126,12 @@
       <!-- 06 Creme Radieuse -->
       <li class="verenne-grid-item" data-category="hydrate">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'creme-radieuse.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°06 Crème Radieuse — Daily moisture lotion' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(5)" role="button" tabindex="0" aria-label="View N°06 Crème Radieuse in detail">
+            <img src="{{ 'creme-radieuse.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°06 Crème Radieuse — Daily moisture lotion" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Crème Radieuse</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(5)">Crème Radieuse</h3>
             <p class="verenne-editorial-subtitle">Daily moisture lotion</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$92</span>
@@ -137,11 +144,12 @@
       <!-- 07 Lait Nectar -->
       <li class="verenne-grid-item" data-category="cleanse">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'lait-nectar.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°07 Lait Nectar Démaquillant — Alpine squalane cleansing milk' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(6)" role="button" tabindex="0" aria-label="View N°07 Lait Nectar Démaquillant in detail">
+            <img src="{{ 'lait-nectar.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°07 Lait Nectar Démaquillant — Alpine squalane cleansing milk" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Lait Nectar Démaquillant</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(6)">Lait Nectar Démaquillant</h3>
             <p class="verenne-editorial-subtitle">Alpine squalane cleansing milk</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$64</span>
@@ -154,11 +162,12 @@
       <!-- 08 Gelee Glaciaire -->
       <li class="verenne-grid-item" data-category="cleanse">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'gel-glaciaire.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°08 Gelée Glaciaire — Glacial salicylic clarifier' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(7)" role="button" tabindex="0" aria-label="View N°08 Gelée Glaciaire in detail">
+            <img src="{{ 'gel-glaciaire.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°08 Gelée Glaciaire — Glacial salicylic clarifier" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Gelée Glaciaire</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(7)">Gelée Glaciaire</h3>
             <p class="verenne-editorial-subtitle">Glacial salicylic clarifier</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$56</span>
@@ -171,11 +180,12 @@
       <!-- 09 Huile Soyeuse -->
       <li class="verenne-grid-item" data-category="cleanse">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'huile-soyeuse.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°09 Huile Soyeuse Purifiante — Golden camellia cleansing oil' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(8)" role="button" tabindex="0" aria-label="View N°09 Huile Soyeuse Purifiante in detail">
+            <img src="{{ 'huile-soyeuse.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°09 Huile Soyeuse Purifiante — Golden camellia cleansing oil" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Huile Soyeuse Purifiante</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(8)">Huile Soyeuse Purifiante</h3>
             <p class="verenne-editorial-subtitle">Golden camellia cleansing oil</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$72</span>
@@ -188,11 +198,12 @@
       <!-- 10 Nectar Resurfacant -->
       <li class="verenne-grid-item" data-category="treat">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'resurfacing-nectar.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°10 Nectar Resurfaçant — Fermented AHA flower peeling' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(9)" role="button" tabindex="0" aria-label="View N°10 Nectar Resurfaçant in detail">
+            <img src="{{ 'resurfacing-nectar.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°10 Nectar Resurfaçant — Fermented AHA flower peeling" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Nectar Resurfaçant</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(9)">Nectar Resurfaçant</h3>
             <p class="verenne-editorial-subtitle">Fermented AHA flower peeling</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$124</span>
@@ -205,11 +216,12 @@
       <!-- 11 Elixir Cuivre Peptides -->
       <li class="verenne-grid-item" data-category="treat">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'cuivre-peptides.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°11 Élixir Cuivré Peptides — Copper tripeptide-1 & chlorella' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(10)" role="button" tabindex="0" aria-label="View N°11 Élixir Cuivré Peptides in detail">
+            <img src="{{ 'cuivre-peptides.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°11 Élixir Cuivré Peptides — Copper tripeptide-1 & chlorella" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Élixir Cuivré Peptides</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(10)">Élixir Cuivré Peptides</h3>
             <p class="verenne-editorial-subtitle">Copper tripeptide-1 & chlorella</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$148</span>
@@ -222,11 +234,12 @@
       <!-- 12 Essence Florale -->
       <li class="verenne-grid-item" data-category="hydrate">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'essence-fleurie.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°12 Essence Florale Cellulaire — Fermented birch sap & tremella' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(11)" role="button" tabindex="0" aria-label="View N°12 Essence Florale Cellulaire in detail">
+            <img src="{{ 'essence-fleurie.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°12 Essence Florale Cellulaire — Fermented birch sap & tremella" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Essence Florale Cellulaire</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(11)">Essence Florale Cellulaire</h3>
             <p class="verenne-editorial-subtitle">Fermented birch sap & tremella</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$78</span>
@@ -239,11 +252,12 @@
       <!-- 13 Voile Solaire SPF 50+ -->
       <li class="verenne-grid-item" data-category="hydrate">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'voile-hydratant.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°13 Voile Solaire Botanique SPF 50+ — Mineral fluid & edelweiss' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(12)" role="button" tabindex="0" aria-label="View N°13 Voile Solaire Botanique SPF 50+ in detail">
+            <img src="{{ 'voile-hydratant.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°13 Voile Solaire Botanique SPF 50+ — Mineral fluid & edelweiss" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Voile Solaire Botanique SPF 50+</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(12)">Voile Solaire Botanique SPF 50+</h3>
             <p class="verenne-editorial-subtitle">Mineral fluid & edelweiss</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$82</span>
@@ -256,11 +270,12 @@
       <!-- 14 Cire Reparatrice Nocturne -->
       <li class="verenne-grid-item" data-category="restore">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'cire-nocturne.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°14 Cire Réparatrice Nocturne — Raw propolis & phytosterol' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(13)" role="button" tabindex="0" aria-label="View N°14 Cire Réparatrice Nocturne in detail">
+            <img src="{{ 'cire-nocturne.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°14 Cire Réparatrice Nocturne — Raw propolis & phytosterol" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Cire Réparatrice Nocturne</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(13)">Cire Réparatrice Nocturne</h3>
             <p class="verenne-editorial-subtitle">Raw propolis & phytosterol</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$112</span>
@@ -273,11 +288,12 @@
       <!-- 15 Baume Contour Regard -->
       <li class="verenne-grid-item" data-category="restore">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'baume-regard.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°15 Baume Contour Regard — Wild arnica & bio-ceramide' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(14)" role="button" tabindex="0" aria-label="View N°15 Baume Contour Regard in detail">
+            <img src="{{ 'baume-regard.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°15 Baume Contour Regard — Wild arnica & bio-ceramide" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Baume Contour Regard</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(14)">Baume Contour Regard</h3>
             <p class="verenne-editorial-subtitle">Wild arnica & bio-ceramide</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$88</span>
@@ -290,11 +306,12 @@
       <!-- 16 Onguent Barriere Extreme -->
       <li class="verenne-grid-item" data-category="restore">
         <article class="verenne-editorial-card">
-          <div class="verenne-card-media-wrap">
-            {{ 'onguent-protecteur.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°16 Onguent Barrière Extrême — Centella & cupuaçu balm' }}
+          <div class="verenne-card-media-wrap" onclick="openVerenneModal(15)" role="button" tabindex="0" aria-label="View N°16 Onguent Barrière Extrême in detail">
+            <img src="{{ 'onguent-protecteur.jpg' | asset_url }}" loading="lazy" class="verenne-editorial-img" alt="N°16 Onguent Barrière Extrême — Centella & cupuaçu balm" width="600" height="750">
+            <span class="verenne-card-quick-view">Quick view</span>
           </div>
           <div class="verenne-editorial-info">
-            <h3 class="verenne-editorial-name">Onguent Barrière Extrême</h3>
+            <h3 class="verenne-editorial-name" onclick="openVerenneModal(15)">Onguent Barrière Extrême</h3>
             <p class="verenne-editorial-subtitle">Centella & cupuaçu balm</p>
             <div class="verenne-editorial-bottom">
               <span class="verenne-editorial-price">$96</span>
@@ -307,7 +324,353 @@
   </div>
 </section>
 
+<!-- ==========================================================================
+     VERENNE PRODUCT DETAIL MODAL (Bottle · On Skin Portrait · 3D Flacon)
+     ========================================================================== -->
+<div id="verenne-modal-backdrop" class="verenne-modal-backdrop" onclick="closeVerenneModal(event)">
+  <div class="verenne-modal-dialog" onclick="event.stopPropagation()">
+    <button type="button" class="verenne-modal-close-btn" onclick="closeVerenneModal()" aria-label="Close modal">&times;</button>
+    
+    <div class="verenne-modal-grid">
+      <!-- Left Column: Visual Explorer (Bottle / On skin / 3D) -->
+      <div class="verenne-modal-media-col">
+        <div class="verenne-modal-viewport">
+          <!-- Bottle View -->
+          <div id="verenne-view-bottle" class="verenne-modal-view-panel active">
+            <img id="verenne-modal-bottle-img" src="{{ 'eclat-sauvage.jpg' | asset_url }}" alt="Formulation bottle" class="verenne-modal-img" width="600" height="750">
+          </div>
+
+          <!-- On Skin View -->
+          <div id="verenne-view-portrait" class="verenne-modal-view-panel">
+            <img id="verenne-modal-portrait-img" src="{{ 'model_oil_glow.jpg' | asset_url }}" alt="Formulation on skin" class="verenne-modal-img" width="600" height="750">
+          </div>
+
+          <!-- 3D Interactive View -->
+          <div id="verenne-view-3d" class="verenne-modal-view-panel">
+            <div class="verenne-3d-scene" id="verenne-3d-container">
+              <div class="verenne-3d-flacon" id="verenne-3d-flacon">
+                <div class="flacon-body" id="flacon-body-color">
+                  <div class="flacon-label">
+                    <span class="flacon-crest">VERENNE</span>
+                    <span id="flacon-label-name" class="flacon-name">ÉCLAT SAUVAGE</span>
+                    <span class="flacon-origin">PARIS · GRASSE</span>
+                  </div>
+                </div>
+                <div class="flacon-cap"></div>
+              </div>
+            </div>
+            <p class="verenne-3d-hint">Drag or swipe to rotate 3D flacon</p>
+          </div>
+        </div>
+
+        <!-- View Switcher Tabs -->
+        <div class="verenne-modal-view-tabs" role="tablist">
+          <button type="button" class="verenne-modal-tab-btn active" id="tab-bottle" onclick="switchVerenneModalView('bottle')">Bottle</button>
+          <button type="button" class="verenne-modal-tab-btn" id="tab-portrait" onclick="switchVerenneModalView('portrait')">On skin</button>
+          <button type="button" class="verenne-modal-tab-btn" id="tab-3d" onclick="switchVerenneModalView('3d')">View in 3D</button>
+        </div>
+      </div>
+
+      <!-- Right Column: Archival Dossier & Add to Bag -->
+      <div class="verenne-modal-info-col">
+        <p class="verenne-caption" id="modal-category">FORMULATION DOSSIER</p>
+        <h2 class="verenne-heading verenne-modal-title" id="modal-title">N°01 Éclat Sauvage</h2>
+        <p class="verenne-modal-latin" id="modal-latin">Helichrysum stoechas</p>
+        <p class="verenne-modal-price" id="modal-price">$118</p>
+
+        <p class="verenne-body verenne-modal-desc" id="modal-desc"></p>
+
+        <div class="verenne-modal-spec-block">
+          <h4 class="verenne-modal-spec-title">Key Botanicals</h4>
+          <p class="verenne-body verenne-modal-spec-text" id="modal-botanicals"></p>
+        </div>
+
+        <div class="verenne-modal-spec-block">
+          <h4 class="verenne-modal-spec-title">Ritual Application</h4>
+          <p class="verenne-body verenne-modal-spec-text" id="modal-how"></p>
+        </div>
+
+        <div class="verenne-modal-metrics">
+          <div>
+            <span class="metric-label">BIOACTIVE</span>
+            <span class="metric-val" id="modal-bioactive">99.4%</span>
+          </div>
+          <div>
+            <span class="metric-label">SKIN PH</span>
+            <span class="metric-val" id="modal-ph">5.2</span>
+          </div>
+        </div>
+
+        <button type="button" class="verenne-pill-btn verenne-modal-add-btn" id="modal-add-btn" onclick="addCurrentModalToBag()">
+          + Add to Bag
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+  const VERENNE_DATA = [
+    {
+      id: 'eclat-sauvage',
+      fullName: 'N°01 Éclat Sauvage',
+      category: 'SERUM · DAWN',
+      subtitle: 'Active botanical serum',
+      latin: 'Helichrysum stoechas · Corsica',
+      price: '$118',
+      bottle: "{{ 'eclat-sauvage.jpg' | asset_url }}",
+      portrait: "{{ 'model_oil_glow.jpg' | asset_url }}",
+      desc: 'Eighteen cold-pressed seeds and wild everlasting flower, folded into a single golden drop. Sinks in like sunlight on warm stone to replenish the lipid barrier.',
+      botanicals: 'Corsican Helichrysum, Rosehip seed, Sea buckthorn, Olive squalane.',
+      how: 'Warm 3–4 drops between palms, breathe in the botanical esters, then press upward into damp skin.',
+      bioactive: '99.4%',
+      ph: '5.2 (Skin-neutral)',
+      color: '#C8782A'
+    },
+    {
+      id: 'baume-resineux',
+      fullName: 'N°02 Baume Résineux',
+      category: 'SALVE · DUSK',
+      subtitle: 'Frankincense & ceramide salve',
+      latin: 'Boswellia carterii · Sanaag',
+      price: '$94',
+      bottle: "{{ 'baume-resineux.jpg' | asset_url }}",
+      portrait: "{{ 'model_cream_massage.jpg' | asset_url }}",
+      desc: 'A velvet soufflé of sacred Somali frankincense and five plant ceramides. Built for harsh dry air, long flights, and the final protective cocoon of the evening.',
+      botanicals: 'Somali frankincense, Oat beta-glucan, Plant ceramides, Cupuaçu butter.',
+      how: 'Warm a pearl between fingertips until molten. Press onto cheekbones, lips, and areas of stress.',
+      bioactive: '98.8%',
+      ph: '5.5 (Acid mantle)',
+      color: '#774C1E'
+    },
+    {
+      id: 'brume-botanique',
+      fullName: 'N°03 Brume Botanique',
+      category: 'HYDROSOL · DAWN',
+      subtitle: 'Neroli & damask rose hydrosol',
+      latin: 'Citrus aurantium · Tunisia & Grasse',
+      price: '$68',
+      bottle: "{{ 'brume-botanique.jpg' | asset_url }}",
+      portrait: "{{ 'model_mist_dew.jpg' | asset_url }}",
+      desc: 'Pure cellular copper distillation of Tunisian orange blossoms and fresh Grasse rose petals. Prepares the skin to absorb active lipid serums with bio-identical mineral hydration.',
+      botanicals: 'Bitter orange neroli, Damask rose hydrosol, Alpine snow mushroom.',
+      how: 'Mist generously over cleansed face and neck before applying lipid serums or creams.',
+      bioactive: '99.8%',
+      ph: '4.8 (Physiological)',
+      color: '#E0935F'
+    },
+    {
+      id: 'seve-doree',
+      fullName: 'N°04 Sève Dorée',
+      category: 'NIGHT ELIXIR · DUSK',
+      subtitle: 'Overnight renewal elixir',
+      latin: 'Psoralea corylifolia · Grasse',
+      price: '$135',
+      bottle: "{{ 'seve-doree.jpg' | asset_url }}",
+      portrait: "{{ 'model_serum_shower.jpg' | asset_url }}",
+      desc: 'A 2% plant-derived bakuchiol fluid harmonized with cold-pressed prickly pear seed oil. Delivers the cellular rejuvenating potency of retinol without irritation or sun sensitivity.',
+      botanicals: 'French Bakuchiol 2%, Moroccan Prickly Pear seed, Cold-pressed Marula.',
+      how: 'Press 3–5 drops into cleansed skin at dusk. Follow with barrier balm for deep sleep regeneration.',
+      bioactive: '99.1%',
+      ph: '5.4 (Dermal)',
+      color: '#2A1652'
+    },
+    {
+      id: 'argile-purifiante',
+      fullName: 'N°05 Argile Purifiante',
+      category: 'CLEANSER · DAWN & DUSK',
+      subtitle: 'Botanical clay cleanser',
+      latin: 'Montmorillonite · Auvergne',
+      price: '$58',
+      bottle: "{{ 'argile-purifiante.jpg' | asset_url }}",
+      portrait: "{{ 'model_argile_mask.jpg' | asset_url }}",
+      desc: 'Non-drying glacial clay blended with cold-pressed meadowfoam and stone-ground chamomile. Draws micro-pollutants and sunscreen without disturbing the delicate acid mantle.',
+      botanicals: 'French Green Clay, Meadowfoam seed oil, Roman Chamomile extract.',
+      how: 'Massage a hazelnut amount over dry or damp skin, emulsify with warm water, and rinse clean.',
+      bioactive: '96.5%',
+      ph: '5.5 (Acid mantle)',
+      color: '#6B675F'
+    },
+    {
+      id: 'creme-radieuse',
+      fullName: 'N°06 Crème Radieuse',
+      category: 'MOISTURISER · DAWN',
+      subtitle: 'Daily moisture lotion',
+      latin: 'Leontopodium alpinum · Valais',
+      price: '$92',
+      bottle: "{{ 'creme-radieuse.jpg' | asset_url }}",
+      portrait: "{{ 'model_cream_massage.jpg' | asset_url }}",
+      desc: 'A featherlight emulsion of alpine edelweiss flavonoids and olive squalane that shields against environmental oxidative stress while locking in dewiness all day.',
+      botanicals: 'Alpine Edelweiss, Olive squalane, Multi-weight Plant Hyaluronic acid.',
+      how: 'Dispense two pumps and smooth gently outward over face, neck, and décolleté.',
+      bioactive: '97.8%',
+      ph: '5.3 (Hydric)',
+      color: '#CDB68A'
+    },
+    {
+      id: 'lait-nectar',
+      fullName: 'N°07 Lait Nectar Démaquillant',
+      category: 'CLEANSING MILK · DUSK',
+      subtitle: 'Alpine squalane cleansing milk',
+      latin: 'Helichrysum & Squalane · Grasse',
+      price: '$64',
+      bottle: "{{ 'lait-nectar.jpg' | asset_url }}",
+      portrait: "{{ 'model_lait_cleanse.jpg' | asset_url }}",
+      desc: 'A soothing milk emulsion that effortlessly lifts long-wear pigment and urban particulates while infusing lipid comfort with cold-pressed Corsican immortelle.',
+      botanicals: 'Alpine squalane, Corsican Immortelle hydrosol, Virgin Jojoba milk.',
+      how: 'Massage 2–3 pumps onto dry skin to dissolve sunscreen and makeup. Tissue or rinse off.',
+      bioactive: '98.2%',
+      ph: '5.5 (Physiological)',
+      color: '#D9D2C3'
+    },
+    {
+      id: 'gel-glaciaire',
+      fullName: 'N°08 Gelée Glaciaire',
+      category: 'CLARIFYING GEL · DAWN',
+      subtitle: 'Glacial salicylic clarifier',
+      latin: 'Salix alba · Haute-Savoie',
+      price: '$56',
+      bottle: "{{ 'gel-glaciaire.jpg' | asset_url }}",
+      portrait: "{{ 'model_argile_mask.jpg' | asset_url }}",
+      desc: 'Gentle clarifying wash harnessing wild willow bark salicylates and cooling rosemary water. Clears cellular congestion and refines texture with zero tightness.',
+      botanicals: 'Natural White Willow Bark, Wild rosemary water, Glacial thermal minerals.',
+      how: 'Lather a pea-sized drop with cool water. Massage across T-zone and rinse thoroughly.',
+      bioactive: '95.4%',
+      ph: '5.0 (Clarifying)',
+      color: '#86B29B'
+    },
+    {
+      id: 'huile-soyeuse',
+      fullName: 'N°09 Huile Soyeuse Purifiante',
+      category: 'CLEANSING OIL · DUSK',
+      subtitle: 'Golden camellia cleansing oil',
+      latin: 'Camellia japonica · Jeju & Grasse',
+      price: '$72',
+      bottle: "{{ 'huile-soyeuse.jpg' | asset_url }}",
+      portrait: "{{ 'model_oil_glow.jpg' | asset_url }}",
+      desc: 'A silky hydrophilic botanical oil that transforms into a milky emulsion upon contact with water. Effortlessly dissolves waterproof pigment and environmental particulate matter.',
+      botanicals: 'Golden Camellia seed, Cold-pressed Bergamot, Rice bran oil.',
+      how: 'Massage 2 pumps onto dry face. Emulsifies into silk milk on contact with water.',
+      bioactive: '99.2%',
+      ph: 'Anhydrous',
+      color: '#E8B96E'
+    },
+    {
+      id: 'resurfacing-nectar',
+      fullName: 'N°10 Nectar Resurfaçant',
+      category: 'ACID ELIXIR · DUSK',
+      subtitle: 'Fermented AHA flower peeling',
+      latin: 'Hibiscus sabdariffa · Atlas',
+      price: '$124',
+      bottle: "{{ 'resurfacing-nectar.jpg' | asset_url }}",
+      portrait: "{{ 'model_serum_shower.jpg' | asset_url }}",
+      desc: 'Gentle botanical acid elixir combining fermented wild hibiscus flower acids and willow bark salicylates. Refines pores and texture while honoring delicate lipid bilayers.',
+      botanicals: 'Wild Hibiscus flower acids, Pomegranate enzymes, White willow bark.',
+      how: 'Apply 4–5 drops at dusk, 2–3 nights per week. Leave on overnight; do not rinse.',
+      bioactive: '97.0%',
+      ph: '3.8 (Active exfoliation)',
+      color: '#822338'
+    },
+    {
+      id: 'cuivre-peptides',
+      fullName: 'N°11 Élixir Cuivré Peptides',
+      category: 'CELLULAR PEPTIDE · DAWN & DUSK',
+      subtitle: 'Copper tripeptide-1 & chlorella',
+      latin: 'GHK-Cu & Chlorella vulgaris',
+      price: '$148',
+      bottle: "{{ 'cuivre-peptides.jpg' | asset_url }}",
+      portrait: "{{ 'model_serum_shower.jpg' | asset_url }}",
+      desc: 'Pure copper tripeptide-1 stabilized in an active base of blue malachite and maritime pine bark. Clinically shown to support endogenous collagen and elastin synthesis.',
+      botanicals: 'Copper Tripeptide-1, Chlorella vulgaris, Maritime pine bark.',
+      how: 'Smooth 3 drops onto clean skin morning and night before heavier creams.',
+      bioactive: '98.5%',
+      ph: '5.6 (Cellular)',
+      color: '#14465F'
+    },
+    {
+      id: 'essence-fleurie',
+      fullName: 'N°12 Essence Florale Cellulaire',
+      category: 'HYDRATING ESSENCE · DAWN',
+      subtitle: 'Fermented birch sap & tremella',
+      latin: 'Betula alba & Tremella · Alps',
+      price: '$78',
+      bottle: "{{ 'essence-fleurie.jpg' | asset_url }}",
+      portrait: "{{ 'model_mist_dew.jpg' | asset_url }}",
+      desc: 'Concentrated bio-fermented floral waters enriched with multi-molecular hyaluronic acid and snow mushroom polysaccharides for deep dermal hydration.',
+      botanicals: 'Fermented Birch sap, Snow mushroom Tremella, Linden blossom.',
+      how: 'Pour a nickel amount into palms and pat firmly into face and neck.',
+      bioactive: '99.0%',
+      ph: '5.1 (Hydric)',
+      color: '#E0D0AE'
+    },
+    {
+      id: 'voile-hydratant',
+      fullName: 'N°13 Voile Solaire Botanique SPF 50+',
+      category: 'MINERAL SHIELD · DAWN',
+      subtitle: 'Mineral fluid & edelweiss',
+      latin: 'Zincum & Edelweiss · Alps',
+      price: '$82',
+      bottle: "{{ 'voile-hydratant.jpg' | asset_url }}",
+      portrait: "{{ 'model_cream_massage.jpg' | asset_url }}",
+      desc: '100% transparent non-nano mineral sun veil infused with alpine edelweiss and raspberry seed oil to neutralize both UV and blue-light radiation.',
+      botanicals: 'Non-nano Zinc Oxide 18%, Alpine Edelweiss, Raspberry seed oil.',
+      how: 'Shake well. Apply generously 15 minutes before sun exposure as the final morning step.',
+      bioactive: '94.5%',
+      ph: '6.0 (Protective)',
+      color: '#EDE6D6'
+    },
+    {
+      id: 'cire-nocturne',
+      fullName: 'N°14 Cire Réparatrice Nocturne',
+      category: 'SLEEPING BUTTER · DUSK',
+      subtitle: 'Raw propolis & phytosterol',
+      latin: 'Propolis cera · Haute-Provence',
+      price: '$112',
+      bottle: "{{ 'cire-nocturne.jpg' | asset_url }}",
+      portrait: "{{ 'model_cream_massage.jpg' | asset_url }}",
+      desc: 'An unctuous golden balm of raw alpine propolis and botanical phytosterols. Creates a breathable micro-climate that repairs cellular barrier damage during sleep.',
+      botanicals: 'Alpine Raw Propolis, Botanical Phytosterols, Calendula resin.',
+      how: 'Melt a pea-sized amount between warm fingers. Press into dry areas before sleep.',
+      bioactive: '99.5%',
+      ph: 'Anhydrous',
+      color: '#774C1E'
+    },
+    {
+      id: 'baume-regard',
+      fullName: 'N°15 Baume Contour Regard',
+      category: 'EYE MELT · DAWN & DUSK',
+      subtitle: 'Wild arnica & bio-ceramide',
+      latin: 'Arnica montana & Coffea · Jura',
+      price: '$88',
+      bottle: "{{ 'baume-regard.jpg' | asset_url }}",
+      portrait: "{{ 'model_cream_massage.jpg' | asset_url }}",
+      desc: 'Targeted eye contour salve infused with supercritical green coffee bean extract, eyebright herb, and arnica. De-puffs and brightens shadow circles with velvety slip.',
+      botanicals: 'Wild Arnica, Green coffee bean extract, Cornflower hydrosol.',
+      how: 'Gently tap a grain-of-rice amount around the orbital bone morning and night.',
+      bioactive: '98.0%',
+      ph: '5.4 (Ocular safe)',
+      color: '#8F7F67'
+    },
+    {
+      id: 'onguent-protecteur',
+      fullName: 'N°16 Onguent Barrière Extrême',
+      category: 'RECOVERY BALM · DUSK',
+      subtitle: 'Centella & cupuaçu balm',
+      latin: 'Centella asiatica & Theobroma',
+      price: '$96',
+      bottle: "{{ 'onguent-protecteur.jpg' | asset_url }}",
+      portrait: "{{ 'model_cream_massage.jpg' | asset_url }}",
+      desc: 'An ultra-concentrated recovery balm formulated with wild alpine arnica, calendula resin, and virgin shea. Melt between palms to cushion wind-burned, dry, or stressed skin.',
+      botanicals: 'Centella Asiatica (Cica), Wild Cupuaçu butter, Murumuru resin.',
+      how: 'Apply to wind-chapped cheeks, lips, hands, or anywhere skin is stressed.',
+      bioactive: '99.3%',
+      ph: 'Anhydrous',
+      color: '#6A5E50'
+    }
+  ];
+
+  let currentProductIndex = 0;
+
   function filterVerenneCategory(cat, btn) {
     document.querySelectorAll('.verenne-cat-btn').forEach(function(b) {
       b.classList.remove('active');
@@ -340,12 +703,119 @@
   function handleVerenneAdd(btn, name, price) {
     const originalText = btn.textContent;
     btn.textContent = '✓ Added';
-    btn.style.color = '#86efac';
+    btn.style.color = '#15803d';
     setTimeout(function() {
       btn.textContent = originalText;
       btn.style.color = '';
     }, 1800);
   }
+
+  function openVerenneModal(index) {
+    currentProductIndex = index;
+    const p = VERENNE_DATA[index];
+    if (!p) return;
+
+    document.getElementById('modal-category').textContent = p.category;
+    document.getElementById('modal-title').textContent = p.fullName;
+    document.getElementById('modal-latin').textContent = p.latin;
+    document.getElementById('modal-price').textContent = p.price;
+    document.getElementById('modal-desc').textContent = p.desc;
+    document.getElementById('modal-botanicals').textContent = p.botanicals;
+    document.getElementById('modal-how').textContent = p.how;
+    document.getElementById('modal-bioactive').textContent = p.bioactive;
+    document.getElementById('modal-ph').textContent = p.ph;
+
+    document.getElementById('verenne-modal-bottle-img').src = p.bottle;
+    document.getElementById('verenne-modal-bottle-img').alt = p.fullName;
+
+    document.getElementById('verenne-modal-portrait-img').src = p.portrait;
+    document.getElementById('verenne-modal-portrait-img').alt = p.fullName + ' on skin';
+
+    document.getElementById('flacon-label-name').textContent = p.fullName.toUpperCase();
+    document.getElementById('flacon-body-color').style.backgroundColor = p.color;
+
+    switchVerenneModalView('bottle');
+    document.getElementById('verenne-modal-backdrop').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVerenneModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.classList.contains('verenne-modal-close-btn')) return;
+    document.getElementById('verenne-modal-backdrop').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function switchVerenneModalView(view) {
+    document.querySelectorAll('.verenne-modal-tab-btn').forEach(function(btn) {
+      btn.classList.remove('active');
+    });
+    document.querySelectorAll('.verenne-modal-view-panel').forEach(function(panel) {
+      panel.classList.remove('active');
+    });
+
+    const activeTab = document.getElementById('tab-' + view);
+    const activePanel = document.getElementById('verenne-view-' + view);
+    if (activeTab) activeTab.classList.add('active');
+    if (activePanel) activePanel.classList.add('active');
+  }
+
+  function addCurrentModalToBag() {
+    const p = VERENNE_DATA[currentProductIndex];
+    const btn = document.getElementById('modal-add-btn');
+    const originalText = btn.textContent;
+    btn.textContent = '✓ Added ' + p.fullName;
+    setTimeout(function() {
+      btn.textContent = originalText;
+      closeVerenneModal();
+    }, 1400);
+  }
+
+  /* Interactive 3D Flacon Rotation on Drag/Touch */
+  (function() {
+    let isDragging = false;
+    let startX = 0;
+    let currentRotation = 0;
+    const scene = document.getElementById('verenne-3d-container');
+    const flacon = document.getElementById('verenne-3d-flacon');
+
+    if (scene && flacon) {
+      scene.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        startX = e.clientX;
+      });
+
+      window.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        currentRotation += dx * 0.7;
+        flacon.style.transform = 'rotateY(' + currentRotation + 'deg)';
+        startX = e.clientX;
+      });
+
+      window.addEventListener('mouseup', function() {
+        isDragging = false;
+      });
+
+      scene.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          startX = e.touches[0].clientX;
+        }
+      });
+
+      window.addEventListener('touchmove', function(e) {
+        if (!isDragging || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - startX;
+        currentRotation += dx * 0.7;
+        flacon.style.transform = 'rotateY(' + currentRotation + 'deg)';
+        startX = e.touches[0].clientX;
+      });
+
+      window.addEventListener('touchend', function() {
+        isDragging = false;
+      });
+    }
+  })();
 </script>
 
 {% schema %}
