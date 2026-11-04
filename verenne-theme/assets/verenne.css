@@ -2080,6 +2080,143 @@ select.verenne-input option {
   background-color: rgba(31, 22, 16, 0.08) !important;
 }
 
+/* Tone-Light Botanical Origins (Provenance) */
+.tone-light .verenne-origins-title,
+.tone-light .verenne-origin-common,
+.tone-light .verenne-spec-val {
+  color: #1F1610 !important;
+}
+
+.tone-light .verenne-origins-subtext,
+.tone-light .verenne-origin-latin,
+.tone-light .verenne-origin-story {
+  color: #4A3B2C !important;
+  font-weight: 450;
+}
+
+.tone-light .verenne-origins-title em {
+  color: #99481F !important;
+}
+
+.tone-light .verenne-origin-spec .verenne-caption {
+  color: #99481F !important;
+}
+
+.tone-light .verenne-origins-list {
+  border-top: 1px solid rgba(31, 22, 16, 0.22) !important;
+}
+
+.tone-light .verenne-origin-item {
+  border-bottom: 1px solid rgba(31, 22, 16, 0.22) !important;
+}
+
+/* Atmospheric Obsidian Sections (Circadian Ritual & Manifesto) */
+.verenne-circadian-ritual {
+  background-color: #1A130E !important;
+  color: #FAF6EE !important;
+}
+
+.verenne-circadian-ritual .verenne-ritual-title {
+  color: #FAF6EE !important;
+}
+
+.verenne-circadian-ritual .verenne-gold-text {
+  color: #E89E6C !important;
+}
+
+.verenne-circadian-ritual .verenne-caption {
+  color: #E89E6C !important;
+}
+
+.verenne-circadian-ritual .verenne-caption::before {
+  background-color: #E89E6C !important;
+}
+
+.verenne-circadian-ritual .verenne-ritual-tabs {
+  background-color: rgba(239, 231, 218, 0.08) !important;
+  border-color: rgba(239, 231, 218, 0.2) !important;
+}
+
+.verenne-circadian-ritual .verenne-ritual-tab {
+  color: #C2B5A4 !important;
+}
+
+.verenne-circadian-ritual .verenne-ritual-tab.active {
+  background-color: #FAF6EE !important;
+  color: #1A130E !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+.verenne-circadian-ritual .verenne-step-verb {
+  color: #C2B5A4 !important;
+  font-family: var(--font-heading-family);
+  font-size: 2rem;
+}
+
+.verenne-circadian-ritual .verenne-ritual-step-item.active .verenne-step-verb {
+  color: #FAF6EE !important;
+  font-style: italic;
+  transform: translateX(6px);
+}
+
+.verenne-circadian-ritual .verenne-step-time {
+  color: #A39585 !important;
+  font-family: monospace;
+}
+
+.verenne-circadian-ritual .verenne-step-product-title {
+  color: #E5DCCE !important;
+}
+
+.verenne-circadian-ritual .verenne-step-product-price {
+  color: #E89E6C !important;
+  font-family: monospace;
+}
+
+.verenne-circadian-ritual .verenne-ritual-subtext {
+  color: #A39585 !important;
+}
+
+.verenne-circadian-ritual .verenne-ritual-steps {
+  border-top: 1px solid rgba(239, 231, 218, 0.16) !important;
+}
+
+.verenne-circadian-ritual .verenne-ritual-step-item {
+  border-bottom: 1px solid rgba(239, 231, 218, 0.16) !important;
+}
+
+.verenne-circadian-ritual .verenne-pill-btn--primary {
+  background-color: #E89E6C !important;
+  color: #140E0A !important;
+  border-color: #E89E6C !important;
+}
+
+.verenne-circadian-ritual .verenne-pill-btn--primary:hover {
+  background-color: #F8B485 !important;
+  border-color: #F8B485 !important;
+}
+
+.verenne-rich-text {
+  background-color: #17110C !important;
+  color: #FAF6EE !important;
+}
+
+.verenne-rich-text .verenne-rich-text__heading {
+  color: #FAF6EE !important;
+}
+
+.verenne-rich-text .verenne-rich-text__text {
+  color: #E5DCCE !important;
+}
+
+.verenne-rich-text .verenne-caption {
+  color: #E89E6C !important;
+}
+
+.verenne-rich-text .verenne-caption::before {
+  background-color: #E89E6C !important;
+}
+
 /* ==========================================================================
    VERENNE PRODUCT DETAIL MODAL & 3D FLACON
    ========================================================================== */
