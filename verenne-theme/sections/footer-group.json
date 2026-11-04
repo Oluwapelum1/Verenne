@@ -1,0 +1,41 @@
+{
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "verenne-footer",
+      "blocks": {
+        "links-house": {
+          "type": "link_list",
+          "settings": {
+            "heading": "The House",
+            "menu": "footer"
+          }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Archival Dispatch",
+            "subtext": "Receive private allocations and botanical harvest records.",
+            "placeholder": "atelier@domain.com"
+          }
+        }
+      },
+      "block_order": [
+        "links-house",
+        "newsletter"
+      ],
+      "settings": {
+        "brand_name": "VERENNE",
+        "brand_tagline": "Haute-Botanique Formulations compounded in Grasse, France. Limited archival editions in violet Miron glass.",
+        "enable_country_selector": true,
+        "show_policy": true,
+        "padding_top": 80,
+        "padding_bottom": 64
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

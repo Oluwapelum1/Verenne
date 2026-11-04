@@ -1,0 +1,123 @@
+{%- comment -%}
+  Verenne Luxury Hero Section
+  Haute-Botanique split editorial layout with large Bodoni typography and studio imagery
+{%- endcomment -%}
+
+<section class="verenne-hero" aria-labelledby="verenne-hero-heading-{{ section.id }}">
+  <div class="verenne-hero-content">
+    <h1 id="verenne-hero-heading-{{ section.id }}" class="verenne-hero-title">
+      {{ section.settings.heading | escape }}
+      {%- if section.settings.heading_italic != blank -%}
+        <em style="display: block; font-style: italic; color: var(--verenne-gold);">
+          {{ section.settings.heading_italic | escape }}
+        </em>
+      {%- endif -%}
+    </h1>
+
+    <div class="verenne-hero-footer">
+      <p class="verenne-hero-subtext">
+        {{ section.settings.subtext | escape }}
+      </p>
+
+      <div class="verenne-hero-actions">
+        {%- if section.settings.button_text != blank and section.settings.button_link != blank -%}
+          <a href="{{ section.settings.button_link }}" class="verenne-pill-btn">
+            {{ section.settings.button_text | escape }}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.secondary_text != blank and section.settings.secondary_link != blank -%}
+          <a href="{{ section.settings.secondary_link }}" class="verenne-pill-btn verenne-pill-btn--outline">
+            {{ section.settings.secondary_text | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="verenne-hero-media">
+    {%- if section.settings.image != blank -%}
+      {{
+        section.settings.image
+        | image_url: width: 1400
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '600, 900, 1200, 1400',
+          sizes: '(min-width: 990px) 45vw, 100vw',
+          alt: section.settings.image.alt
+      }}
+    {%- else -%}
+      <div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:500px;background:#241B14;color:#A39585;text-align:center;padding:2rem;">
+        <p style="font-family:var(--font-heading-family);font-size:1.5rem;letter-spacing:0.05em;">
+          Select a high-resolution hero image in the theme editor
+        </p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Verenne Hero",
+  "class": "section-verenne-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Botanical skincare,",
+      "label": "Heading main line"
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "default": "made slowly.",
+      "label": "Heading accent line"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "default": "Sixteen plant-based formulas to cleanse, treat, hydrate and restore your skin. Distilled in small batches in Grasse.",
+      "label": "Subtext description"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "default": "Shop the collection",
+      "label": "Primary button text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_text",
+      "default": "Our story",
+      "label": "Secondary button text"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero photograph"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne Hero",
+      "settings": {
+        "heading": "Botanical skincare,",
+        "heading_italic": "made slowly.",
+        "button_text": "Shop the collection"
+      }
+    }
+  ]
+}
+{% endschema %}
+

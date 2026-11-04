@@ -1,0 +1,34 @@
+{
+  "name": "Header",
+  "type": "header",
+  "sections": {
+    "announcement-bar": {
+      "type": "verenne-announcement-bar",
+      "blocks": {
+        "ticker-0": {
+          "type": "announcement",
+          "settings": {
+            "text": "GRASSE APOTHECARY — N°01 ÉCLAT SAUVAGE NOW ALLOCATED IN FOUR HUNDRED FLACONS",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "ticker-0"
+      ],
+      "settings": {}
+    },
+    "header": {
+      "type": "verenne-header",
+      "settings": {
+        "menu": "main-menu",
+        "show_search": true,
+        "show_cart": true
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

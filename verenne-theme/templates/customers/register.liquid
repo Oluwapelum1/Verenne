@@ -1,0 +1,83 @@
+<div class="verenne-section verenne-customer-portal" style="padding: 6rem 1.5rem; min-height: 70vh; display: flex; align-items: center; justify-content: center;">
+  <div class="verenne-auth-card" style="max-width: 480px; width: 100%; background-color: var(--verenne-bg-surface); border: 1px solid var(--verenne-border-subtle); border-radius: 16px; padding: 3rem 2.5rem; text-align: center;">
+    
+    <p class="verenne-caption" style="margin-bottom: 0.5rem;">ATELIER ENROLLMENT</p>
+    <h1 class="verenne-heading" style="font-size: 2rem; margin-bottom: 1rem;">Create Account</h1>
+    <p class="verenne-body" style="font-size: 0.875rem; color: var(--verenne-text-dim); margin-bottom: 2rem;">
+      Register to reserve small-batch seasonal formulations and private releases.
+    </p>
+
+    {%- form 'create_customer', return_to: routes.account_url -%}
+      {%- if form.errors -%}
+        <div class="verenne-auth-error" style="color: #f87171; font-size: 0.85rem; margin-bottom: 1rem; text-align: left;">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; text-align: left;">
+        <div>
+          <label for="RegisterFirstName" class="verenne-caption" style="display: block; margin-bottom: 0.4rem;">First Name</label>
+          <input
+            type="text"
+            name="customer[first_name]"
+            id="RegisterFirstName"
+            class="verenne-input"
+            autocomplete="given-name"
+            placeholder="Élise"
+          >
+        </div>
+        <div>
+          <label for="RegisterLastName" class="verenne-caption" style="display: block; margin-bottom: 0.4rem;">Last Name</label>
+          <input
+            type="text"
+            name="customer[last_name]"
+            id="RegisterLastName"
+            class="verenne-input"
+            autocomplete="family-name"
+            placeholder="Laurent"
+          >
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1.25rem; text-align: left;">
+        <label for="RegisterEmail" class="verenne-caption" style="display: block; margin-bottom: 0.4rem;">Email Address</label>
+        <input
+          type="email"
+          name="customer[email]"
+          id="RegisterEmail"
+          class="verenne-input"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          required
+          placeholder="client@domain.com"
+        >
+      </div>
+
+      <div style="margin-bottom: 1.75rem; text-align: left;">
+        <label for="RegisterPassword" class="verenne-caption" style="display: block; margin-bottom: 0.4rem;">Password</label>
+        <input
+          type="password"
+          name="customer[password]"
+          id="RegisterPassword"
+          class="verenne-input"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="verenne-pill-btn verenne-pill-btn--primary" style="width: 100%; margin-bottom: 1.5rem;">
+        Establish Account
+      </button>
+
+      <div style="font-size: 0.85rem; color: var(--verenne-text-dim);">
+        Already hold an allocation account?
+        <a href="{{ routes.account_login_url }}" style="color: var(--verenne-gold); font-weight: 600; text-decoration: none; margin-left: 0.25rem;">
+          Sign In →
+        </a>
+      </div>
+    {%- endform -%}
+
+  </div>
+</div>
+

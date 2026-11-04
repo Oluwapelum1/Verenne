@@ -1,0 +1,189 @@
+<div class="verenne-section verenne-origins" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="verenne-container">
+    <div class="verenne-origins-header">
+      {%- if section.settings.caption != blank -%}
+        <p class="verenne-caption">{{ section.settings.caption | escape }}</p>
+      {%- endif -%}
+      <h2 class="verenne-heading verenne-origins-title">
+        {{ section.settings.heading | escape }}
+        {%- if section.settings.heading_italic != blank -%}
+          <em>{{ section.settings.heading_italic | escape }}</em>
+        {%- endif -%}
+      </h2>
+      {%- if section.settings.subtext != blank -%}
+        <p class="verenne-body verenne-origins-subtext">
+          {{ section.settings.subtext | escape }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    <ul class="verenne-origins-list" role="list">
+      {%- for block in section.blocks -%}
+        <li class="verenne-origin-item" {{ block.shopify_attributes }}>
+          <div class="verenne-origin-title-col">
+            <h3 class="verenne-origin-common">{{ block.settings.common_name | escape }}</h3>
+            <p class="verenne-origin-latin">{{ block.settings.latin_name | escape }}</p>
+          </div>
+
+          <div class="verenne-origin-specs-col">
+            <div class="verenne-origin-spec">
+              <span class="verenne-caption">TERROIR</span>
+              <span class="verenne-spec-val">{{ block.settings.origin | escape }}</span>
+            </div>
+            <div class="verenne-origin-spec">
+              <span class="verenne-caption">HARVEST</span>
+              <span class="verenne-spec-val">{{ block.settings.harvest | escape }}</span>
+            </div>
+          </div>
+
+          <div class="verenne-origin-story-col">
+            <p class="verenne-origin-story">{{ block.settings.story | escape }}</p>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Botanical Origins",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "BOTANICAL PROVENANCE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Four places, "
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Italic heading accent",
+      "default": "one harvest each."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "We purchase from the same independent regenerative growers every year, at a fixed fair price contracted prior to the spring thaw."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "botanical",
+      "name": "Botanical Provenance",
+      "settings": [
+        {
+          "type": "text",
+          "id": "common_name",
+          "label": "Common Name",
+          "default": "Immortelle de Corse"
+        },
+        {
+          "type": "text",
+          "id": "latin_name",
+          "label": "Latin Botanical Name",
+          "default": "Helichrysum italicum"
+        },
+        {
+          "type": "text",
+          "id": "origin",
+          "label": "Terroir / Origin",
+          "default": "Balagne, Corsica"
+        },
+        {
+          "type": "text",
+          "id": "harvest",
+          "label": "Harvest Season",
+          "default": "Late June, at midday"
+        },
+        {
+          "type": "textarea",
+          "id": "story",
+          "label": "Provenance Narrative",
+          "default": "Gathered on granite slopes overlooking the Mediterranean. Distilled on-site within six hours of cutting to capture fleeting neryl acetate esters."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne Botanical Origins",
+      "blocks": [
+        {
+          "type": "botanical",
+          "settings": {
+            "common_name": "Immortelle de Corse",
+            "latin_name": "Helichrysum italicum",
+            "origin": "Balagne, Corsica",
+            "harvest": "Late June, at midday",
+            "story": "Gathered on granite slopes overlooking the Mediterranean. Distilled on-site within six hours of cutting to capture fleeting neryl acetate esters."
+          }
+        },
+        {
+          "type": "botanical",
+          "settings": {
+            "common_name": "Atlas Cedarwood",
+            "latin_name": "Cedrus atlantica",
+            "origin": "Middle Atlas, Morocco",
+            "harvest": "Autumn windfalls",
+            "story": "Steam-distilled solely from naturally fallen highland heartwood. High himachalene concentration provides anti-inflammatory cellular resilience."
+          }
+        },
+        {
+          "type": "botanical",
+          "settings": {
+            "common_name": "Wild Frankincense",
+            "latin_name": "Boswellia carterii",
+            "origin": "Sanaag, Horn of Africa",
+            "harvest": "Dry-season tap",
+            "story": "Harvested from wild trees tended by nomadic clans for nine generations. Hydro-distilled in glass for pure alpha-pinene clarity."
+          }
+        },
+        {
+          "type": "botanical",
+          "settings": {
+            "common_name": "Grasse Rose de Mai",
+            "latin_name": "Rosa centifolia",
+            "origin": "Plaines de Grasse, France",
+            "harvest": "May dawn, 05:00–08:00",
+            "story": "Every petal hand-plucked before sunrise while dew holds volatile terpene alcohols intact. Extracted into cold cellular waters."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

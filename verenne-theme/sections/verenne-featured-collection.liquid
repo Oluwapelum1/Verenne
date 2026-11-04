@@ -1,0 +1,150 @@
+{%- comment -%}
+  Verenne Featured Collection
+  Renders real Shopify products from the selected collection in the luxury grid layout
+{%- endcomment -%}
+
+<section class="verenne-collection-section" aria-labelledby="verenne-collection-heading-{{ section.id }}">
+  <div class="verenne-section-header">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="verenne-section-eyebrow">
+          <span class="verenne-section-eyebrow-dot" aria-hidden="true"></span>
+          <span>{{ section.settings.eyebrow | escape }}</span>
+        </div>
+      {%- endif -%}
+
+      <h2 id="verenne-collection-heading-{{ section.id }}" class="verenne-section-title">
+        {{ section.settings.title | escape }}
+      </h2>
+    </div>
+
+    {%- if section.settings.show_view_all and section.settings.collection != blank -%}
+      <a href="{{ section.settings.collection.url }}" class="verenne-pill-btn verenne-pill-btn--outline">
+        {{ 'sections.featured_collection.view_all' | t }} &rarr;
+      </a>
+    {%- endif -%}
+  </div>
+
+  <div class="verenne-product-grid">
+    {%- assign current_collection = collections[section.settings.collection] -%}
+    {%- assign products_to_display = current_collection.products | default: collections.all.products -%}
+
+    {%- for product in products_to_display limit: section.settings.products_to_show -%}
+      <article class="verenne-product-card">
+        <a href="{{ product.url }}" class="verenne-card-media" aria-label="{{ product.title | escape }}">
+          {%- if product.featured_image != blank -%}
+            {{
+              product.featured_image
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                widths: '320, 600, 800',
+                sizes: '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw',
+                alt: product.featured_image.alt | default: product.title
+            }}
+          {%- else -%}
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#A39585;background:#2C2119;">
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+        </a>
+
+        <div class="verenne-card-details">
+          <div class="verenne-card-meta">
+            <span>{{ product.type | default: 'Formula' }}</span>
+            {%- if product.available -%}
+              <span style="color: var(--verenne-gold); font-size: 0.7rem;">In stock</span>
+            {%- else -%}
+              <span style="color: var(--verenne-text-muted); font-size: 0.7rem;">Sold out</span>
+            {%- endif -%}
+          </div>
+
+          <h3 class="verenne-card-title">
+            <a href="{{ product.url }}" style="text-decoration: none; color: inherit;">
+              {{ product.title | escape }}
+            </a>
+          </h3>
+
+          <div class="verenne-card-price">
+            {{ product.price | money }}
+          </div>
+
+          {%- form 'product', product -%}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <button
+              type="submit"
+              name="add"
+              class="verenne-card-btn"
+              {% unless product.available %}disabled{% endunless %}
+            >
+              {%- if product.available -%}
+                + Add to Bag
+              {%- else -%}
+                Sold Out
+              {%- endif -%}
+            </button>
+          {%- endform -%}
+        </div>
+      </article>
+    {%- else -%}
+      {%- comment -%} Empty placeholder state when no products exist in the store {%- endcomment -%}
+      {%- for i in (1..4) -%}
+        <div class="verenne-product-card" style="padding: 2rem; text-align: center;">
+          <p style="color: var(--verenne-text-muted); font-size: 0.9rem;">No products found in this collection</p>
+        </div>
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Verenne Collection Grid",
+  "class": "section-verenne-collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "default": "(01) · Curated Catalogue",
+      "label": "Section eyebrow label"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "default": "The Formulations",
+      "label": "Heading"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 16,
+      "step": 2,
+      "default": 8,
+      "label": "Maximum products to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Enable \"View all\" button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne Collection Grid",
+      "settings": {
+        "eyebrow": "(01) · Curated Catalogue",
+        "title": "The Formulations",
+        "products_to_show": 8
+      }
+    }
+  ]
+}
+{% endschema %}
+

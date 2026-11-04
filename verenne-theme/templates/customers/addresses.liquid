@@ -1,0 +1,106 @@
+<div class="verenne-section verenne-addresses-view" style="padding: 5rem 1.5rem; min-height: 70vh;">
+  <div class="verenne-container">
+    
+    <div style="border-bottom: 1px solid var(--verenne-border-subtle); padding-bottom: 2rem; margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <a href="{{ routes.account_url }}" style="font-size: 0.85rem; color: var(--verenne-gold); text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem;">
+          ← Return to Client Dossier
+        </a>
+        <h1 class="verenne-heading" style="font-size: clamp(2rem, 4vw, 3rem); margin: 0;">
+          Dispatch Addresses
+        </h1>
+      </div>
+      <div>
+        <button type="button" onclick="document.getElementById('AddAddress').style.display = 'block'" class="verenne-pill-btn verenne-pill-btn--primary">
+          + Add New Address
+        </button>
+      </div>
+    </div>
+
+    <!-- New Address Form (Hidden by default) -->
+    <div id="AddAddress" style="display: none; background-color: var(--verenne-bg-surface); border: 1px solid var(--verenne-border-subtle); border-radius: 16px; padding: 2.5rem; margin-bottom: 3rem; max-width: 700px;">
+      <h2 class="verenne-heading" style="font-size: 1.5rem; margin-bottom: 1.5rem;">Register New Address</h2>
+      {%- form 'customer_address', customer.new_address -%}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <label class="verenne-caption">First Name</label>
+            <input type="text" name="address[first_name]" class="verenne-input" value="{{ form.first_name }}">
+          </div>
+          <div>
+            <label class="verenne-caption">Last Name</label>
+            <input type="text" name="address[last_name]" class="verenne-input" value="{{ form.last_name }}">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <label class="verenne-caption">Address Line 1</label>
+          <input type="text" name="address[address1]" class="verenne-input" value="{{ form.address1 }}" required>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <label class="verenne-caption">Apartment / Suite</label>
+          <input type="text" name="address[address2]" class="verenne-input" value="{{ form.address2 }}">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <label class="verenne-caption">City</label>
+            <input type="text" name="address[city]" class="verenne-input" value="{{ form.city }}" required>
+          </div>
+          <div>
+            <label class="verenne-caption">Postal / Zip Code</label>
+            <input type="text" name="address[zip]" class="verenne-input" value="{{ form.zip }}" required>
+          </div>
+          <div>
+            <label class="verenne-caption">Country</label>
+            <select name="address[country]" class="verenne-input" style="height: 48px;">
+              {{ all_country_option_tags }}
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" class="verenne-pill-btn verenne-pill-btn--primary">
+            Save Address
+          </button>
+          <button type="button" onclick="document.getElementById('AddAddress').style.display = 'none'" class="verenne-pill-btn verenne-pill-btn--outline">
+            Cancel
+          </button>
+        </div>
+      {%- endform -%}
+    </div>
+
+    <!-- Existing Addresses Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+      {%- for address in customer.addresses -%}
+        <div style="background-color: var(--verenne-bg-surface); border: 1px solid var(--verenne-border-subtle); border-radius: 12px; padding: 2rem;">
+          {%- if address == customer.default_address -%}
+            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.2rem 0.5rem; border-radius: 4px; background-color: rgba(224, 147, 95, 0.2); color: var(--verenne-gold); display: inline-block; margin-bottom: 1rem;">
+              Default Address
+            </span>
+          {%- endif -%}
+
+          <div style="font-size: 0.9rem; line-height: 1.7; color: var(--verenne-text-dim); margin-bottom: 1.5rem;">
+            <p style="color: var(--verenne-text-bone); font-weight: 600;">{{ address.name }}</p>
+            <p>{{ address.address1 }}</p>
+            {%- if address.address2 != blank -%}<p>{{ address.address2 }}</p>{%- endif -%}
+            <p>{{ address.city }}, {{ address.province_code }} {{ address.zip }}</p>
+            <p>{{ address.country }}</p>
+          </div>
+
+          <form
+            method="post"
+            action="{{ routes.account_addresses_url }}/{{ address.id }}"
+            onsubmit="return confirm('Are you sure you wish to delete this address?');"
+          >
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" style="background: none; border: none; color: #f87171; font-size: 0.8rem; cursor: pointer; text-decoration: underline; padding: 0;">
+              Delete Address
+            </button>
+          </form>
+        </div>
+      {%- endfor -%}
+    </div>
+
+  </div>
+</div>

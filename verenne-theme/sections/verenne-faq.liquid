@@ -1,0 +1,151 @@
+<div class="verenne-section verenne-faq" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="verenne-container">
+    <div class="verenne-faq-grid">
+      <!-- Left Column: Title -->
+      <div class="verenne-faq-lead">
+        {%- if section.settings.caption != blank -%}
+          <p class="verenne-caption">{{ section.settings.caption | escape }}</p>
+        {%- endif -%}
+        <h2 class="verenne-heading verenne-faq-title">
+          {{ section.settings.heading | escape }}
+          {%- if section.settings.heading_italic != blank -%}
+            <em>{{ section.settings.heading_italic | escape }}</em>
+          {%- endif -%}
+        </h2>
+        {%- if section.settings.subtext != blank -%}
+          <p class="verenne-body verenne-faq-subtext">
+            {{ section.settings.subtext | escape }}
+          </p>
+        {%- endif -%}
+      </div>
+
+      <!-- Right Column: Exclusive <details> Accordion -->
+      <div class="verenne-faq-accordion">
+        {%- for block in section.blocks -%}
+          <details class="verenne-faq-item" name="verenne-faq"{% if forloop.first %} open{% endif %} {{ block.shopify_attributes }}>
+            <summary class="verenne-faq-summary">
+              <span class="verenne-faq-question">{{ block.settings.question | escape }}</span>
+              <span class="verenne-faq-toggle-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="verenne-faq-answer">
+              <p>{{ block.settings.answer | escape }}</p>
+            </div>
+          </details>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Formulation FAQ",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "DISPENSATION & SCIENCE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Questions, "
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Italic heading accent",
+      "default": "clarified."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Everything concerning our cold-extraction methods, violet Miron glass stability, and small-batch allocation protocol."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Why are formulations aged in violet Miron glass?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Violet glass acts as a natural botanical filter: it blocks the entire spectrum of visible light except for violet and infrared frequencies, preventing photo-oxidation of delicate terpenes without requiring synthetic chemical preservatives."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne Botanical FAQ",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Why are formulations aged in violet Miron glass?",
+            "answer": "Violet glass acts as a natural botanical filter: it blocks the entire spectrum of visible light except for violet and infrared frequencies, preventing photo-oxidation of delicate terpenes without requiring synthetic chemical preservatives."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How often are new editions released?",
+            "answer": "Each formula is compounded only after annual harvests. We produce strictly four hundred flacons per edition. Once an edition is fully allocated, the formula remains unavailable until the subsequent year's harvest."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Are your botanical extracts certified organic?",
+            "answer": "Every plant is either certified organic or gathered by permitted wildcrafting in protected alpine reserves. Every harvest undergoes gas-chromatography mass-spectrometry before extraction."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I combine the Dawn and Dusk rituals?",
+            "answer": "The formulas are compounded chronobiologically to respect skin pH and cellular regeneration rhythms. Dawn prepares the antioxidant shield; Dusk triggers lipid layer restoration."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

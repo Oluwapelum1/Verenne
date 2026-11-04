@@ -1,0 +1,94 @@
+<div class="verenne-section verenne-order-view" style="padding: 5rem 1.5rem; min-height: 70vh;">
+  <div class="verenne-container">
+    
+    <div style="border-bottom: 1px solid var(--verenne-border-subtle); padding-bottom: 2rem; margin-bottom: 3rem;">
+      <a href="{{ routes.account_url }}" style="font-size: 0.85rem; color: var(--verenne-gold); text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 1rem;">
+        ← Return to Client Dossier
+      </a>
+      <p class="verenne-caption">FORMULATION ALLOCATION RECORD</p>
+      <h1 class="verenne-heading" style="font-size: clamp(2rem, 4vw, 3rem); margin-top: 0.25rem;">
+        Order {{ order.name }}
+      </h1>
+      <p style="font-size: 0.875rem; color: var(--verenne-text-dim);">
+        Placed on {{ order.created_at | date: "%B %d, %Y at %I:%M %p" }}
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem;">
+      <!-- Order Items Table -->
+      <div>
+        <h2 class="verenne-heading" style="font-size: 1.5rem; margin-bottom: 1.5rem;">Allocated Formulations</h2>
+        
+        <div style="background-color: var(--verenne-bg-surface); border: 1px solid var(--verenne-border-subtle); border-radius: 12px; overflow: hidden;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--verenne-border-subtle); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--verenne-gold);">
+                <th style="padding: 1.25rem;">Product</th>
+                <th style="padding: 1.25rem; text-align: center;">Qty</th>
+                <th style="padding: 1.25rem; text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for line_item in order.line_items -%}
+                <tr style="border-bottom: 1px solid var(--verenne-border-subtle); font-size: 0.9rem;">
+                  <td style="padding: 1.25rem;">
+                    <span style="font-family: var(--font-heading-family); font-size: 1.05rem; color: var(--verenne-text-bone); display: block;">
+                      {{ line_item.product.title | default: line_item.title }}
+                    </span>
+                    {%- if line_item.variant.title != 'Default Title' -%}
+                      <span style="font-size: 0.8rem; color: var(--verenne-text-muted);">{{ line_item.variant.title }}</span>
+                    {%- endif -%}
+                  </td>
+                  <td style="padding: 1.25rem; text-align: center; color: var(--verenne-text-dim);">
+                    {{ line_item.quantity }}
+                  </td>
+                  <td style="padding: 1.25rem; text-align: right; color: var(--verenne-gold); font-weight: 600;">
+                    {{ line_item.final_line_price | money }}
+                  </td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+
+          <div style="padding: 1.5rem; border-top: 1px solid var(--verenne-border-subtle); background-color: rgba(0,0,0,0.15);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--verenne-text-dim);">
+              <span>Subtotal:</span>
+              <span>{{ order.line_items_subtotal_price | money }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--verenne-text-dim);">
+              <span>Courier Shipping:</span>
+              <span>{{ order.shipping_price | money }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--verenne-border-subtle); font-size: 1.15rem; font-weight: 700; color: var(--verenne-text-bone);">
+              <span>Total:</span>
+              <span style="color: var(--verenne-gold);">{{ order.total_net_amount | money }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping & Billing Details -->
+      <div>
+        <h2 class="verenne-heading" style="font-size: 1.5rem; margin-bottom: 1.5rem;">Dispatch Details</h2>
+        <div style="background-color: var(--verenne-bg-surface); border: 1px solid var(--verenne-border-subtle); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem;">
+          <p class="verenne-caption" style="margin-bottom: 0.5rem;">DESTINATION</p>
+          <div style="font-size: 0.9rem; line-height: 1.7; color: var(--verenne-text-dim);">
+            <p style="color: var(--verenne-text-bone); font-weight: 600;">{{ order.shipping_address.name }}</p>
+            <p>{{ order.shipping_address.address1 }}</p>
+            <p>{{ order.shipping_address.city }}, {{ order.shipping_address.province_code }} {{ order.shipping_address.zip }}</p>
+            <p>{{ order.shipping_address.country }}</p>
+          </div>
+        </div>
+
+        <div style="background-color: var(--verenne-bg-surface); border: 1px solid var(--verenne-border-subtle); border-radius: 12px; padding: 1.75rem;">
+          <p class="verenne-caption" style="margin-bottom: 0.5rem;">FULFILLMENT STATUS</p>
+          <p style="font-size: 0.9rem; color: var(--verenne-gold); font-weight: 600;">
+            {{ order.fulfillment_status_label }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+

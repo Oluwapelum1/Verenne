@@ -1,0 +1,77 @@
+{%- comment -%}
+  Verenne Luxury Header
+  Online Store 2.0 section with crest, customizable navigation, and cart counter
+{%- endcomment -%}
+
+<header class="verenne-header{% if section.settings.enable_sticky_header %} verenne-header--sticky{% endif %}" role="banner">
+  <div class="verenne-header-inner">
+    {%- comment -%} Left: Main Menu Navigation {%- endcomment -%}
+    <nav class="verenne-nav" role="navigation" aria-label="Main Navigation">
+      <ul class="verenne-nav-links">
+        {%- for link in linklists[section.settings.menu].links -%}
+          <li>
+            <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>
+              {{ link.title | escape }}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    {%- comment -%} Center: Brand Crest & Wordmark {%- endcomment -%}
+    <div class="verenne-brand-wrapper">
+      <a href="{{ routes.root_url }}" class="verenne-brand-crest">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 240 | image_tag: class: 'verenne-brand-img', alt: shop.name }}
+        {%- else -%}
+          <svg class="verenne-crest-icon" width="28" height="28" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="64" cy="64" r="62" stroke="#E0935F" stroke-width="2.5" />
+            <path d="M40 37 L50 37 L64 89 L57 89 Z" fill="#E0935F" />
+            <path d="M87 37 L89.5 37 L65 91 L62.5 91 Z" fill="#E0935F" />
+            <polygon points="64,52 68,58 64,64 60,58" fill="#FCEFD2" />
+          </svg>
+          <span class="verenne-brand-logo">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- comment -%} Right: Actions (Search & Cart) {%- endcomment -%}
+    <div class="verenne-header-actions">
+      <a href="{{ routes.search_url }}" class="verenne-action-link" aria-label="{{ 'general.search.search' | t }}">
+        <span>Search</span>
+      </a>
+
+      <a href="{{ routes.cart_url }}" class="verenne-cart-trigger" id="cart-icon-bubble" aria-label="{{ 'templates.cart.cart' | t }}">
+        <span>Bag</span>
+        <span class="verenne-cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Verenne Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Custom logo image"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Navigation menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "default": true,
+      "label": "Enable sticky header"
+    }
+  ]
+}
+{% endschema %}
+

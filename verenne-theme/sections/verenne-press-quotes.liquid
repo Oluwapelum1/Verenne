@@ -1,0 +1,102 @@
+<div class="verenne-section verenne-press" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; border-top: 1px solid var(--verenne-border-subtle); border-bottom: 1px solid var(--verenne-border-subtle); background-color: #140E0A;">
+  <div class="verenne-container">
+    <div class="verenne-press-grid">
+      {%- for block in section.blocks -%}
+        <figure class="verenne-press-item" {{ block.shopify_attributes }}>
+          <blockquote class="verenne-press-quote">
+            “{{ block.settings.quote | escape }}”
+          </blockquote>
+          <figcaption class="verenne-press-author">
+            <span class="verenne-press-author-name">{{ block.settings.author | escape }}</span>
+            {%- if block.settings.role != blank -%}
+              <span class="verenne-press-author-role">, {{ block.settings.role | escape }}</span>
+            {%- endif -%}
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Archival Press & Reviews",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "quote",
+      "name": "Citation / Review",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote text",
+          "default": "Verenne has accomplished what modern cosmeceuticals discarded: true botanical bioavailability compounded without haste."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author / Publication",
+          "default": "British Vogue"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / Column",
+          "default": "The Autumn Beauty Compendium"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne Press & Reviews",
+      "blocks": [
+        {
+          "type": "quote",
+          "settings": {
+            "quote": "The purest active botanical serum we have evaluated in a decade of clinical trials. The lipid barrier restoration is palpable.",
+            "author": "Dr. Hélène Rousseau",
+            "role": "Director of Clinical Dermatology, Geneva"
+          }
+        },
+        {
+          "type": "quote",
+          "settings": {
+            "quote": "Compounded by hand in Grasse in editions of four hundred. An uncompromising apothecarial triumph.",
+            "author": "Financial Times",
+            "role": "How to Spend It"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

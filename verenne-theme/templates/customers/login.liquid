@@ -1,0 +1,115 @@
+<div class="verenne-section verenne-customer-portal" style="padding: 6rem 1.5rem; min-height: 70vh; display: flex; align-items: center; justify-content: center;">
+  <div class="verenne-auth-card" style="max-width: 460px; width: 100%; background-color: var(--verenne-bg-surface); border: 1px solid var(--verenne-border-subtle); border-radius: 16px; padding: 3rem 2.5rem; text-align: center;">
+    
+    <div id="recover" style="display: none;">
+      <p class="verenne-caption" style="margin-bottom: 0.5rem;">CLIENT SERVICES</p>
+      <h1 class="verenne-heading" style="font-size: 2rem; margin-bottom: 1rem;">Reset Password</h1>
+      <p class="verenne-body" style="font-size: 0.875rem; color: var(--verenne-text-dim); margin-bottom: 2rem;">
+        Enter your email address to receive password retrieval instructions.
+      </p>
+
+      {%- form 'recover_customer_password' -%}
+        {%- if form.errors -%}
+          <div class="verenne-auth-error" style="color: #f87171; font-size: 0.85rem; margin-bottom: 1rem;">
+            {{ form.errors.messages.form }}
+          </div>
+        {%- endif -%}
+
+        <div style="margin-bottom: 1.5rem; text-align: left;">
+          <label for="RecoverEmail" class="verenne-caption" style="display: block; margin-bottom: 0.4rem;">Email Address</label>
+          <input
+            type="email"
+            name="email"
+            id="RecoverEmail"
+            class="verenne-input"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+            placeholder="client@domain.com"
+          >
+        </div>
+
+        <button type="submit" class="verenne-pill-btn verenne-pill-btn--primary" style="width: 100%; margin-bottom: 1rem;">
+          Send Reset Link
+        </button>
+
+        <a href="#login" onclick="toggleRecover(false); return false;" style="font-size: 0.8rem; color: var(--verenne-text-dim); text-decoration: underline;">
+          Return to Sign In
+        </a>
+      {%- endform -%}
+    </div>
+
+    <div id="customer-login">
+      <p class="verenne-caption" style="margin-bottom: 0.5rem;">PRIVATE ALLOCATION</p>
+      <h1 class="verenne-heading" style="font-size: 2rem; margin-bottom: 1rem;">Client Sign In</h1>
+      <p class="verenne-body" style="font-size: 0.875rem; color: var(--verenne-text-dim); margin-bottom: 2rem;">
+        Access your formulation archive, active orders, and batch allocations.
+      </p>
+
+      {%- form 'customer_login', return_to: routes.account_url -%}
+        {%- if form.errors -%}
+          <div class="verenne-auth-error" style="color: #f87171; font-size: 0.85rem; margin-bottom: 1rem;">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div style="margin-bottom: 1.25rem; text-align: left;">
+          <label for="CustomerEmail" class="verenne-caption" style="display: block; margin-bottom: 0.4rem;">Email Address</label>
+          <input
+            type="email"
+            name="customer[email]"
+            id="CustomerEmail"
+            class="verenne-input"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+            placeholder="client@domain.com"
+          >
+        </div>
+
+        {%- if form.password_needed -%}
+          <div style="margin-bottom: 1.75rem; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+              <label for="CustomerPassword" class="verenne-caption">Password</label>
+              <a href="#recover" onclick="toggleRecover(true); return false;" style="font-size: 0.75rem; color: var(--verenne-gold); text-decoration: none;">
+                Forgot password?
+              </a>
+            </div>
+            <input
+              type="password"
+              name="customer[password]"
+              id="CustomerPassword"
+              class="verenne-input"
+              autocomplete="current-password"
+              required
+            >
+          </div>
+        {%- endif -%}
+
+        <button type="submit" class="verenne-pill-btn verenne-pill-btn--primary" style="width: 100%; margin-bottom: 1.5rem;">
+          Sign In to Portal
+        </button>
+
+        <div style="font-size: 0.85rem; color: var(--verenne-text-dim);">
+          New to Verenne?
+          <a href="{{ routes.account_register_url }}" style="color: var(--verenne-gold); font-weight: 600; text-decoration: none; margin-left: 0.25rem;">
+            Request Client Account →
+          </a>
+        </div>
+      {%- endform -%}
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function toggleRecover(show) {
+    document.getElementById('recover').style.display = show ? 'block' : 'none';
+    document.getElementById('customer-login').style.display = show ? 'none' : 'block';
+  }
+  if (window.location.hash === '#recover') {
+    toggleRecover(true);
+  }
+</script>
+

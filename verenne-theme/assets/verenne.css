@@ -1,0 +1,1706 @@
+/* ==========================================================================
+   VERENNE — Haute-Botanique Luxury Skincare Theme
+   Design System & Master Styling for Shopify OS 2.0
+   ========================================================================== */
+
+:root {
+  --verenne-bg-obsidian: #1A130E;
+  --verenne-bg-surface: #241B14;
+  --verenne-bg-elevated: #2C2119;
+  --verenne-text-bone: #EFE7DA;
+  --verenne-text-dim: #C2B5A4;
+  --verenne-text-muted: #A39585;
+  --verenne-gold: #E0935F;
+  --verenne-gold-hover: #F2A65A;
+  --verenne-gold-ink: #1A130E;
+  --verenne-border-subtle: rgba(239, 231, 218, 0.12);
+  --verenne-border-strong: rgba(239, 231, 218, 0.28);
+  --verenne-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Base Body & Reset Overrides */
+body {
+  background-color: var(--verenne-bg-obsidian);
+  color: var(--verenne-text-bone);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+/* Subtle Film Grain Texture Overlay */
+.verenne-grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .verenne-grain {
+    animation: verenne-grain-shift 1.2s steps(6) infinite;
+  }
+}
+
+@keyframes verenne-grain-shift {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-2%, 1%); }
+  40% { transform: translate(1%, -2%); }
+  60% { transform: translate(-1%, -1%); }
+  80% { transform: translate(2%, 2%); }
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6,
+.font-serif,
+.verenne-heading {
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+p, span, a, button, input, select, textarea,
+.font-sans,
+.verenne-body {
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+}
+
+/* Luxury Buttons */
+.verenne-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.85rem;
+  border-radius: 9999px;
+  background-color: var(--verenne-gold);
+  color: var(--verenne-gold-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: all 0.3s var(--verenne-ease-expo);
+  border: 1px solid var(--verenne-gold);
+  cursor: pointer;
+}
+
+.verenne-pill-btn:hover {
+  background-color: var(--verenne-gold-hover);
+  border-color: var(--verenne-gold-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(224, 147, 95, 0.25);
+}
+
+.verenne-pill-btn--outline {
+  background-color: transparent;
+  color: var(--verenne-text-bone);
+  border: 1px solid var(--verenne-border-strong);
+}
+
+.verenne-pill-btn--outline:hover {
+  background-color: var(--verenne-text-bone);
+  color: var(--verenne-bg-obsidian);
+  border-color: var(--verenne-text-bone);
+  box-shadow: 0 8px 20px rgba(239, 231, 218, 0.15);
+}
+
+/* Announcement Bar */
+.verenne-announcement {
+  background-color: #110C09;
+  border-bottom: 1px solid var(--verenne-border-subtle);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.65rem 1rem;
+  color: var(--verenne-text-dim);
+  text-align: center;
+}
+
+.verenne-announcement a {
+  color: var(--verenne-gold);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Header */
+.verenne-header {
+  background-color: rgba(26, 19, 14, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--verenne-border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color 0.3s ease;
+}
+
+.verenne-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 1.1rem 1.5rem;
+}
+
+.verenne-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.verenne-nav-links a {
+  color: var(--verenne-text-dim);
+  text-decoration: none;
+  font-size: 0.875rem;
+  letter-spacing: 0.03em;
+  transition: color 0.2s ease;
+}
+
+.verenne-nav-links a:hover {
+  color: var(--verenne-text-bone);
+}
+
+.verenne-brand-crest {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--verenne-text-bone);
+}
+
+.verenne-brand-logo {
+  font-family: var(--font-heading-family);
+  font-size: 1.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.verenne-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.verenne-header-actions a,
+.verenne-header-actions button {
+  color: var(--verenne-text-bone);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.verenne-cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 0.35rem;
+  border-radius: 9999px;
+  background-color: var(--verenne-gold);
+  color: var(--verenne-gold-ink);
+  font-size: 0.725rem;
+  font-weight: 700;
+}
+
+/* Hero Section */
+.verenne-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: calc(100vh - 120px);
+  border-bottom: 1px solid var(--verenne-border-subtle);
+}
+
+@media (min-width: 990px) {
+  .verenne-hero {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+.verenne-hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3.5rem 1.5rem;
+}
+
+@media (min-width: 750px) {
+  .verenne-hero-content {
+    padding: 5rem 3.5rem;
+  }
+}
+
+.verenne-hero-title {
+  font-size: clamp(3rem, 7.5vw, 7.5rem);
+  line-height: 0.95;
+  margin: 0 0 2rem 0;
+}
+
+.verenne-hero-footer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  border-top: 1px solid var(--verenne-border-strong);
+  padding-top: 1.75rem;
+}
+
+@media (min-width: 750px) {
+  .verenne-hero-footer {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+.verenne-hero-subtext {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--verenne-text-dim);
+  margin: 0;
+}
+
+.verenne-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+@media (min-width: 750px) {
+  .verenne-hero-actions {
+    justify-content: flex-end;
+  }
+}
+
+.verenne-hero-media {
+  position: relative;
+  min-height: 400px;
+  overflow: hidden;
+  background-color: var(--verenne-bg-surface);
+}
+
+.verenne-hero-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Featured Collection / Product Grid */
+.verenne-collection-section {
+  padding: 6rem 1.5rem;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.verenne-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+  border-bottom: 1px solid var(--verenne-border-subtle);
+  padding-bottom: 2rem;
+}
+
+@media (min-width: 750px) {
+  .verenne-section-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.verenne-section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--verenne-gold);
+  margin-bottom: 0.5rem;
+}
+
+.verenne-section-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--verenne-gold);
+}
+
+.verenne-section-title {
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  line-height: 1;
+  margin: 0;
+}
+
+.verenne-product-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .verenne-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .verenne-product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Luxury Product Card */
+.verenne-product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--verenne-border-subtle);
+  border-radius: 1.25rem;
+  background-color: var(--verenne-bg-surface);
+  overflow: hidden;
+  transition: all 0.4s var(--verenne-ease-expo);
+  text-decoration: none;
+  color: inherit;
+}
+
+.verenne-product-card:hover {
+  border-color: var(--verenne-border-strong);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.verenne-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background-color: var(--verenne-bg-elevated);
+  overflow: hidden;
+}
+
+.verenne-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s var(--verenne-ease-expo);
+}
+
+.verenne-product-card:hover .verenne-card-media img {
+  transform: scale(1.05);
+}
+
+.verenne-card-details {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 1.5rem;
+}
+
+.verenne-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--verenne-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.verenne-card-title {
+  font-size: 1.35rem;
+  line-height: 1.2;
+  margin: 0 0 0.5rem 0;
+}
+
+.verenne-card-price {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--verenne-gold);
+  margin-bottom: 1.25rem;
+}
+
+.verenne-card-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  background-color: var(--verenne-text-bone);
+  color: var(--verenne-bg-obsidian);
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.verenne-card-btn:hover {
+  background-color: var(--verenne-gold);
+  color: var(--verenne-gold-ink);
+}
+
+/* Rich Text / Statement Section */
+.verenne-statement-section {
+  padding: 6rem 1.5rem;
+  border-top: 1px solid var(--verenne-border-subtle);
+  border-bottom: 1px solid var(--verenne-border-subtle);
+  background-color: #150F0B;
+  text-align: center;
+}
+
+.verenne-statement-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.verenne-statement-text {
+  font-family: var(--font-heading-family);
+  font-size: clamp(1.8rem, 3.8vw, 3.4rem);
+  line-height: 1.25;
+  color: var(--verenne-text-bone);
+  margin: 0 0 2rem 0;
+}
+
+.verenne-statement-text em {
+  color: var(--verenne-gold);
+  font-style: italic;
+}
+
+/* Luxury Footer */
+.verenne-footer {
+  background-color: #110C09;
+  border-top: 1px solid var(--verenne-border-subtle);
+  padding: 5rem 1.5rem 2.5rem;
+}
+
+.verenne-footer-inner {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.verenne-footer-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 750px) {
+  .verenne-footer-top {
+    grid-template-columns: 2fr 1fr 1fr 2fr;
+  }
+}
+
+.verenne-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.verenne-footer-motto {
+  font-size: 0.9rem;
+  color: var(--verenne-text-dim);
+  line-height: 1.6;
+}
+
+.verenne-footer-col h4 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--verenne-gold);
+  margin: 0 0 1.25rem 0;
+}
+
+.verenne-footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.verenne-footer-links a {
+  color: var(--verenne-text-dim);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.verenne-footer-links a:hover {
+  color: var(--verenne-text-bone);
+}
+
+.verenne-footer-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--verenne-border-subtle);
+  padding-top: 2rem;
+  font-size: 0.75rem;
+  color: var(--verenne-text-muted);
+}
+
+@media (min-width: 750px) {
+  .verenne-footer-bottom {
+    flex-direction: row;
+  }
+}
+
+/* Footer clock & grid additions */
+.verenne-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 750px) {
+  .verenne-footer__grid {
+    grid-template-columns: 2fr 1fr 1fr 2fr;
+  }
+}
+
+.verenne-footer__col--brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.verenne-footer__tagline {
+  font-size: 0.9rem;
+  color: var(--verenne-text-dim);
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+.verenne-footer__clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  background-color: rgba(239, 231, 218, 0.05);
+  border: 1px solid var(--verenne-border-subtle);
+  font-size: 0.75rem;
+  color: var(--verenne-text-dim);
+  width: fit-content;
+  margin-top: 0.5rem;
+}
+
+.verenne-footer__clock-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+  display: inline-block;
+  animation: verenne-pulse 2s infinite ease-in-out;
+}
+
+@keyframes verenne-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.verenne-footer__heading {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--verenne-gold);
+  margin: 0 0 1.25rem 0;
+}
+
+.verenne-footer__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.verenne-footer__link {
+  color: var(--verenne-text-dim);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.verenne-footer__link:hover {
+  color: var(--verenne-text-bone);
+}
+
+.verenne-footer__subtext {
+  font-size: 0.875rem;
+  color: var(--verenne-text-dim);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.verenne-footer__newsletter-input-wrap {
+  display: flex;
+  align-items: center;
+  border-radius: 9999px;
+  background-color: rgba(239, 231, 218, 0.06);
+  border: 1px solid var(--verenne-border-strong);
+  overflow: hidden;
+  padding: 0.25rem 0.35rem 0.25rem 1rem;
+}
+
+.verenne-footer__input {
+  background: transparent;
+  border: none;
+  color: var(--verenne-text-bone);
+  font-size: 0.85rem;
+  outline: none;
+  width: 100%;
+}
+
+.verenne-footer__input::placeholder {
+  color: var(--verenne-text-muted);
+}
+
+.verenne-footer__submit-btn {
+  background-color: var(--verenne-gold);
+  color: var(--verenne-gold-ink);
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.verenne-footer__submit-btn:hover {
+  transform: scale(1.05);
+}
+
+.verenne-footer__success {
+  font-size: 0.8rem;
+  color: #86efac;
+  margin-top: 0.5rem;
+}
+
+.verenne-footer__policies {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.verenne-footer__policy-link {
+  color: var(--verenne-text-muted);
+  text-decoration: none;
+  font-size: 0.75rem;
+}
+
+.verenne-footer__policy-link:hover {
+  color: var(--verenne-text-bone);
+}
+
+.verenne-footer__select {
+  background-color: transparent;
+  border: 1px solid var(--verenne-border-subtle);
+  color: var(--verenne-text-dim);
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  outline: none;
+}
+
+/* ==========================================================================
+   VERENNE CART DRAWER & FREE SHIPPING METER
+   ========================================================================== */
+.drawer__inner {
+  background-color: var(--verenne-bg-obsidian) !important;
+  color: var(--verenne-text-bone) !important;
+  border-left: 1px solid var(--verenne-border-subtle) !important;
+}
+
+.drawer__header {
+  padding: 1.5rem 1.75rem !important;
+  border-bottom: 1px solid var(--verenne-border-subtle) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.drawer__heading {
+  font-family: var(--font-heading-family) !important;
+  font-size: 1.35rem !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: var(--verenne-text-bone) !important;
+  margin: 0 !important;
+}
+
+.drawer__close {
+  color: var(--verenne-text-dim) !important;
+  transition: color 0.2s ease, transform 0.2s ease !important;
+}
+
+.drawer__close:hover {
+  color: var(--verenne-gold) !important;
+  transform: rotate(90deg) !important;
+}
+
+/* Verenne Free Shipping Progress Bar */
+.verenne-shipping-meter {
+  padding: 1rem 1.75rem;
+  background-color: #211913;
+  border-bottom: 1px solid var(--verenne-border-subtle);
+  font-size: 0.8rem;
+  color: var(--verenne-text-dim);
+}
+
+.verenne-shipping-meter__text {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.verenne-shipping-meter__bar-bg {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(239, 231, 218, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.verenne-shipping-meter__bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #E0935F, #f3b082);
+  border-radius: 9999px;
+  transition: width 0.4s var(--verenne-ease-expo);
+}
+
+/* Cart Line Items */
+.cart-drawer-items .cart-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 1.25rem;
+  padding: 1.5rem 1.75rem;
+  border-bottom: 1px solid var(--verenne-border-subtle);
+  background-color: transparent;
+}
+
+.cart-item__media {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #251C15;
+  border: 1px solid var(--verenne-border-subtle);
+}
+
+.cart-item__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item__name {
+  font-family: var(--font-heading-family);
+  font-size: 1.05rem;
+  color: var(--verenne-text-bone);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.35rem;
+  transition: color 0.2s ease;
+}
+
+.cart-item__name:hover {
+  color: var(--verenne-gold);
+}
+
+.cart-item__price {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--verenne-gold);
+}
+
+.cart-item__quantity-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.quantity {
+  background-color: rgba(239, 231, 218, 0.06) !important;
+  border: 1px solid var(--verenne-border-strong) !important;
+  border-radius: 9999px !important;
+  color: var(--verenne-text-bone) !important;
+}
+
+.quantity__input {
+  color: var(--verenne-text-bone) !important;
+}
+
+.quantity__button {
+  color: var(--verenne-text-dim) !important;
+}
+
+.quantity__button:hover {
+  color: var(--verenne-gold) !important;
+}
+
+/* Drawer Footer */
+.drawer__footer {
+  padding: 1.5rem 1.75rem !important;
+  background-color: #17110C !important;
+  border-top: 1px solid var(--verenne-border-subtle) !important;
+}
+
+.totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.totals__total {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--verenne-text-dim);
+}
+
+.totals__total-value {
+  font-size: 1.35rem;
+  font-family: var(--font-heading-family);
+  color: var(--verenne-gold);
+}
+
+.tax-note {
+  font-size: 0.75rem;
+  color: var(--verenne-text-muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.4;
+}
+
+.cart__checkout-button {
+  width: 100% !important;
+  border-radius: 9999px !important;
+  background-color: var(--verenne-gold) !important;
+  color: var(--verenne-gold-ink) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 1rem 1.5rem !important;
+  transition: all 0.3s var(--verenne-ease-expo) !important;
+  border: 1px solid var(--verenne-gold) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+}
+
+.cart__checkout-button:hover {
+  background-color: var(--verenne-gold-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(224, 147, 95, 0.3);
+}
+
+/* ==========================================================================
+   VERENNE SEARCH & PREDICTIVE SEARCH STYLING
+   ========================================================================== */
+.predictive-search {
+  background-color: var(--verenne-bg-surface) !important;
+  border: 1px solid var(--verenne-border-strong) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(20px) !important;
+  overflow: hidden !important;
+}
+
+.predictive-search__heading {
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: var(--verenne-gold) !important;
+  padding: 1rem 1.5rem 0.5rem !important;
+  border-bottom: 1px solid var(--verenne-border-subtle) !important;
+  margin: 0 !important;
+}
+
+.predictive-search__item {
+  padding: 0.85rem 1.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  color: var(--verenne-text-bone) !important;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.predictive-search__item:hover,
+.predictive-search__item[aria-selected="true"] {
+  background-color: rgba(224, 147, 95, 0.1) !important;
+  color: var(--verenne-gold) !important;
+}
+
+.predictive-search__item-heading {
+  font-family: var(--font-heading-family) !important;
+  font-size: 1rem !important;
+  color: var(--verenne-text-bone) !important;
+  margin: 0 !important;
+}
+
+.predictive-search__item-vendor {
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: var(--verenne-text-muted) !important;
+}
+
+.template-search__header {
+  padding: 4rem 1.5rem 2rem;
+  text-align: center;
+}
+
+.template-search__search {
+  max-width: 600px;
+  margin: 2rem auto 0;
+}
+
+.search__input {
+  background-color: rgba(239, 231, 218, 0.06) !important;
+  border: 1px solid var(--verenne-border-strong) !important;
+  border-radius: 9999px !important;
+  color: var(--verenne-text-bone) !important;
+  padding: 1rem 1.75rem !important;
+  font-size: 1rem !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.search__input:focus {
+  border-color: var(--verenne-gold) !important;
+  box-shadow: 0 0 15px rgba(224, 147, 95, 0.2) !important;
+  outline: none !important;
+}
+
+/* ==========================================================================
+   VERENNE EDITORIAL BLOG & ARTICLE STYLING
+   ========================================================================== */
+.verenne-article-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--verenne-bg-surface);
+  border: 1px solid var(--verenne-border-subtle);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.3s var(--verenne-ease-expo), border-color 0.3s ease;
+}
+
+.verenne-article-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--verenne-border-strong);
+}
+
+.verenne-article-card__media-link {
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+}
+
+.verenne-article-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: #261D16;
+}
+
+.verenne-article-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--verenne-ease-expo);
+}
+
+.verenne-article-card:hover .verenne-article-card__img {
+  transform: scale(1.04);
+}
+
+.verenne-article-card__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--verenne-text-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.verenne-article-card__content {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.verenne-article-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--verenne-gold);
+  margin-bottom: 0.75rem;
+}
+
+.verenne-article-card__title {
+  font-family: var(--font-heading-family);
+  font-size: 1.35rem;
+  line-height: 1.25;
+  margin: 0 0 0.75rem 0;
+}
+
+.verenne-article-card__title a {
+  color: var(--verenne-text-bone);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.verenne-article-card__title a:hover {
+  color: var(--verenne-gold);
+}
+
+.verenne-article-card__excerpt {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--verenne-text-dim);
+  margin: 0 0 1.5rem 0;
+  flex-grow: 1;
+}
+
+.verenne-article-card__read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--verenne-gold);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+  margin-top: auto;
+}
+
+.verenne-article-card:hover .verenne-article-card__read-more {
+  transform: translateX(4px);
+}
+
+/* Article Page Typography */
+.article-template__hero {
+  text-align: center;
+  padding: 4rem 1.5rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.article-template__title {
+  font-family: var(--font-heading-family) !important;
+  font-size: clamp(2.5rem, 5vw, 4rem) !important;
+  line-height: 1.15 !important;
+  color: var(--verenne-text-bone) !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.article-template__content {
+  max-width: 780px;
+  margin: 0 auto;
+  font-size: 1.125rem;
+  line-height: 1.85;
+  color: var(--verenne-text-dim);
+}
+
+.article-template__content p {
+  margin-bottom: 1.75rem;
+}
+
+.article-template__content blockquote {
+  border-left: 2px solid var(--verenne-gold);
+  padding: 1rem 0 1rem 2rem;
+  margin: 2.5rem 0;
+  font-family: var(--font-heading-family);
+  font-size: 1.45rem;
+  font-style: italic;
+  color: var(--verenne-text-bone);
+}
+
+/* ==========================================================================
+   VERENNE FORM & CUSTOMER INPUT STYLING
+   ========================================================================== */
+.verenne-input {
+  width: 100%;
+  background-color: rgba(239, 231, 218, 0.05);
+  border: 1px solid var(--verenne-border-strong);
+  border-radius: 8px;
+  color: var(--verenne-text-bone);
+  padding: 0.85rem 1rem;
+  font-size: 0.9rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.verenne-input:focus {
+  border-color: var(--verenne-gold);
+  box-shadow: 0 0 10px rgba(224, 147, 95, 0.2);
+}
+
+.verenne-input::placeholder {
+  color: var(--verenne-text-muted);
+}
+
+select.verenne-input option {
+  background-color: var(--verenne-bg-surface);
+  color: var(--verenne-text-bone);
+}
+
+/* ==========================================================================
+   VERENNE BESPOKE SECTIONS STYLING (PHASE 3)
+   ========================================================================== */
+
+/* 1. Circadian Ritual Dial */
+.verenne-ritual-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (min-width: 990px) {
+  .verenne-ritual-grid {
+    grid-template-columns: 5fr 7fr;
+  }
+}
+
+.verenne-ritual-title {
+  font-size: clamp(2.4rem, 4.5vw, 4.2rem);
+  line-height: 1.05;
+  margin: 1rem 0 2rem 0;
+}
+
+.verenne-gold-text {
+  color: var(--verenne-gold);
+  font-style: italic;
+  display: block;
+}
+
+.verenne-ritual-tabs {
+  display: inline-flex;
+  padding: 0.35rem;
+  border-radius: 9999px;
+  background-color: rgba(239, 231, 218, 0.05);
+  border: 1px solid var(--verenne-border-subtle);
+  margin-bottom: 2.5rem;
+}
+
+.verenne-ritual-tab {
+  background: transparent;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.85rem;
+  color: var(--verenne-text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.verenne-ritual-tab.active {
+  background-color: var(--verenne-text-bone);
+  color: var(--verenne-bg-obsidian);
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.verenne-ritual-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem 0;
+  border-top: 1px solid var(--verenne-border-subtle);
+}
+
+.verenne-ritual-step-item {
+  border-bottom: 1px solid var(--verenne-border-subtle);
+  transition: background-color 0.2s ease;
+}
+
+.verenne-ritual-step-btn {
+  background: transparent;
+  border: none;
+  width: 100%;
+  padding: 1.25rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  text-align: left;
+  cursor: pointer;
+  color: var(--verenne-text-bone);
+}
+
+.verenne-step-time {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--verenne-text-muted);
+  min-width: 48px;
+}
+
+.verenne-step-verb {
+  font-family: var(--font-heading-family);
+  font-size: 1.85rem;
+  color: var(--verenne-text-dim);
+  transition: all 0.3s ease;
+}
+
+.verenne-ritual-step-item.active .verenne-step-verb {
+  color: var(--verenne-text-bone);
+  font-style: italic;
+  transform: translateX(6px);
+}
+
+.verenne-step-product {
+  margin-left: auto;
+  text-align: right;
+  font-size: 0.85rem;
+  color: var(--verenne-text-dim);
+}
+
+.verenne-step-product-title {
+  display: block;
+}
+
+.verenne-step-product-price {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--verenne-gold);
+}
+
+.verenne-ritual-action {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 600px) {
+  .verenne-ritual-action {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+.verenne-ritual-subtext {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--verenne-text-muted);
+}
+
+/* Orbital Dial Graphic */
+.verenne-ritual-dial-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.verenne-dial-face {
+  position: relative;
+  width: min(100%, 480px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224, 147, 95, 0.08) 0%, rgba(26, 19, 14, 0.95) 70%);
+  border: 1px solid var(--verenne-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(224, 147, 95, 0.05);
+}
+
+.verenne-dial-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.verenne-dial-ring--outer {
+  inset: 12%;
+  border: 1px dashed rgba(239, 231, 218, 0.15);
+  animation: verenne-spin 90s linear infinite;
+}
+
+.verenne-dial-ring--inner {
+  inset: 24%;
+  border: 1px solid rgba(224, 147, 95, 0.2);
+}
+
+@keyframes verenne-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.verenne-dial-center {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.verenne-dial-crest {
+  font-family: var(--font-heading-family);
+  font-size: 1.4rem;
+  letter-spacing: 0.2em;
+  color: var(--verenne-text-bone);
+}
+
+.verenne-dial-status {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--verenne-gold);
+}
+
+.verenne-dial-dots {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.verenne-dial-dots .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--verenne-border-subtle);
+  transition: all 0.3s ease;
+}
+
+.verenne-dial-dots .dot.active {
+  background-color: var(--verenne-gold);
+  box-shadow: 0 0 8px var(--verenne-gold);
+  transform: scale(1.3);
+}
+
+/* 2. Four Inviolable Statutes */
+.verenne-statutes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+}
+
+@media (min-width: 990px) {
+  .verenne-statutes-grid {
+    grid-template-columns: 5fr 7fr;
+  }
+}
+
+.verenne-statutes-title {
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  line-height: 1.05;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.verenne-statutes-title em {
+  color: var(--verenne-gold);
+  font-style: italic;
+}
+
+.verenne-statutes-subtext {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--verenne-text-dim);
+}
+
+.verenne-statutes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--verenne-border-strong);
+}
+
+.verenne-statute-item {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 1.5rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--verenne-border-strong);
+}
+
+@media (min-width: 600px) {
+  .verenne-statute-item {
+    grid-template-columns: 7.5rem 1fr;
+  }
+}
+
+.verenne-statute-num {
+  font-family: var(--font-heading-family);
+  font-size: clamp(2.2rem, 3.8vw, 3.5rem);
+  line-height: 1;
+  color: var(--verenne-gold);
+}
+
+.verenne-statute-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--verenne-text-bone);
+  margin: 0 0 0.5rem 0;
+}
+
+.verenne-statute-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--verenne-text-dim);
+  margin: 0;
+}
+
+/* 3. Botanical Provenance */
+.verenne-origins-header {
+  max-width: 800px;
+  margin-bottom: 3.5rem;
+}
+
+.verenne-origins-title {
+  font-size: clamp(2.4rem, 4.5vw, 4.5rem);
+  line-height: 1.05;
+  margin: 1rem 0 1.25rem 0;
+}
+
+.verenne-origins-title em {
+  color: var(--verenne-gold);
+  font-style: italic;
+}
+
+.verenne-origins-subtext {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--verenne-text-dim);
+}
+
+.verenne-origins-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--verenne-border-strong);
+}
+
+.verenne-origin-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--verenne-border-strong);
+}
+
+@media (min-width: 990px) {
+  .verenne-origin-item {
+    grid-template-columns: 4fr 4fr 4fr;
+    gap: 2rem;
+  }
+}
+
+.verenne-origin-common {
+  font-family: var(--font-heading-family);
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  line-height: 1.15;
+  color: var(--verenne-text-bone);
+  margin: 0 0 0.35rem 0;
+}
+
+.verenne-origin-latin {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--verenne-text-dim);
+  margin: 0;
+}
+
+.verenne-origin-specs-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.verenne-origin-spec {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.verenne-spec-val {
+  font-size: 0.95rem;
+  color: var(--verenne-text-bone);
+  font-weight: 500;
+}
+
+.verenne-origin-story {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--verenne-text-dim);
+  margin: 0;
+}
+
+/* 4. Press & Clinical Reviews */
+.verenne-press-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+}
+
+@media (min-width: 990px) {
+  .verenne-press-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+  }
+}
+
+.verenne-press-item {
+  margin: 0;
+}
+
+.verenne-press-quote {
+  margin: 0 0 1.5rem 0;
+  font-family: var(--font-heading-family);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.2;
+  color: var(--verenne-text-bone);
+}
+
+.verenne-press-author {
+  font-size: 0.95rem;
+  color: var(--verenne-text-dim);
+}
+
+.verenne-press-author-name {
+  color: var(--verenne-gold);
+  font-weight: 600;
+}
+
+/* 5. Formulation FAQ Accordion */
+.verenne-faq-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+}
+
+@media (min-width: 990px) {
+  .verenne-faq-grid {
+    grid-template-columns: 4fr 8fr;
+  }
+}
+
+.verenne-faq-title {
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  line-height: 1.05;
+  margin: 1rem 0 1.25rem 0;
+}
+
+.verenne-faq-title em {
+  color: var(--verenne-gold);
+  font-style: italic;
+}
+
+.verenne-faq-subtext {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--verenne-text-dim);
+}
+
+.verenne-faq-accordion {
+  border-top: 1px solid var(--verenne-border-subtle);
+}
+
+.verenne-faq-item {
+  border-bottom: 1px solid var(--verenne-border-subtle);
+}
+
+.verenne-faq-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.75rem 0;
+  outline: none;
+}
+
+.verenne-faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.verenne-faq-question {
+  font-family: var(--font-heading-family);
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  line-height: 1.2;
+  color: var(--verenne-text-bone);
+  transition: color 0.2s ease;
+}
+
+.verenne-faq-item[open] .verenne-faq-question {
+  color: var(--verenne-gold);
+}
+
+.verenne-faq-toggle-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--verenne-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--verenne-text-bone);
+  flex-shrink: 0;
+  transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.verenne-faq-item[open] .verenne-faq-toggle-icon {
+  transform: rotate(45deg);
+  border-color: var(--verenne-gold);
+  color: var(--verenne-gold);
+}
+
+.verenne-faq-answer {
+  padding-bottom: 2rem;
+  max-width: 720px;
+}
+
+.verenne-faq-answer p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--verenne-text-dim);
+}

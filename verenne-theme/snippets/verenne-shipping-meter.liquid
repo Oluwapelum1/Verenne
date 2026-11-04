@@ -1,0 +1,26 @@
+{%- liquid
+  assign threshold_amount = settings.free_shipping_threshold | default: 150
+  assign threshold_cents = threshold_amount | times: 100
+  assign current_subtotal = cart.total_price
+  assign remaining_cents = threshold_cents | minus: current_subtotal
+  assign percent = current_subtotal | times: 100 | divided_by: threshold_cents
+  if percent > 100
+    assign percent = 100
+  endif
+-%}
+
+<div class="verenne-shipping-meter" data-threshold="{{ threshold_cents }}">
+  <div class="verenne-shipping-meter__text">
+    {%- if remaining_cents <= 0 -%}
+      <span>✨ <strong>Complimentary Grasse Courier Dispatch Unlocked</strong></span>
+      <span>100%</span>
+    {%- else -%}
+      <span>Add <strong>{{ remaining_cents | money }}</strong> for complimentary courier dispatch</span>
+      <span>{{ percent }}%</span>
+    {%- endif -%}
+  </div>
+  <div class="verenne-shipping-meter__bar-bg">
+    <div class="verenne-shipping-meter__bar-fill" style="width: {{ percent }}%;"></div>
+  </div>
+</div>
+

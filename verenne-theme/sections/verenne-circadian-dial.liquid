@@ -1,0 +1,379 @@
+<div class="verenne-section verenne-circadian-ritual" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; position: relative; overflow: hidden;">
+  <div class="verenne-container">
+    <div class="verenne-ritual-grid">
+      <!-- Left Column: Copy, Tabs & Steps -->
+      <div class="verenne-ritual-content">
+        <p class="verenne-caption">{{ section.settings.caption | escape }}</p>
+        <h2 class="verenne-heading verenne-ritual-title">
+          {{ section.settings.heading | escape }}
+          <em class="verenne-gold-text" id="verenne-ritual-subtitle-mode">{{ section.settings.dawn_subtitle | escape }}</em>
+        </h2>
+
+        <!-- Time of Day Mode Switcher -->
+        <div class="verenne-ritual-tabs" role="tablist" aria-label="Ritual Time of Day">
+          <button
+            type="button"
+            role="tab"
+            aria-selected="true"
+            id="verenne-tab-dawn"
+            class="verenne-ritual-tab active"
+            onclick="switchVerenneRitual('dawn')"
+          >
+            <span class="verenne-ritual-tab__icon">☼</span>
+            <span>{{ section.settings.dawn_tab_label | default: 'Dawn (AM)' }}</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            id="verenne-tab-dusk"
+            class="verenne-ritual-tab"
+            onclick="switchVerenneRitual('dusk')"
+          >
+            <span class="verenne-ritual-tab__icon">☾</span>
+            <span>{{ section.settings.dusk_tab_label | default: 'Dusk (PM)' }}</span>
+          </button>
+        </div>
+
+        <!-- Dawn Steps List -->
+        <ol class="verenne-ritual-steps" id="verenne-steps-dawn">
+          {%- assign dawn_count = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'step_dawn' -%}
+              {%- assign dawn_count = dawn_count | plus: 1 -%}
+              <li class="verenne-ritual-step-item{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+                <button type="button" class="verenne-ritual-step-btn" onclick="selectVerenneRitualStep('dawn', {{ forloop.index0 }})">
+                  <span class="verenne-step-time">{{ block.settings.time | escape }}</span>
+                  <span class="verenne-step-verb">{{ block.settings.verb | escape }}</span>
+                  <span class="verenne-step-product">
+                    <span class="verenne-step-product-title">{{ block.settings.product_title | escape }}</span>
+                    <span class="verenne-step-product-price">{{ block.settings.price | escape }}</span>
+                  </span>
+                </button>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ol>
+
+        <!-- Dusk Steps List (Hidden initially) -->
+        <ol class="verenne-ritual-steps" id="verenne-steps-dusk" style="display: none;">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'step_dusk' -%}
+              <li class="verenne-ritual-step-item{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+                <button type="button" class="verenne-ritual-step-btn" onclick="selectVerenneRitualStep('dusk', {{ forloop.index0 }})">
+                  <span class="verenne-step-time">{{ block.settings.time | escape }}</span>
+                  <span class="verenne-step-verb">{{ block.settings.verb | escape }}</span>
+                  <span class="verenne-step-product">
+                    <span class="verenne-step-product-title">{{ block.settings.product_title | escape }}</span>
+                    <span class="verenne-step-product-price">{{ block.settings.price | escape }}</span>
+                  </span>
+                </button>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ol>
+
+        <!-- Action CTA -->
+        <div class="verenne-ritual-action">
+          {%- if section.settings.collection != blank -%}
+            <a href="{{ section.settings.collection.url }}" class="verenne-pill-btn verenne-pill-btn--primary">
+              {{ section.settings.button_label | default: 'Add Complete Ritual' }} →
+            </a>
+          {%- else -%}
+            <a href="{{ routes.all_products_collection_url }}" class="verenne-pill-btn verenne-pill-btn--primary">
+              {{ section.settings.button_label | default: 'Add Complete Ritual' }} →
+            </a>
+          {%- endif -%}
+          <span class="verenne-ritual-subtext">{{ section.settings.action_subtext | default: 'Numbered editions · Insured Grasse delivery' }}</span>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Orbital Dial -->
+      <div class="verenne-ritual-dial-wrapper">
+        <div class="verenne-dial-face">
+          <!-- Orbital rings -->
+          <div class="verenne-dial-ring verenne-dial-ring--outer"></div>
+          <div class="verenne-dial-ring verenne-dial-ring--inner"></div>
+          
+          <!-- Sun / Moon Center Motif -->
+          <div class="verenne-dial-center" id="verenne-dial-center">
+            <span class="verenne-dial-crest">VERENNE</span>
+            <span class="verenne-dial-status" id="verenne-dial-mode-text">AM RITUAL</span>
+            <div class="verenne-dial-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchVerenneRitual(mode) {
+    const isDawn = mode === 'dawn';
+    document.getElementById('verenne-tab-dawn').classList.toggle('active', isDawn);
+    document.getElementById('verenne-tab-dusk').classList.toggle('active', !isDawn);
+    document.getElementById('verenne-tab-dawn').setAttribute('aria-selected', isDawn);
+    document.getElementById('verenne-tab-dusk').setAttribute('aria-selected', !isDawn);
+
+    document.getElementById('verenne-steps-dawn').style.display = isDawn ? 'block' : 'none';
+    document.getElementById('verenne-steps-dusk').style.display = isDawn ? 'none' : 'block';
+
+    const subtitleEl = document.getElementById('verenne-ritual-subtitle-mode');
+    if (subtitleEl) {
+      subtitleEl.textContent = isDawn ? '{{ section.settings.dawn_subtitle | escape }}' : '{{ section.settings.dusk_subtitle | escape }}';
+    }
+
+    const modeTextEl = document.getElementById('verenne-dial-mode-text');
+    if (modeTextEl) {
+      modeTextEl.textContent = isDawn ? 'AM RITUAL' : 'PM RITUAL';
+    }
+  }
+
+  function selectVerenneRitualStep(mode, index) {
+    const list = document.getElementById(mode === 'dawn' ? 'verenne-steps-dawn' : 'verenne-steps-dusk');
+    if (!list) return;
+    const items = list.querySelectorAll('.verenne-ritual-step-item');
+    items.forEach((item, i) => {
+      item.classList.toggle('active', i === index);
+    });
+    
+    // Update active dot in dial
+    const dots = document.querySelectorAll('.verenne-dial-dots .dot');
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === index);
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Circadian Routine Dial",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "THE CIRCADIAN RITUAL"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Four steps. "
+    },
+    {
+      "type": "text",
+      "id": "dawn_subtitle",
+      "label": "Dawn subtitle",
+      "default": "Every morning."
+    },
+    {
+      "type": "text",
+      "id": "dusk_subtitle",
+      "label": "Dusk subtitle",
+      "default": "Twice at night."
+    },
+    {
+      "type": "text",
+      "id": "dawn_tab_label",
+      "label": "Dawn tab label",
+      "default": "Dawn"
+    },
+    {
+      "type": "text",
+      "id": "dusk_tab_label",
+      "label": "Dusk tab label",
+      "default": "Dusk"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Ritual collection"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Add Complete Routine"
+    },
+    {
+      "type": "text",
+      "id": "action_subtext",
+      "label": "Action subtext",
+      "default": "Numbered editions · Insured Grasse delivery"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step_dawn",
+      "name": "Dawn Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "time",
+          "label": "Time (e.g. 07:00)",
+          "default": "07:00"
+        },
+        {
+          "type": "text",
+          "id": "verb",
+          "label": "Action verb",
+          "default": "Cleanse"
+        },
+        {
+          "type": "text",
+          "id": "product_title",
+          "label": "Product name",
+          "default": "N°05 Argile Purifiante"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "$68"
+        }
+      ]
+    },
+    {
+      "type": "step_dusk",
+      "name": "Dusk Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "time",
+          "label": "Time (e.g. 21:00)",
+          "default": "21:00"
+        },
+        {
+          "type": "text",
+          "id": "verb",
+          "label": "Action verb",
+          "default": "Restore"
+        },
+        {
+          "type": "text",
+          "id": "product_title",
+          "label": "Product name",
+          "default": "N°01 Éclat Sauvage"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "$145"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne Circadian Ritual Dial",
+      "blocks": [
+        {
+          "type": "step_dawn",
+          "settings": {
+            "time": "07:00",
+            "verb": "Cleanse",
+            "product_title": "N°05 Argile Purifiante",
+            "price": "$68"
+          }
+        },
+        {
+          "type": "step_dawn",
+          "settings": {
+            "time": "07:15",
+            "verb": "Activate",
+            "product_title": "N°02 Brume Cellulaire",
+            "price": "$82"
+          }
+        },
+        {
+          "type": "step_dawn",
+          "settings": {
+            "time": "07:20",
+            "verb": "Nourish",
+            "product_title": "N°01 Éclat Sauvage",
+            "price": "$145"
+          }
+        },
+        {
+          "type": "step_dawn",
+          "settings": {
+            "time": "07:30",
+            "verb": "Shield",
+            "product_title": "N°03 Crème Céramide",
+            "price": "$115"
+          }
+        },
+        {
+          "type": "step_dusk",
+          "settings": {
+            "time": "20:30",
+            "verb": "Purify",
+            "product_title": "N°06 Huile Démaquillante",
+            "price": "$74"
+          }
+        },
+        {
+          "type": "step_dusk",
+          "settings": {
+            "time": "20:45",
+            "verb": "Clarify",
+            "product_title": "N°05 Argile Purifiante",
+            "price": "$68"
+          }
+        },
+        {
+          "type": "step_dusk",
+          "settings": {
+            "time": "21:00",
+            "verb": "Treat",
+            "product_title": "N°04 Élixir Nocturne",
+            "price": "$160"
+          }
+        },
+        {
+          "type": "step_dusk",
+          "settings": {
+            "time": "21:15",
+            "verb": "Seal",
+            "product_title": "N°07 Baume Régénérant",
+            "price": "$128"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
