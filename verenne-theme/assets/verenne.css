@@ -2331,6 +2331,18 @@ select.verenne-input option {
 }
 
 /* 3D Flacon Interactive Container */
+.verenne-three-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  outline: none;
+  cursor: grab;
+}
+
+.verenne-three-canvas:active {
+  cursor: grabbing;
+}
+
 .verenne-3d-scene {
   perspective: 900px;
   width: 100%;
