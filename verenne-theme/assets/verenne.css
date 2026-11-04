@@ -2782,3 +2782,538 @@ select.verenne-input option {
     padding: 0.85rem 1rem !important;
   }
 }
+
+/* ==========================================================================
+   VERENNE 1:1 REPLICATION STYLES (GITHUB PAGES MATCH)
+   ========================================================================== */
+
+/* Editorial Asymmetrical Mosaic Grid */
+.verenne-collection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+  grid-auto-flow: dense;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 1024px) {
+  .verenne-collection-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3.5rem 1.5rem;
+  }
+}
+
+/* Mosaic Feature Card (Every 5th item) */
+.verenne-collection-grid.is-editorial .verenne-grid-item.tile-large {
+  grid-column: span 2 / span 2;
+  grid-row: span 2 / span 2;
+}
+
+@media (min-width: 1024px) {
+  .verenne-collection-grid.is-editorial .verenne-grid-item.tile-large.tile-right {
+    grid-column-start: 3;
+  }
+}
+
+.verenne-collection-grid.is-editorial .verenne-grid-item.tile-large .verenne-card-media-wrap {
+  aspect-ratio: 4 / 5;
+}
+@media (min-width: 1024px) {
+  .verenne-collection-grid.is-editorial .verenne-grid-item.tile-large .verenne-card-media-wrap {
+    aspect-ratio: auto;
+    min-height: 0;
+    flex: 1 1 0%;
+  }
+  .verenne-collection-grid.is-editorial .verenne-grid-item.tile-large .verenne-editorial-name {
+    font-size: clamp(1.8rem, 3vw, 2.8rem) !important;
+  }
+}
+
+/* Formulation Dossier Modal (Exact 1:1 match to Screenshot 5) */
+.verenne-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: rgba(10, 8, 6, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+}
+
+.verenne-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.verenne-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 1140px;
+  max-height: 94vh;
+  background-color: #16120E;
+  color: #FAF6EE;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: grid;
+  grid-template-columns: 1fr;
+  overflow-y: auto;
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.7);
+  transform: translateY(20px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.verenne-modal-overlay.active .verenne-modal-card {
+  transform: translateY(0);
+}
+
+@media (min-width: 900px) {
+  .verenne-modal-card {
+    grid-template-columns: 1.05fr 1fr;
+    max-height: 88vh;
+    overflow-y: hidden;
+  }
+}
+
+/* Left Media Column */
+.verenne-modal-media-col {
+  position: relative;
+  background-color: #1F1914;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+  overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .verenne-modal-media-col {
+    min-height: 600px;
+  }
+}
+
+.verenne-modal-view-panel {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.verenne-modal-view-panel.active {
+  display: flex;
+}
+
+.verenne-bottle-zoom-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: crosshair;
+  overflow: hidden;
+}
+
+.verenne-modal-img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+  display: block;
+}
+
+.verenne-modal-img--skin {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+/* Magnifying Lens */
+.verenne-magnifier-lens {
+  position: absolute;
+  width: 176px;
+  height: 176px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background-repeat: no-repeat;
+  z-index: 50;
+}
+
+/* Three.js Canvas */
+#verenne-three-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  cursor: grab;
+}
+
+#verenne-three-canvas:active {
+  cursor: grabbing;
+}
+
+.verenne-3d-hint {
+  position: absolute;
+  left: 1.25rem;
+  top: 1.25rem;
+  font-size: 0.8rem;
+  color: #A39585;
+  pointer-events: none;
+}
+
+/* View Switcher Pills */
+.verenne-view-switcher {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 30;
+}
+
+.verenne-view-btn {
+  background: rgba(0, 0, 0, 0.45);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.75rem;
+  font-family: var(--font-body-family);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s, color 0.2s;
+}
+
+.verenne-view-btn.active {
+  background: #FFFFFF;
+  color: #000000;
+}
+
+/* Right Dossier Info Column */
+.verenne-modal-info-col {
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 900px) {
+  .verenne-modal-info-col {
+    padding: 3rem 2.5rem;
+    overflow-y: auto;
+  }
+}
+
+.verenne-modal-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.verenne-modal-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.75rem;
+  color: #C2B5A4;
+  letter-spacing: 0.05em;
+}
+
+.verenne-eyebrow-no {
+  color: var(--verenne-gold);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+}
+
+.verenne-eyebrow-divider {
+  width: 2rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.verenne-modal-close {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FAF6EE;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.verenne-modal-close:hover {
+  border-color: #FAF6EE;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.verenne-modal-title {
+  font-family: var(--font-heading-family);
+  font-size: clamp(2.4rem, 4.2vw, 3.8rem);
+  line-height: 0.95;
+  color: #FAF6EE;
+  margin: 0.25rem 0 0.15rem 0;
+}
+
+.verenne-modal-subtitle {
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: #C2B5A4;
+  margin: 0.2rem 0 0.85rem;
+}
+
+.verenne-modal-reviews {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #A39585;
+  margin-bottom: 1.25rem;
+}
+
+.verenne-stars {
+  color: var(--verenne-gold);
+  letter-spacing: 2px;
+}
+
+/* Specs Row */
+.verenne-modal-specs-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.85rem 0;
+  margin-bottom: 1.25rem;
+}
+
+.verenne-spec-box {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.65rem 0.85rem;
+  text-align: center;
+}
+
+.verenne-spec-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #A39585;
+}
+
+.verenne-spec-val {
+  display: block;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  color: var(--verenne-gold);
+  margin-top: 0.25rem;
+}
+
+.verenne-modal-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #C2B5A4;
+  margin: 0 0 1.25rem 0;
+}
+
+/* Buy Box */
+.verenne-buy-box {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.verenne-buy-box-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.verenne-size-pills {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.verenne-size-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #A39585;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono, monospace);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.verenne-size-btn.active {
+  border-color: #FAF6EE;
+  color: #FAF6EE;
+}
+
+.verenne-buy-price {
+  font-family: var(--font-heading-family);
+  font-size: 2.2rem;
+  color: #FAF6EE;
+}
+
+.verenne-buy-box-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.verenne-qty-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  height: 48px;
+}
+
+.verenne-qty-stepper button {
+  background: none;
+  border: none;
+  color: #FAF6EE;
+  width: 36px;
+  height: 100%;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.verenne-qty-stepper span {
+  min-width: 28px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-family: var(--font-mono, monospace);
+}
+
+.verenne-btn-add-bag {
+  flex: 1;
+  height: 48px;
+  border-radius: 9999px;
+  background: #EDE6DD;
+  color: #16120E;
+  border: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.verenne-btn-add-bag:hover {
+  background: #FFFFFF;
+  transform: scale(1.01);
+}
+
+.verenne-btn-wishlist {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FAF6EE;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.verenne-btn-wishlist.active {
+  color: #E0935F;
+  border-color: #E0935F;
+}
+
+.verenne-buy-guarantee {
+  font-size: 0.75rem;
+  color: #A39585;
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+/* Dossier Specifications Accordion */
+.verenne-dossier-details {
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.verenne-detail-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.85rem 0;
+}
+
+.verenne-detail-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #A39585;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.verenne-detail-val {
+  font-size: 0.9rem;
+  color: #EDE7DC;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.verenne-tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.verenne-tag-pill {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  color: #EDE7DC;
+}
+
+/* Floating Toast Notification */
+.verenne-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #FAF6EE;
+  color: #16120E;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+  z-index: 999999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+}
+
+.verenne-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.verenne-toast-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #E0935F;
+}
