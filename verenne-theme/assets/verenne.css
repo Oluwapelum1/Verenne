@@ -325,79 +325,215 @@ p, span, a, button, input, select, textarea,
   object-fit: cover;
 }
 
-/* Featured Collection / Product Grid */
+/* ==========================================================================
+   VERENNE EDITORIAL COLLECTION (Original Web App Design System)
+   ========================================================================== */
 .verenne-collection-section {
-  padding: 6rem 1.5rem;
-  max-width: 1500px;
+  padding: 6rem 1.5rem 8rem;
+  background-color: var(--verenne-bg-obsidian);
+  border-top: 1px solid var(--verenne-border-subtle);
+}
+
+.verenne-collection-container {
+  max-width: 1600px;
   margin: 0 auto;
 }
 
-.verenne-section-header {
+.verenne-collection-header {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-bottom: 3.5rem;
-  border-bottom: 1px solid var(--verenne-border-subtle);
+  border-bottom: 1px solid var(--verenne-border-strong);
   padding-bottom: 2rem;
+  margin-bottom: 3.5rem;
 }
 
-@media (min-width: 750px) {
-  .verenne-section-header {
+@media (min-width: 990px) {
+  .verenne-collection-header {
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-between;
   }
 }
 
-.verenne-section-eyebrow {
+.verenne-collection-title {
+  font-family: var(--font-heading-family);
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: var(--verenne-text-bone);
+  margin: 0.5rem 0 0;
+}
+
+.verenne-collection-blurb {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--verenne-text-dim);
+  margin: 0.85rem 0 0;
+  max-width: 600px;
+}
+
+.verenne-category-tabs {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.75rem;
+}
+
+.verenne-cat-btn {
+  background: transparent;
+  border: none;
+  padding: 0.4rem 0;
+  color: var(--verenne-text-dim);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.verenne-cat-btn:hover {
   color: var(--verenne-gold);
-  margin-bottom: 0.5rem;
 }
 
-.verenne-section-eyebrow-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: var(--verenne-gold);
+.verenne-cat-btn.active {
+  color: var(--verenne-gold);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
 }
 
-.verenne-section-title {
-  font-size: clamp(2.2rem, 4.5vw, 4rem);
-  line-height: 1;
+/* 4-column PC Grid / 2-column Mobile Grid */
+.verenne-collection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3rem 1.25rem;
+  list-style: none;
+  padding: 0;
   margin: 0;
 }
 
-.verenne-product-grid {
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 2rem;
-}
-
-@media (min-width: 640px) {
-  .verenne-product-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+@media (min-width: 768px) {
+  .verenne-collection-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3.5rem 1.5rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .verenne-product-grid {
+  .verenne-collection-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4rem 2rem;
   }
 }
 
-/* Luxury Product Card */
+.verenne-grid-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.verenne-grid-item.hidden {
+  display: none !important;
+}
+
+/* Editorial Card */
+.verenne-editorial-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.verenne-card-media-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background-color: var(--verenne-bg-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--verenne-border-subtle);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.verenne-editorial-card:hover .verenne-card-media-wrap {
+  border-color: var(--verenne-border-strong);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.verenne-editorial-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s var(--verenne-ease-expo);
+}
+
+.verenne-editorial-card:hover .verenne-editorial-img {
+  transform: scale(1.04);
+}
+
+.verenne-editorial-info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.1rem;
+}
+
+.verenne-editorial-name {
+  font-family: var(--font-heading-family);
+  font-size: 1.45rem;
+  line-height: 1.2;
+  color: var(--verenne-text-bone);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.verenne-editorial-subtitle {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--verenne-text-dim);
+  margin: 0.35rem 0 0;
+}
+
+.verenne-editorial-bottom {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 0.85rem;
+  padding-top: 0.5rem;
+}
+
+.verenne-editorial-price {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--verenne-text-bone);
+  font-variant-numeric: tabular-nums;
+}
+
+.verenne-editorial-add-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--verenne-gold);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.verenne-editorial-add-btn:hover {
+  color: var(--verenne-gold-hover);
+}
+
+/* Fallback product card styles */
 .verenne-product-card {
   position: relative;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--verenne-border-subtle);
-  border-radius: 1.25rem;
+  border-radius: 12px;
   background-color: var(--verenne-bg-surface);
   overflow: hidden;
   transition: all 0.4s var(--verenne-ease-expo);

@@ -1,144 +1,352 @@
 {%- comment -%}
   Verenne Featured Collection
-  Renders real Shopify products or graceful onboarding placeholders
+  Full 16 Haute-Botanique Formulations from the Verenne Archive
 {%- endcomment -%}
 
-<section class="verenne-collection-section" aria-labelledby="verenne-collection-heading-{{ section.id }}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
-  <div class="verenne-section-header">
-    <div>
-      {%- if section.settings.caption != blank -%}
-        <p class="verenne-caption">{{ section.settings.caption | escape }}</p>
-      {%- endif -%}
+<section id="collection" class="verenne-collection-section" aria-labelledby="verenne-collection-heading-{{ section.id }}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="verenne-collection-container">
+    <div class="verenne-collection-header">
+      <div>
+        {%- if section.settings.caption != blank -%}
+          <p class="verenne-caption">{{ section.settings.caption | escape }}</p>
+        {%- endif -%}
 
-      <h2 id="verenne-collection-heading-{{ section.id }}" class="verenne-heading" style="font-size: clamp(2rem, 3.8vw, 3.2rem); margin-top: 0.5rem;">
-        {{ section.settings.title | escape }}
-      </h2>
+        <h2 id="verenne-collection-heading-{{ section.id }}" class="verenne-heading verenne-collection-title">
+          {{ section.settings.title | default: 'All 16 formulations' | escape }}
+        </h2>
+
+        <p class="verenne-collection-blurb" id="verenne-cat-blurb">
+          {{ section.settings.blurb | default: 'Four steps, four formulas each. Pick a step or browse them all.' | escape }}
+        </p>
+      </div>
+
+      <!-- Category Filter Tabs (from Web App) -->
+      <div class="verenne-category-tabs" role="group" aria-label="Filter by category">
+        <button type="button" class="verenne-cat-btn active" onclick="filterVerenneCategory('all', this)">All Formulations</button>
+        <button type="button" class="verenne-cat-btn" onclick="filterVerenneCategory('cleanse', this)">Cleanse</button>
+        <button type="button" class="verenne-cat-btn" onclick="filterVerenneCategory('treat', this)">Treat</button>
+        <button type="button" class="verenne-cat-btn" onclick="filterVerenneCategory('hydrate', this)">Hydrate</button>
+        <button type="button" class="verenne-cat-btn" onclick="filterVerenneCategory('restore', this)">Restore</button>
+      </div>
     </div>
 
-    {%- if section.settings.show_view_all and section.settings.collection != blank -%}
-      <a href="{{ section.settings.collection.url }}" class="verenne-pill-btn verenne-pill-btn--outline">
-        View All Formulations &rarr;
-      </a>
-    {%- endif -%}
-  </div>
-
-  {%- assign current_collection = collections[section.settings.collection] -%}
-  {%- assign products_to_display = current_collection.products | default: collections.all.products -%}
-
-  <div class="verenne-product-grid" style="grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);">
-    {%- if products_to_display.size > 0 -%}
-      {%- for product in products_to_display limit: section.settings.products_to_show -%}
-        <article class="verenne-product-card">
-          <a href="{{ product.url }}" class="verenne-card-media" aria-label="{{ product.title | escape }}">
-            {%- if product.featured_image != blank -%}
-              {%- assign card_alt = product.featured_image.alt | default: product.title | escape -%}
-              {{
-                product.featured_image
-                | image_url: width: 800
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '320, 600, 800',
-                  sizes: '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw',
-                  alt: card_alt,
-                  class: 'verenne-card-img'
-              }}
-            {%- else -%}
-              <div class="verenne-card-placeholder">
-                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg verenne-placeholder-svg' }}
-              </div>
-            {%- endif -%}
-          </a>
-
-          <div class="verenne-card-details">
-            <div class="verenne-card-meta">
-              <span>{{ product.type | default: 'Botanical Formulation' }}</span>
-              {%- if section.settings.show_stock_badge -%}
-                {%- if product.available -%}
-                  <span style="color: var(--verenne-gold); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase;">In stock</span>
-                {%- else -%}
-                  <span style="color: var(--verenne-text-muted); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase;">Allocated</span>
-                {%- endif -%}
-              {%- endif -%}
+    <!-- 16 Botanical Formulations Grid -->
+    <ul class="verenne-collection-grid" id="verenne-product-list">
+      <!-- 01 Eclat Sauvage -->
+      <li class="verenne-grid-item" data-category="treat">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'eclat-sauvage.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°01 Éclat Sauvage — Active botanical serum' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Éclat Sauvage</h3>
+            <p class="verenne-editorial-subtitle">Active botanical serum</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$118</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°01 Éclat Sauvage', '$118')">Add to bag</button>
             </div>
-
-            <h3 class="verenne-card-title">
-              <a href="{{ product.url }}">{{ product.title | escape }}</a>
-            </h3>
-
-            <div class="verenne-card-price">
-              <span>{{ product.price | money }}</span>
-              {%- if product.compare_at_price > product.price -%}
-                <s style="color: var(--verenne-text-muted); font-size: 0.85em; margin-left: 0.5rem;">
-                  {{ product.compare_at_price | money }}
-                </s>
-              {%- endif -%}
-            </div>
-
-            <form method="post" action="{{ routes.cart_add_url }}" class="verenne-card-form">
-              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-              <button
-                type="submit"
-                class="verenne-card-btn"
-                {% unless product.available %}disabled{% endunless %}
-              >
-                {%- if product.available -%}
-                  + Add to Bag
-                {%- else -%}
-                  Sold Out
-                {%- endif -%}
-              </button>
-            </form>
           </div>
         </article>
-      {%- endfor -%}
-    {%- else -%}
-      {%- comment -%}
-        Shopify Haute-Botanique Complete Onboarding:
-        Displays complete flagship formulations with high-resolution studio photography
-        when the store has no products imported yet.
-      {%- endcomment -%}
-      {%- assign dummy_names = "N°01 Éclat Sauvage,N°02 Baume Résineux,N°03 Brume Botanique,N°04 Élixir Nocturne,N°05 Argile Purifiante,N°06 Huile Démaquillante,N°07 Baume Régénérant,N°08 Essence Fleurie" | split: "," -%}
-      {%- assign dummy_types = "Active Serum,Ceramide Salve,Damask Hydrosol,Cellular Elixir,Botanical Clay,Cleansing Oil,Lipid Balm,Hydrating Essence" | split: "," -%}
-      {%- assign dummy_prices = "$118,$94,$68,$160,$68,$74,$128,$92" | split: "," -%}
-      {%- assign dummy_images = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1608248597359-002779a5e1bb?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?auto=format&fit=crop&w=800&q=80" | split: "," -%}
+      </li>
 
-      {%- for i in (1..section.settings.products_to_show) -%}
-        {%- assign idx = forloop.index0 | modulo: 8 -%}
-        <article class="verenne-product-card">
-          <div class="verenne-card-media">
-            <img
-              src="{{ dummy_images[idx] }}"
-              alt="{{ dummy_names[idx] | escape }} — Haute-Botanique Formulation"
-              class="verenne-card-img"
-              loading="lazy"
-              width="600"
-              height="750"
-            >
+      <!-- 02 Baume Resineux -->
+      <li class="verenne-grid-item" data-category="restore">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'baume-resineux.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°02 Baume Résineux — Frankincense & ceramide salve' }}
           </div>
-
-          <div class="verenne-card-details">
-            <div class="verenne-card-meta">
-              <span>{{ dummy_types[idx] }}</span>
-              <span style="color: var(--verenne-gold); font-size: 0.72rem; letter-spacing: 0.08em; font-weight: 600; text-transform: uppercase;">Numbered Batch</span>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Baume Résineux</h3>
+            <p class="verenne-editorial-subtitle">Frankincense & ceramide salve</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$94</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°02 Baume Résineux', '$94')">Add to bag</button>
             </div>
-
-            <h3 class="verenne-card-title">
-              <a href="{{ routes.all_products_collection_url }}">{{ dummy_names[idx] }}</a>
-            </h3>
-
-            <div class="verenne-card-price">
-              <span>{{ dummy_prices[idx] }}</span>
-            </div>
-
-            <button type="button" class="verenne-card-btn">
-              + Add to Bag
-            </button>
           </div>
         </article>
-      {%- endfor -%}
-    {%- endif -%}
+      </li>
+
+      <!-- 03 Brume Botanique -->
+      <li class="verenne-grid-item" data-category="hydrate">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'brume-botanique.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°03 Brume Botanique — Neroli & damask rose hydrosol' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Brume Botanique</h3>
+            <p class="verenne-editorial-subtitle">Neroli & damask rose hydrosol</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$68</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°03 Brume Botanique', '$68')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 04 Seve Doree -->
+      <li class="verenne-grid-item" data-category="treat">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'seve-doree.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°04 Sève Dorée — Overnight renewal elixir' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Sève Dorée</h3>
+            <p class="verenne-editorial-subtitle">Overnight renewal elixir</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$135</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°04 Sève Dorée', '$135')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 05 Argile Purifiante -->
+      <li class="verenne-grid-item" data-category="cleanse">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'argile-purifiante.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°05 Argile Purifiante — Botanical clay cleanser' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Argile Purifiante</h3>
+            <p class="verenne-editorial-subtitle">Botanical clay cleanser</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$58</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°05 Argile Purifiante', '$58')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 06 Creme Radieuse -->
+      <li class="verenne-grid-item" data-category="hydrate">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'creme-radieuse.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°06 Crème Radieuse — Daily moisture lotion' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Crème Radieuse</h3>
+            <p class="verenne-editorial-subtitle">Daily moisture lotion</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$92</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°06 Crème Radieuse', '$92')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 07 Lait Nectar -->
+      <li class="verenne-grid-item" data-category="cleanse">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'lait-nectar.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°07 Lait Nectar Démaquillant — Alpine squalane cleansing milk' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Lait Nectar Démaquillant</h3>
+            <p class="verenne-editorial-subtitle">Alpine squalane cleansing milk</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$64</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°07 Lait Nectar Démaquillant', '$64')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 08 Gelee Glaciaire -->
+      <li class="verenne-grid-item" data-category="cleanse">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'gel-glaciaire.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°08 Gelée Glaciaire — Glacial salicylic clarifier' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Gelée Glaciaire</h3>
+            <p class="verenne-editorial-subtitle">Glacial salicylic clarifier</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$56</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°08 Gelée Glaciaire', '$56')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 09 Huile Soyeuse -->
+      <li class="verenne-grid-item" data-category="cleanse">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'huile-soyeuse.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°09 Huile Soyeuse Purifiante — Golden camellia cleansing oil' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Huile Soyeuse Purifiante</h3>
+            <p class="verenne-editorial-subtitle">Golden camellia cleansing oil</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$72</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°09 Huile Soyeuse Purifiante', '$72')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 10 Nectar Resurfacant -->
+      <li class="verenne-grid-item" data-category="treat">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'resurfacing-nectar.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°10 Nectar Resurfaçant — Fermented AHA flower peeling' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Nectar Resurfaçant</h3>
+            <p class="verenne-editorial-subtitle">Fermented AHA flower peeling</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$124</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°10 Nectar Resurfaçant', '$124')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 11 Elixir Cuivre Peptides -->
+      <li class="verenne-grid-item" data-category="treat">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'cuivre-peptides.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°11 Élixir Cuivré Peptides — Copper tripeptide-1 & chlorella' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Élixir Cuivré Peptides</h3>
+            <p class="verenne-editorial-subtitle">Copper tripeptide-1 & chlorella</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$148</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°11 Élixir Cuivré Peptides', '$148')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 12 Essence Florale -->
+      <li class="verenne-grid-item" data-category="hydrate">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'essence-fleurie.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°12 Essence Florale Cellulaire — Fermented birch sap & tremella' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Essence Florale Cellulaire</h3>
+            <p class="verenne-editorial-subtitle">Fermented birch sap & tremella</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$78</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°12 Essence Florale Cellulaire', '$78')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 13 Voile Solaire SPF 50+ -->
+      <li class="verenne-grid-item" data-category="hydrate">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'voile-hydratant.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°13 Voile Solaire Botanique SPF 50+ — Mineral fluid & edelweiss' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Voile Solaire Botanique SPF 50+</h3>
+            <p class="verenne-editorial-subtitle">Mineral fluid & edelweiss</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$82</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°13 Voile Solaire Botanique SPF 50+', '$82')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 14 Cire Reparatrice Nocturne -->
+      <li class="verenne-grid-item" data-category="restore">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'cire-nocturne.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°14 Cire Réparatrice Nocturne — Raw propolis & phytosterol' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Cire Réparatrice Nocturne</h3>
+            <p class="verenne-editorial-subtitle">Raw propolis & phytosterol</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$112</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°14 Cire Réparatrice Nocturne', '$112')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 15 Baume Contour Regard -->
+      <li class="verenne-grid-item" data-category="restore">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'baume-regard.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°15 Baume Contour Regard — Wild arnica & bio-ceramide' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Baume Contour Regard</h3>
+            <p class="verenne-editorial-subtitle">Wild arnica & bio-ceramide</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$88</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°15 Baume Contour Regard', '$88')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 16 Onguent Barriere Extreme -->
+      <li class="verenne-grid-item" data-category="restore">
+        <article class="verenne-editorial-card">
+          <div class="verenne-card-media-wrap">
+            {{ 'onguent-protecteur.jpg' | asset_url | image_tag: loading: 'lazy', class: 'verenne-editorial-img', alt: 'N°16 Onguent Barrière Extrême — Centella & cupuaçu balm' }}
+          </div>
+          <div class="verenne-editorial-info">
+            <h3 class="verenne-editorial-name">Onguent Barrière Extrême</h3>
+            <p class="verenne-editorial-subtitle">Centella & cupuaçu balm</p>
+            <div class="verenne-editorial-bottom">
+              <span class="verenne-editorial-price">$96</span>
+              <button type="button" class="verenne-editorial-add-btn" onclick="handleVerenneAdd(this, 'N°16 Onguent Barrière Extrême', '$96')">Add to bag</button>
+            </div>
+          </div>
+        </article>
+      </li>
+    </ul>
   </div>
 </section>
+
+<script>
+  function filterVerenneCategory(cat, btn) {
+    document.querySelectorAll('.verenne-cat-btn').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    btn.classList.add('active');
+
+    const blurbs = {
+      all: 'Four steps, four formulas each. Pick a step or browse them all.',
+      cleanse: 'Remove impurities and sunscreen without stripping your skin.',
+      treat: 'Concentrated serums, peptides and overnight treatments.',
+      hydrate: 'Mists, lotions and a weightless daily SPF.',
+      restore: 'Rich balms, night butters and eye care.'
+    };
+
+    const blurbEl = document.getElementById('verenne-cat-blurb');
+    if (blurbEl && blurbs[cat]) {
+      blurbEl.textContent = blurbs[cat];
+    }
+
+    const items = document.querySelectorAll('.verenne-grid-item');
+    items.forEach(function(item) {
+      if (cat === 'all' || item.getAttribute('data-category') === cat) {
+        item.classList.remove('hidden');
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+  }
+
+  function handleVerenneAdd(btn, name, price) {
+    const originalText = btn.textContent;
+    btn.textContent = '✓ Added';
+    btn.style.color = '#86efac';
+    setTimeout(function() {
+      btn.textContent = originalText;
+      btn.style.color = '';
+    }, 1800);
+  }
+</script>
 
 {% schema %}
 {
@@ -154,43 +362,14 @@
     {
       "type": "text",
       "id": "title",
-      "default": "Sixteen Active Formulations",
+      "default": "All 16 formulations",
       "label": "Heading title"
     },
     {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection"
-    },
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "min": 2,
-      "max": 12,
-      "step": 1,
-      "default": 6,
-      "label": "Products to display"
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 2,
-      "max": 4,
-      "step": 1,
-      "default": 3,
-      "label": "Columns on desktop"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_stock_badge",
-      "default": true,
-      "label": "Show stock badge"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_view_all",
-      "default": true,
-      "label": "Show 'View all' link"
+      "type": "text",
+      "id": "blurb",
+      "default": "Four steps, four formulas each. Pick a step or browse them all.",
+      "label": "Description blurb"
     },
     {
       "type": "range",

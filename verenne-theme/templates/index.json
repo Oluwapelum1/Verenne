@@ -4,13 +4,13 @@
       "type": "verenne-hero",
       "settings": {
         "caption": "HAUTE-BOTANIQUE FORMULATIONS",
-        "title": "Compounded in Grasse. Bottled in violet Miron glass.",
-        "subtext": "Rare alpine flora, cold-pressed seed oils, and bioactive cellular extracts compounded in small numbered batches of four hundred flacons.",
-        "primary_button_label": "Discover Formulations",
-        "primary_button_link": "shopify://collections/all",
-        "secondary_button_label": "Read The Manifesto",
-        "secondary_button_link": "shopify://pages/about",
-        "image_position": "right",
+        "heading": "Botanical skincare,",
+        "heading_italic": "made slowly.",
+        "subtext": "Sixteen plant-based formulas to cleanse, treat, hydrate and restore your skin. Distilled in small batches in Grasse.",
+        "button_text": "Shop from $56",
+        "button_link": "#collection",
+        "secondary_text": "See the routine",
+        "secondary_link": "#ritual",
         "padding_top": 80,
         "padding_bottom": 80
       }
@@ -19,12 +19,8 @@
       "type": "verenne-featured-collection",
       "settings": {
         "caption": "(02) — THE COMPENDIUM",
-        "title": "Sixteen Active Formulations",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 3,
-        "show_stock_badge": true,
-        "show_view_all": true,
+        "title": "All 16 formulations",
+        "blurb": "Four steps, four formulas each. Pick a step or browse them all.",
         "padding_top": 80,
         "padding_bottom": 80
       }

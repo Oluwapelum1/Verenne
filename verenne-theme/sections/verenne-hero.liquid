@@ -54,17 +54,15 @@
           class: 'verenne-hero-img'
       }}
     {%- else -%}
-      {% comment %}theme-check-disable RemoteAsset{% endcomment %}
-      <img
-        src="https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=1400&q=85"
-        alt="Verenne Haute-Botanique Formulations in Miron Glass"
-        class="verenne-hero-img"
-        loading="eager"
-        fetchpriority="high"
-        width="1400"
-        height="1000"
-      >
-      {% comment %}theme-check-enable RemoteAsset{% endcomment %}
+      {{
+        'model_oil_glow.jpg'
+        | asset_url
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'verenne-hero-img',
+          alt: 'A woman pressing a golden facial oil into her cheek — Verenne'
+      }}
     {%- endif -%}
   </div>
 </section>
