@@ -2562,3 +2562,211 @@ select.verenne-input option {
   font-size: 0.95rem;
   letter-spacing: 0.12em;
 }
+
+/* ==========================================================================
+   TACTILE MAGNIFYING LENS (Cursor Hover on Formulation Flacon)
+   ========================================================================== */
+.verenne-bottle-zoom-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: crosshair;
+  overflow: hidden;
+}
+
+.verenne-magnifier-lens {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.25);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background-repeat: no-repeat;
+  z-index: 30;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  backdrop-filter: contrast(1.08);
+}
+
+/* ==========================================================================
+   DESKTOP / PC ENHANCED TYPOGRAPHY & VISIBILITY SCALING
+   ========================================================================== */
+@media (min-width: 990px) {
+  /* Hero */
+  .verenne-hero-title {
+    font-size: clamp(4.2rem, 7vw, 7.5rem) !important;
+    line-height: 0.94 !important;
+  }
+
+  .verenne-hero-subtext {
+    font-size: 1.25rem !important;
+    line-height: 1.7 !important;
+    max-width: 540px !important;
+  }
+
+  /* Compendium / Collection */
+  .verenne-collection-title {
+    font-size: clamp(3.2rem, 5.5vw, 5.4rem) !important;
+  }
+
+  .verenne-collection-blurb {
+    font-size: 1.25rem !important;
+    line-height: 1.65 !important;
+    max-width: 680px !important;
+  }
+
+  .verenne-cat-btn {
+    font-size: 1.1rem !important;
+    padding: 0.4rem 0.2rem !important;
+  }
+
+  .verenne-editorial-name {
+    font-size: 1.45rem !important;
+  }
+
+  .verenne-editorial-subtitle {
+    font-size: 1.05rem !important;
+  }
+
+  .verenne-editorial-price {
+    font-size: 1.25rem !important;
+  }
+
+  .verenne-editorial-add-btn {
+    font-size: 1.05rem !important;
+  }
+
+  /* Circadian Ritual */
+  .verenne-circadian-ritual .verenne-ritual-title {
+    font-size: clamp(3rem, 5vw, 4.8rem) !important;
+  }
+
+  .verenne-circadian-ritual .verenne-step-verb {
+    font-size: 2.6rem !important;
+  }
+
+  .verenne-circadian-ritual .verenne-step-time {
+    font-size: 0.95rem !important;
+  }
+
+  .verenne-circadian-ritual .verenne-step-product-title {
+    font-size: 1.15rem !important;
+  }
+
+  .verenne-circadian-ritual .verenne-step-product-price {
+    font-size: 1.05rem !important;
+  }
+
+  .verenne-circadian-ritual .verenne-ritual-tab {
+    font-size: 1rem !important;
+    padding: 0.75rem 1.75rem !important;
+  }
+
+  .verenne-circadian-ritual .verenne-ritual-subtext {
+    font-size: 0.95rem !important;
+  }
+
+  /* Botanical Origins */
+  .verenne-origins-title {
+    font-size: clamp(3rem, 5vw, 5rem) !important;
+  }
+
+  .verenne-origins-subtext {
+    font-size: 1.25rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .verenne-origin-common {
+    font-size: clamp(2rem, 3vw, 2.8rem) !important;
+  }
+
+  .verenne-origin-latin {
+    font-size: 1.15rem !important;
+  }
+
+  .verenne-origin-spec .verenne-caption {
+    font-size: 0.9rem !important;
+  }
+
+  .verenne-origin-spec .verenne-spec-val {
+    font-size: 1.15rem !important;
+  }
+
+  .verenne-origin-story {
+    font-size: 1.15rem !important;
+    line-height: 1.75 !important;
+  }
+
+  /* Statutes (Manifesto 4 points) */
+  .verenne-statutes-title {
+    font-size: clamp(2.8rem, 4.5vw, 4.2rem) !important;
+  }
+
+  .verenne-statute-num {
+    font-size: clamp(3rem, 4.5vw, 4.5rem) !important;
+  }
+
+  .verenne-statute-name {
+    font-size: 1.45rem !important;
+  }
+
+  .verenne-statute-text {
+    font-size: 1.15rem !important;
+    line-height: 1.7 !important;
+  }
+
+  /* FAQ */
+  .verenne-faq-title {
+    font-size: clamp(3rem, 4.5vw, 4.8rem) !important;
+  }
+
+  .verenne-faq-question {
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem) !important;
+  }
+
+  .verenne-faq-answer p {
+    font-size: 1.2rem !important;
+    line-height: 1.85 !important;
+  }
+
+  /* Product Detail Modal */
+  .verenne-modal-title {
+    font-size: clamp(2.8rem, 4.5vw, 4.2rem) !important;
+  }
+
+  .verenne-modal-latin {
+    font-size: 1.35rem !important;
+  }
+
+  .verenne-modal-price {
+    font-size: 1.6rem !important;
+  }
+
+  .verenne-modal-desc {
+    font-size: 1.15rem !important;
+    line-height: 1.75 !important;
+  }
+
+  .verenne-modal-spec-title {
+    font-size: 0.85rem !important;
+  }
+
+  .verenne-modal-spec-text {
+    font-size: 1.1rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .metric-val {
+    font-size: 1.35rem !important;
+  }
+
+  .verenne-modal-tab-btn {
+    font-size: 0.9rem !important;
+    padding: 0.85rem 1rem !important;
+  }
+}

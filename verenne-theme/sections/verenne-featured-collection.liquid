@@ -335,9 +335,12 @@
       <!-- Left Column: Visual Explorer (Bottle / On skin / 3D) -->
       <div class="verenne-modal-media-col">
         <div class="verenne-modal-viewport">
-          <!-- Bottle View -->
+          <!-- Bottle View with Tactile Magnifying Lens -->
           <div id="verenne-view-bottle" class="verenne-modal-view-panel active">
-            <img id="verenne-modal-bottle-img" src="{{ 'eclat-sauvage.jpg' | asset_url }}" alt="Formulation bottle" class="verenne-modal-img" width="600" height="750">
+            <div class="verenne-bottle-zoom-wrap" id="verenne-bottle-zoom-wrap">
+              <img id="verenne-modal-bottle-img" src="{{ 'eclat-sauvage.jpg' | asset_url }}" alt="Formulation bottle" class="verenne-modal-img" width="600" height="750">
+              <div id="verenne-magnifier-lens" class="verenne-magnifier-lens" aria-hidden="true"></div>
+            </div>
           </div>
 
           <!-- On Skin View -->
@@ -770,35 +773,99 @@
     }, 1400);
   }
 
-  /* Interactive 3D Flacon Rotation on Drag/Touch */
+  /* ==========================================================================
+     TACTILE MAGNIFYING LENS (Cursor Hover on Bottle)
+     ========================================================================== */
+  (function() {
+    const wrap = document.getElementById('verenne-bottle-zoom-wrap');
+    const img = document.getElementById('verenne-modal-bottle-img');
+    const lens = document.getElementById('verenne-magnifier-lens');
+
+    if (wrap && img && lens) {
+      function moveLens(e) {
+        const rect = img.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        if (!clientX || !clientY) return;
+
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        if (x < 0 || x > rect.width || y < 0 || y > rect.height) {
+          lens.style.opacity = '0';
+          return;
+        }
+
+        lens.style.opacity = '1';
+        lens.style.left = x + 'px';
+        lens.style.top = y + 'px';
+        lens.style.backgroundImage = 'url(' + img.src + ')';
+        lens.style.backgroundSize = (rect.width * 2.8) + 'px ' + (rect.height * 2.8) + 'px';
+        lens.style.backgroundPosition = '-' + (x * 2.8 - lens.offsetWidth / 2) + 'px -' + (y * 2.8 - lens.offsetHeight / 2) + 'px';
+      }
+
+      wrap.addEventListener('mouseenter', function() {
+        lens.style.opacity = '1';
+      });
+
+      wrap.addEventListener('mouseleave', function() {
+        lens.style.opacity = '0';
+      });
+
+      wrap.addEventListener('mousemove', moveLens);
+      wrap.addEventListener('touchmove', moveLens, { passive: true });
+    }
+  })();
+
+  /* ==========================================================================
+     3D FLACON ANIMATION & DRAG/TOUCH ROTATION
+     ========================================================================== */
   (function() {
     let isDragging = false;
     let startX = 0;
     let currentRotation = 0;
+    let autoRotate = true;
     const scene = document.getElementById('verenne-3d-container');
     const flacon = document.getElementById('verenne-3d-flacon');
+
+    // Continuous gentle 3D animation loop
+    function animate3D() {
+      if (autoRotate && !isDragging) {
+        currentRotation += 0.35;
+        if (flacon) {
+          flacon.style.transform = 'rotateY(' + currentRotation + 'deg)';
+        }
+      }
+      requestAnimationFrame(animate3D);
+    }
+    requestAnimationFrame(animate3D);
 
     if (scene && flacon) {
       scene.addEventListener('mousedown', function(e) {
         isDragging = true;
+        autoRotate = false;
         startX = e.clientX;
       });
 
       window.addEventListener('mousemove', function(e) {
         if (!isDragging) return;
         const dx = e.clientX - startX;
-        currentRotation += dx * 0.7;
+        currentRotation += dx * 0.75;
         flacon.style.transform = 'rotateY(' + currentRotation + 'deg)';
         startX = e.clientX;
       });
 
       window.addEventListener('mouseup', function() {
-        isDragging = false;
+        if (isDragging) {
+          isDragging = false;
+          setTimeout(function() { autoRotate = true; }, 1800);
+        }
       });
 
       scene.addEventListener('touchstart', function(e) {
         if (e.touches.length === 1) {
           isDragging = true;
+          autoRotate = false;
           startX = e.touches[0].clientX;
         }
       });
@@ -806,13 +873,16 @@
       window.addEventListener('touchmove', function(e) {
         if (!isDragging || e.touches.length !== 1) return;
         const dx = e.touches[0].clientX - startX;
-        currentRotation += dx * 0.7;
+        currentRotation += dx * 0.75;
         flacon.style.transform = 'rotateY(' + currentRotation + 'deg)';
         startX = e.touches[0].clientX;
       });
 
       window.addEventListener('touchend', function() {
-        isDragging = false;
+        if (isDragging) {
+          isDragging = false;
+          setTimeout(function() { autoRotate = true; }, 1800);
+        }
       });
     }
   })();

@@ -8,13 +8,28 @@
     {%- comment -%} Left: Main Menu Navigation {%- endcomment -%}
     <nav class="verenne-nav" role="navigation" aria-label="Main Navigation">
       <ul class="verenne-nav-links">
-        {%- for link in linklists[section.settings.menu].links -%}
-          <li>
-            <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>
-              {{ link.title | escape }}
-            </a>
-          </li>
-        {%- endfor -%}
+        {%- if linklists[section.settings.menu].links.size > 0 -%}
+          {%- for link in linklists[section.settings.menu].links -%}
+            {%- assign link_href = link.url -%}
+            {%- assign link_text = link.title | escape -%}
+            {%- if link.url contains '/collections/all' or link.title == 'Catalog' -%}
+              {%- assign link_href = routes.root_url | append: '#collection' -%}
+              {%- assign link_text = 'Collection' -%}
+            {%- elsif link.title == 'Home' -%}
+              {%- assign link_href = routes.root_url -%}
+            {%- endif -%}
+            <li>
+              <a href="{{ link_href }}" {% if link.current %}aria-current="page"{% endif %}>
+                {{ link_text }}
+              </a>
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          <li><a href="{{ routes.root_url }}#collection">Collection</a></li>
+          <li><a href="{{ routes.root_url }}#ritual">Ritual</a></li>
+          <li><a href="{{ routes.root_url }}#origins">Origins</a></li>
+          <li><a href="{{ routes.root_url }}#faq">FAQ</a></li>
+        {%- endif -%}
       </ul>
     </nav>
 
