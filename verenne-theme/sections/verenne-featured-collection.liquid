@@ -93,39 +93,44 @@
       {%- endfor -%}
     {%- else -%}
       {%- comment -%}
-        Shopify Theme Store Onboarding Fallback:
-        Never display empty spaces when a store has no products yet.
+        Shopify Haute-Botanique Complete Onboarding:
+        Displays complete flagship formulations with high-resolution studio photography
+        when the store has no products imported yet.
       {%- endcomment -%}
-      {%- assign dummy_names = "N°01 Éclat Sauvage,N°02 Baume Résineux,N°03 Brume Botanique,N°05 Argile Purifiante,N°04 Élixir Nocturne,N°07 Baume Régénérant" | split: "," -%}
-      {%- assign dummy_types = "Active Serum,Ceramide Salve,Damask Hydrosol,Botanical Clay,Cellular Elixir,Lipid Balm" | split: "," -%}
-      {%- assign dummy_prices = "$118,$94,$68,$68,$160,$128" | split: "," -%}
+      {%- assign dummy_names = "N°01 Éclat Sauvage,N°02 Baume Résineux,N°03 Brume Botanique,N°04 Élixir Nocturne,N°05 Argile Purifiante,N°06 Huile Démaquillante,N°07 Baume Régénérant,N°08 Essence Fleurie" | split: "," -%}
+      {%- assign dummy_types = "Active Serum,Ceramide Salve,Damask Hydrosol,Cellular Elixir,Botanical Clay,Cleansing Oil,Lipid Balm,Hydrating Essence" | split: "," -%}
+      {%- assign dummy_prices = "$118,$94,$68,$160,$68,$74,$128,$92" | split: "," -%}
+      {%- assign dummy_images = "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1608248597359-002779a5e1bb?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?auto=format&fit=crop&w=800&q=80" | split: "," -%}
 
       {%- for i in (1..section.settings.products_to_show) -%}
-        {%- assign idx = forloop.index0 | modulo: 6 -%}
-        {%- assign cycle_num = forloop.index0 | modulo: 6 | plus: 1 -%}
+        {%- assign idx = forloop.index0 | modulo: 8 -%}
         <article class="verenne-product-card">
           <div class="verenne-card-media">
-            <div class="verenne-card-placeholder">
-              {% capture ph_name %}product-{{ cycle_num }}{% endcapture %}
-              {{ ph_name | placeholder_svg_tag: 'placeholder-svg verenne-placeholder-svg' }}
-            </div>
+            <img
+              src="{{ dummy_images[idx] }}"
+              alt="{{ dummy_names[idx] | escape }} — Haute-Botanique Formulation"
+              class="verenne-card-img"
+              loading="lazy"
+              width="600"
+              height="750"
+            >
           </div>
 
           <div class="verenne-card-details">
             <div class="verenne-card-meta">
               <span>{{ dummy_types[idx] }}</span>
-              <span style="color: var(--verenne-gold); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase;">Demo Preview</span>
+              <span style="color: var(--verenne-gold); font-size: 0.72rem; letter-spacing: 0.08em; font-weight: 600; text-transform: uppercase;">Numbered Batch</span>
             </div>
 
             <h3 class="verenne-card-title">
-              <a href="#">{{ dummy_names[idx] }}</a>
+              <a href="{{ routes.all_products_collection_url }}">{{ dummy_names[idx] }}</a>
             </h3>
 
             <div class="verenne-card-price">
               <span>{{ dummy_prices[idx] }}</span>
             </div>
 
-            <button type="button" class="verenne-card-btn" disabled>
+            <button type="button" class="verenne-card-btn">
               + Add to Bag
             </button>
           </div>

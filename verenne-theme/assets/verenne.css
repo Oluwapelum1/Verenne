@@ -7,14 +7,14 @@
   --verenne-bg-obsidian: #1A130E;
   --verenne-bg-surface: #241B14;
   --verenne-bg-elevated: #2C2119;
-  --verenne-text-bone: #EFE7DA;
-  --verenne-text-dim: #C2B5A4;
-  --verenne-text-muted: #A39585;
-  --verenne-gold: #E0935F;
-  --verenne-gold-hover: #F2A65A;
-  --verenne-gold-ink: #1A130E;
-  --verenne-border-subtle: rgba(239, 231, 218, 0.12);
-  --verenne-border-strong: rgba(239, 231, 218, 0.28);
+  --verenne-text-bone: #FAF6EE;
+  --verenne-text-dim: #E5DCCE;
+  --verenne-text-muted: #C8BEB1;
+  --verenne-gold: #E89E6C;
+  --verenne-gold-hover: #F8B485;
+  --verenne-gold-ink: #140E0A;
+  --verenne-border-subtle: rgba(250, 246, 238, 0.16);
+  --verenne-border-strong: rgba(250, 246, 238, 0.32);
   --verenne-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -70,6 +70,28 @@ p, span, a, button, input, select, textarea,
   font-family: var(--font-body-family);
   font-style: var(--font-body-style);
   font-weight: var(--font-body-weight);
+}
+
+.verenne-caption {
+  font-family: var(--font-body-family);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--verenne-gold);
+  margin: 0 0 0.85rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.verenne-caption::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--verenne-gold);
 }
 
 /* Luxury Buttons */
@@ -419,22 +441,33 @@ p, span, a, button, input, select, textarea,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
-  color: var(--verenne-text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--verenne-text-dim);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   margin-bottom: 0.5rem;
 }
 
 .verenne-card-title {
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   line-height: 1.2;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.6rem 0;
+}
+
+.verenne-card-title a {
+  color: var(--verenne-text-bone);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.verenne-card-title a:hover {
+  color: var(--verenne-gold);
 }
 
 .verenne-card-price {
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-size: 1.15rem;
+  font-weight: 600;
   color: var(--verenne-gold);
   margin-bottom: 1.25rem;
 }
@@ -1475,15 +1508,15 @@ select.verenne-input option {
 }
 
 .verenne-statute-name {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--verenne-text-bone);
   margin: 0 0 0.5rem 0;
 }
 
 .verenne-statute-text {
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 1.05rem;
+  line-height: 1.7;
   color: var(--verenne-text-dim);
   margin: 0;
 }
@@ -1567,8 +1600,8 @@ select.verenne-input option {
 }
 
 .verenne-origin-story {
-  font-size: 0.95rem;
-  line-height: 1.7;
+  font-size: 1.05rem;
+  line-height: 1.75;
   color: var(--verenne-text-dim);
   margin: 0;
 }
@@ -1700,7 +1733,7 @@ select.verenne-input option {
 
 .verenne-faq-answer p {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   line-height: 1.8;
   color: var(--verenne-text-dim);
 }

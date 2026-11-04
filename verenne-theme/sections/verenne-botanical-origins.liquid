@@ -21,8 +21,8 @@
       {%- for block in section.blocks -%}
         <li class="verenne-origin-item" {{ block.shopify_attributes }}>
           <div class="verenne-origin-title-col">
-            {%- if block.settings.image != blank -%}
-              <div class="verenne-origin-media">
+            <div class="verenne-origin-media">
+              {%- if block.settings.image != blank -%}
                 {{
                   block.settings.image
                   | image_url: width: 400
@@ -31,8 +31,19 @@
                     class: 'verenne-origin-img',
                     alt: block.settings.common_name | escape
                 }}
-              </div>
-            {%- endif -%}
+              {%- else -%}
+                {%- assign fallback_origin_images = "https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=400&q=80,https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=400&q=80,https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=400&q=80,https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80" | split: "," -%}
+                {%- assign origin_idx = forloop.index0 | modulo: 4 -%}
+                <img
+                  src="{{ fallback_origin_images[origin_idx] }}"
+                  alt="{{ block.settings.common_name | escape }} harvest terroir"
+                  class="verenne-origin-img"
+                  loading="lazy"
+                  width="400"
+                  height="260"
+                >
+              {%- endif -%}
+            </div>
             <h3 class="verenne-origin-common">{{ block.settings.common_name | escape }}</h3>
             <p class="verenne-origin-latin">{{ block.settings.latin_name | escape }}</p>
           </div>

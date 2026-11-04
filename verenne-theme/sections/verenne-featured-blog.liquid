@@ -70,13 +70,19 @@
           Theme Store Onboarding Placeholder:
         {%- endcomment -%}
         {%- assign dummy_titles = "The Extraction of Alpine Gentian at Dawn,Violet Glass: Photo-Oxidation in High Altitudes,The 2026 Harvest: Cold Mountain Polyphenols" | split: "," -%}
+        {%- assign dummy_blog_imgs = "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=800&q=80" | split: "," -%}
         {%- for i in (1..3) -%}
           {%- assign idx = forloop.index0 -%}
           <article class="verenne-article-card">
             <div class="verenne-article-card__media">
-              <div class="verenne-card-placeholder">
-                {{ 'image' | placeholder_svg_tag: 'placeholder-svg verenne-placeholder-svg' }}
-              </div>
+              <img
+                src="{{ dummy_blog_imgs[idx] }}"
+                alt="{{ dummy_titles[idx] | escape }}"
+                class="verenne-article-card__img"
+                loading="lazy"
+                width="800"
+                height="500"
+              >
             </div>
             <div class="verenne-article-card__content">
               <div class="verenne-article-card__meta">

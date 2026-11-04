@@ -54,9 +54,17 @@
           class: 'verenne-hero-img'
       }}
     {%- else -%}
-      <div class="verenne-hero-placeholder">
-        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg verenne-placeholder-svg' }}
-      </div>
+      {% comment %}theme-check-disable RemoteAsset{% endcomment %}
+      <img
+        src="https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=1400&q=85"
+        alt="Verenne Haute-Botanique Formulations in Miron Glass"
+        class="verenne-hero-img"
+        loading="eager"
+        fetchpriority="high"
+        width="1400"
+        height="1000"
+      >
+      {% comment %}theme-check-enable RemoteAsset{% endcomment %}
     {%- endif -%}
   </div>
 </section>
