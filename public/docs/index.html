@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verenne theme documentation</title>
+  <meta name="description" content="How to set up and customize the Verenne Shopify theme: settings, sections, product details, filters, reviews and translations.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&family=Figtree:wght@300..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../support/site.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="../">Verenne <span>Theme documentation</span></a>
+    <nav><a href="#start">Start</a><a href="#settings">Settings</a><a href="#sections">Sections</a><a href="../support/">Support</a></nav>
+  </header>
+
+  <div class="layout">
+    <aside class="toc" aria-label="Contents">
+      <p class="label">Guides</p>
+      <a href="#start">Getting started</a>
+      <a href="#details">Product details</a>
+      <a href="#home">Home page content</a>
+      <a href="#navigation">Menus and anchors</a>
+      <a href="#filters">Filters and search</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#markets">Countries and languages</a>
+      <a href="#text">Editing theme text</a>
+      <a href="#accessibility">Accessibility</a>
+      <p class="label">Reference</p>
+      <a href="#settings">Theme settings</a>
+      <a href="#sections">Sections</a>
+      <a href="#changelog">Release notes</a>
+    </aside>
+
+    <main>
+      <section class="hero">
+        <p class="label">Version 1.0.0</p>
+        <h1>A slow, botanical storefront, <em>set up in an afternoon.</em></h1>
+        <p class="lead">Verenne is an editorial Shopify theme for small-batch beauty and wellness brands: an asymmetric product grid, a full-page product dossier with a magnifier and a 3D glass bottle, and a dawn-to-dusk ritual dial.</p>
+      </section>
+
+      <section id="start">
+        <h2>Getting started</h2>
+        <ol>
+          <li>In your Shopify admin, go to <strong>Online Store → Themes</strong>, add Verenne and choose <strong>Customize</strong>.</li>
+          <li>Under <strong>Theme settings</strong>, pick your <strong>Heading font</strong> and <strong>Body font</strong> and set the dark and light color schemes. The defaults are Bodoni Moda and Figtree on warm ink and travertine.</li>
+          <li>On the home page, choose the <strong>Product collection</strong> section's collection and add a <strong>Filter</strong> block for each category you want as a tab.</li>
+          <li>Add <strong>Step</strong> blocks to the <strong>Ritual dial</strong>, one per product, set to the first or second routine (for example Dawn and Dusk).</li>
+          <li>Create menus named <code>main-menu</code> and <code>footer</code> under <strong>Content → Menus</strong>; the header and footer use them automatically.</li>
+          <li>Optionally add the <a href="#details">product details metafield</a> to unlock the dossier's specs, texture swatch, scent notes and 3D bottle.</li>
+        </ol>
+      </section>
+
+      <section id="details">
+        <h2>Product details</h2>
+        <p>Everything in the theme works with standard product data: title, description, images, variants and price. The dossier and product page show extra rows when a product has a <code>verenne.details</code> metafield of type <strong>JSON</strong>. Each field is optional; rows without data are hidden.</p>
+        <ol>
+          <li>Go to <strong>Settings → Custom data → Products</strong> and add a definition: namespace and key <code>verenne.details</code>, type <strong>JSON</strong>.</li>
+          <li>Open a product and paste its details into the new field:</li>
+        </ol>
+        <pre><code>{
+  "subtitle": "Active botanical serum",
+  "latin": "Helichrysum stoechas",
+  "texture": "Weightless golden micro-oil",
+  "notes": [
+    "Immortelle",
+    "Neroli",
+    "Cedar"
+  ],
+  "keyIngredients": [
+    "Corsican Helichrysum",
+    "Rosehip seed"
+  ],
+  "benefits": [
+    "Replenishes the lipid barrier",
+    "Lit-from-within radiance"
+  ],
+  "howToUse": "Warm 3–4 drops between palms and press into damp skin.",
+  "ph": "5.2 (Skin-neutral)",
+  "finish": "Lit-from-within satin",
+  "glow": "#F2A65A",
+  "glass": {
+    "shape": "dropper",
+    "color": "#7A3F12",
+    "liquid": "#E08A2E"
+  },
+  "moment": "Dawn",
+  "synergy": {
+    "pairId": "brume-botanique",
+    "benefit": "Press into damp skin so the oil spreads more easily"
+  },
+  "description": "A one or two sentence summary shown in the product dossier."
+}</code></pre>
+        <table>
+          <thead><tr><th>Field</th><th>Shown as</th></tr></thead>
+          <tbody>
+            <tr><td><code>subtitle</code></td><td>Italic line under the product name, and on product cards</td></tr>
+            <tr><td><code>ph</code>, <code>finish</code></td><td>The two specification boxes</td></tr>
+            <tr><td><code>texture</code>, <code>glow</code></td><td>Texture row with an animated swatch in the <code>glow</code> color</td></tr>
+            <tr><td><code>notes</code>, <code>keyIngredients</code>, <code>benefits</code>, <code>howToUse</code></td><td>Scent, key botanicals, numbered benefits and how-to rows</td></tr>
+            <tr><td><code>glass</code></td><td>The 3D bottle: <code>shape</code> is <code>dropper</code>, <code>jar</code>, <code>mist</code>, <code>pump</code> or <code>tube</code>; <code>color</code> is the glass, <code>liquid</code> the contents</td></tr>
+            <tr><td><code>moment</code></td><td>Groups products for “Pairs well with” in the home page dossier</td></tr>
+            <tr><td><code>synergy</code></td><td>“Recommended partner” with a button that adds both products. <code>pairId</code> is the partner's handle</td></tr>
+            <tr><td><code>description</code></td><td>Short summary used in the dossier instead of the full description</td></tr>
+          </tbody>
+        </table>
+        <p>Product titles that start with a number such as <code>N°01 Éclat Sauvage</code> show the number separately and the name in large type.</p>
+      </section>
+
+      <section id="home">
+        <h2>Home page content</h2>
+        <p>The home page is built from sections you can reorder, hide or duplicate: Hero, Product collection, Manifesto, Ritual dial, Origins, Press and FAQ. Lists such as manifesto standards, origins, quotes and questions are blocks, so you can add or remove entries freely. The hero button can show your lowest price: write <code>[price]</code> in its label.</p>
+        <p>Clicking a product on the home page opens the product dossier in place. Product cards everywhere else link to the full product page.</p>
+      </section>
+
+      <section id="navigation">
+        <h2>Menus and anchors</h2>
+        <p>Links to sections on the home page scroll smoothly. Use the section's anchor, for example <code>/#collection</code>, <code>/#ritual</code>, <code>/#origins</code> or <code>/#faq</code>. Until you create a <code>main-menu</code>, the header shows these four links. The full-screen menu also lists your products and includes predictive search.</p>
+      </section>
+
+      <section id="filters">
+        <h2>Filters and search</h2>
+        <p>Collection and search pages use Shopify's storefront filtering. Choose which filters appear (availability, price, product type, tags, variant options or metafields) in the free <strong>Search &amp; Discovery</strong> app. The same app sets complementary products for the “Complete the ritual” recommendations on product pages.</p>
+      </section>
+
+      <section id="reviews">
+        <h2>Reviews</h2>
+        <p>Star ratings appear on product pages and in the dossier when products have Shopify's standard review metafields (<code>reviews.rating</code> and <code>reviews.rating_count</code>). Most review apps write these automatically. Without review data, no stars are shown.</p>
+      </section>
+
+      <section id="markets">
+        <h2>Countries and languages</h2>
+        <p>The footer's language and currency control switches the storefront when you sell in several markets or languages. Add them under <strong>Settings → Markets</strong> and <strong>Settings → Languages</strong>; the control updates on its own.</p>
+      </section>
+
+      <section id="text">
+        <h2>Editing theme text</h2>
+        <p>Headings and section text are edited in the theme editor. Shopper-facing labels such as “Add to bag”, “Bag”, “Checkout”, the empty-bag message and delivery notes live in the theme's language file: go to <strong>Online Store → Themes → ⋯ → Edit default theme content</strong> and search for the text. Translations for other languages are added the same way, or with the Translate &amp; Adapt app.</p>
+      </section>
+
+      <section id="accessibility">
+        <h2>Accessibility</h2>
+        <p>The theme scores 100 for accessibility in Lighthouse on the home, product and collection pages. Menus, the bag and the dossier close with Escape, every control is reachable by keyboard with a visible focus outline, motion is reduced for visitors who ask for it, and the default colors meet WCAG AA contrast. If you change colors, keep body text at a contrast of at least 4.5:1.</p>
+      </section>
+
+      <section id="settings">
+        <h2>Theme settings</h2>
+        <article class="ref" id="settings-typography"><h3>Typography</h3><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Heading font</td><td>Font</td><td>bodoni_moda_n4</td><td></td></tr><tr><td>Body font</td><td>Font</td><td>figtree_n4</td><td></td></tr></tbody></table></article><article class="ref" id="settings-colors"><h3>Colors</h3><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Background</td><td>Color</td><td>#1A130E</td><td></td></tr><tr><td>Secondary background</td><td>Color</td><td>#241B14</td><td></td></tr><tr><td>Surface background</td><td>Color</td><td>#2C2119</td><td></td></tr><tr><td>Text</td><td>Color</td><td>#EFE7DA</td><td></td></tr><tr><td>Secondary text</td><td>Color</td><td>#C2B5A4</td><td></td></tr><tr><td>Muted text</td><td>Color</td><td>#A39585</td><td></td></tr><tr><td>Accent</td><td>Color</td><td>#E0935F</td><td></td></tr><tr><td>Text on accent</td><td>Color</td><td>#1A130E</td><td></td></tr><tr><td>Background</td><td>Color</td><td>#E9E1D4</td><td></td></tr><tr><td>Secondary background</td><td>Color</td><td>#DDD3C3</td><td></td></tr><tr><td>Surface background</td><td>Color</td><td>#F2ECE2</td><td></td></tr><tr><td>Text</td><td>Color</td><td>#1F1610</td><td></td></tr><tr><td>Secondary text</td><td>Color</td><td>#554739</td><td></td></tr><tr><td>Muted text</td><td>Color</td><td>#6B5D4F</td><td></td></tr><tr><td>Accent</td><td>Color</td><td>#99481F</td><td></td></tr><tr><td>Text on accent</td><td>Color</td><td>#F2ECE2</td><td></td></tr></tbody></table></article><article class="ref" id="settings-cart"><h3>Cart</h3><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Free delivery threshold</td><td>Number</td><td>120</td><td>Shown as a progress meter in the bag. Set the real rate under Settings &gt; Shipping and delivery.</td></tr><tr><td>Show film grain texture</td><td>Checkbox</td><td>On</td><td></td></tr></tbody></table></article><article class="ref" id="settings-favicon"><h3>Favicon</h3><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Favicon image</td><td>Image</td><td><span class="muted">—</span></td><td></td></tr></tbody></table></article>
+      </section>
+
+      <section id="sections">
+        <h2>Sections</h2>
+        <p class="muted">Generated from the theme's section schemas.</p>
+        <article class="ref" id="header">
+    <h3>Header <code>vr-header</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Announcement</td><td>Text</td><td>Free shipping on orders over $150</td><td></td></tr><tr><td>Logo name</td><td>Text</td><td><span class="muted">—</span></td><td>Leave blank to use the store name.</td></tr><tr><td>Logo tagline</td><td>Text</td><td>Paris · Grasse</td><td></td></tr><tr><td>Menu</td><td>Menu</td><td>main-menu</td><td>Links to sections on the home page, such as /#ritual, scroll smoothly.</td></tr><tr><td>Account label</td><td>Text</td><td>Account</td><td></td></tr><tr><td>Customer account menu</td><td>Menu</td><td>customer-account-main-menu</td><td></td></tr><tr><td>Menu product index</td><td>Collection</td><td><span class="muted">—</span></td><td>Products listed in the full-screen menu. Defaults to all products.</td></tr><tr><td>Menu links heading</td><td>Text</td><td>Navigate</td><td></td></tr><tr><td>Menu product index heading</td><td>Text</td><td>Index — 16 formulations</td><td></td></tr><tr><td>Show search in menu</td><td>Checkbox</td><td>On</td><td></td></tr><tr><td>Search heading</td><td>Text</td><td>Search</td><td></td></tr><tr><td>Search placeholder</td><td>Text</td><td>Search the collection</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="hero">
+    <h3>Hero <code>vr-hero</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Heading</td><td>Text</td><td>Botanical skincare,</td><td></td></tr><tr><td>Heading second line</td><td>Text</td><td>made slowly.</td><td>Shown in italics.</td></tr><tr><td>Text</td><td>Text area</td><td>Sixteen plant-based formulas to cleanse, treat, hydrate and restore your skin. Distilled in small batches in Grasse.</td><td></td></tr><tr><td>Image</td><td>Image</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Button label</td><td>Text</td><td>Shop from [price]</td><td>Use [price] to show the lowest product price.</td></tr><tr><td>Button scrolls to section</td><td>Text</td><td>collection</td><td>Section anchor on this page, such as collection.</td></tr><tr><td>Collection for lowest price</td><td>Collection</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Link label</td><td>Text</td><td>See the routine</td><td></td></tr><tr><td>Link scrolls to section</td><td>Text</td><td>ritual</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="product-collection">
+    <h3>Product collection <code>vr-collection</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Collection</td><td>Collection</td><td><span class="muted">—</span></td><td>Defaults to all products.</td></tr><tr><td>Heading</td><td>Text</td><td>All 16 formulations</td><td></td></tr><tr><td>Text</td><td>Text area</td><td>Four steps, four formulas each. Pick a step or browse them all.</td><td></td></tr><tr><td>All products filter label</td><td>Text</td><td>All</td><td></td></tr></tbody></table>
+    <h4>Blocks</h4><details><summary>Filter</summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Collection</td><td>Collection</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Filter label</td><td>Text</td><td>Cleanse</td><td></td></tr><tr><td>Heading when selected</td><td>Text</td><td>Purify &amp; Clarify</td><td></td></tr><tr><td>Text when selected</td><td>Text area</td><td>Remove impurities and sunscreen without stripping your skin.</td><td></td></tr></tbody></table></details>
+    
+  </article><article class="ref" id="verenne-manifesto">
+    <h3>Verenne manifesto <code>vr-manifesto</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Heading</td><td>Text</td><td>We make sixteen formulations and</td><td></td></tr><tr><td>Heading ending</td><td>Text</td><td>nothing else.</td><td>Shown in italics.</td></tr><tr><td>Text</td><td>Text area</td><td>Wild plants, distilled soon after picking and bottled in dark glass. Slow by design, because skin is too.</td><td></td></tr></tbody></table>
+    <h4>Blocks</h4><details><summary>Standard</summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Number</td><td>Text</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Title</td><td>Text</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Text</td><td>Text area</td><td><span class="muted">—</span></td><td></td></tr></tbody></table></details>
+    
+  </article><article class="ref" id="ritual-dial">
+    <h3>Ritual dial <code>vr-ritual</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Eyebrow</td><td>Text</td><td>The ritual</td><td></td></tr><tr><td>Heading</td><td>Text</td><td>Four steps.</td><td></td></tr><tr><td>First routine name</td><td>Text</td><td>Dawn</td><td></td></tr><tr><td>First routine subtitle</td><td>Text</td><td>Every morning.</td><td></td></tr><tr><td>Second routine name</td><td>Text</td><td>Dusk</td><td></td></tr><tr><td>Second routine subtitle</td><td>Text</td><td>Twice at night.</td><td></td></tr><tr><td>Button label</td><td>Text</td><td>Add the [time] ritual — [price]</td><td>[time] is the routine name and [price] the routine total.</td></tr><tr><td>Note beside the button</td><td>Text</td><td>Ships together · free delivery</td><td></td></tr></tbody></table>
+    <h4>Blocks</h4><details><summary>Step</summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Routine</td><td>Select</td><td>First routine</td><td></td></tr><tr><td>Product</td><td>Product</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Step name</td><td>Text</td><td>Cleanse</td><td></td></tr><tr><td>Time</td><td>Text</td><td>07:00</td><td></td></tr></tbody></table></details>
+    
+  </article><article class="ref" id="verenne-origins">
+    <h3>Verenne origins <code>vr-origins</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Heading</td><td>Text</td><td>Four places,</td><td></td></tr><tr><td>Heading ending</td><td>Text</td><td>one harvest each.</td><td>Shown in italics.</td></tr><tr><td>Text</td><td>Text area</td><td>We buy from the same growers every year, at a price agreed before the season.</td><td></td></tr><tr><td>Origin label</td><td>Text</td><td>Origin</td><td></td></tr><tr><td>Harvest label</td><td>Text</td><td>Harvest</td><td></td></tr></tbody></table>
+    <h4>Blocks</h4><details><summary>Botanical</summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Common name</td><td>Text</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Latin name</td><td>Text</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Origin</td><td>Text</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Harvest</td><td>Text</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Story</td><td>Text area</td><td><span class="muted">—</span></td><td></td></tr></tbody></table></details>
+    
+  </article><article class="ref" id="verenne-press">
+    <h3>Verenne press <code>vr-press</code></h3>
+    <p class="muted">No settings.</p>
+    <h4>Blocks</h4><details><summary>Quote</summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Quote</td><td>Text area</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Author</td><td>Text</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Role</td><td>Text</td><td><span class="muted">—</span></td><td></td></tr></tbody></table></details>
+    
+  </article><article class="ref" id="verenne-faq">
+    <h3>Verenne FAQ <code>vr-faq</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Eyebrow</td><td>Text</td><td>Questions</td><td></td></tr><tr><td>Heading</td><td>Text</td><td>Asked,</td><td></td></tr><tr><td>Heading ending</td><td>Text</td><td>answered.</td><td>Shown in italics in the accent color.</td></tr></tbody></table>
+    <h4>Blocks</h4><details><summary>Question</summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Question</td><td>Text</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Answer</td><td>Text area</td><td><span class="muted">—</span></td><td></td></tr></tbody></table></details>
+    
+  </article><article class="ref" id="footer">
+    <h3>Footer <code>vr-footer</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Eyebrow</td><td>Text</td><td>The Seasonal Gazette</td><td></td></tr><tr><td>Heading</td><td>Text</td><td>Four letters a year. Harvest notes, private batches,</td><td></td></tr><tr><td>Heading ending</td><td>Text</td><td>nothing else.</td><td>Shown in italics in the accent color.</td></tr><tr><td>Text</td><td>Text area</td><td>Subscribers receive early access to seasonal copper-still harvests and limited single-estate distillations before public release.</td><td></td></tr><tr><td>Logo name</td><td>Text</td><td><span class="muted">—</span></td><td>Leave blank to use the store name.</td></tr><tr><td>Logo tagline</td><td>Text</td><td>Paris · Grasse</td><td></td></tr><tr><td>About text</td><td>Text area</td><td>Verenne is an independent botanical skincare house in Grasse, built on slow copper distillation, single-origin plant oils and dark glass.</td><td></td></tr><tr><td>Address</td><td>Text</td><td>12 Rue de l’Oratoire, 06130 Grasse, France</td><td></td></tr><tr><td>Opening hours</td><td>Text</td><td>Atelier Hours: Mon–Sat 09:00–18:00</td><td></td></tr><tr><td>Show local time in Paris</td><td>Checkbox</td><td>On</td><td></td></tr><tr><td>First column heading</td><td>Text</td><td>Shop</td><td></td></tr><tr><td>First column menu</td><td>Menu</td><td>footer</td><td></td></tr><tr><td>Second column heading</td><td>Text</td><td>About</td><td></td></tr><tr><td>Second column menu</td><td>Menu</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Third column heading</td><td>Text</td><td>Help</td><td></td></tr><tr><td>Third column menu</td><td>Menu</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Badges heading</td><td>Text</td><td>Integrity Standards</td><td></td></tr><tr><td>First badge</td><td>Text</td><td>100% Recyclable Glass</td><td></td></tr><tr><td>Second badge</td><td>Text</td><td>Carbon Neutral Freight</td><td></td></tr><tr><td>Signature name</td><td>Text</td><td>Maison Verenne</td><td></td></tr><tr><td>Signature motto</td><td>Text</td><td>Formulata Tarde · Natura Vivens</td><td></td></tr><tr><td>Copyright text</td><td>Text</td><td>Verenne Inc. All rights reserved.</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="product-information">
+    <h3>Product information <code>vr-main-product</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Show glass bottle view</td><td>Checkbox</td><td>On</td><td>Draws a 3D bottle from the product's details metafield.</td></tr><tr><td>Glass bottle view label</td><td>Text</td><td>View in 3D</td><td></td></tr><tr><td>First image label</td><td>Text</td><td>Bottle</td><td></td></tr><tr><td>Second image label</td><td>Text</td><td>On skin</td><td></td></tr></tbody></table>
+    <h4>Blocks</h4><details><summary>Number and category <span class="muted">· up to 1</span></summary><p class="muted">No settings.</p></details><details><summary>Title <span class="muted">· up to 1</span></summary><p class="muted">No settings.</p></details><details><summary>Rating <span class="muted">· up to 1</span></summary><p class="muted">No settings.</p></details><details><summary>Specifications <span class="muted">· up to 1</span></summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>First label</td><td>Text</td><td>pH Balance</td><td></td></tr><tr><td>Second label</td><td>Text</td><td>Finish</td><td></td></tr></tbody></table></details><details><summary>Description <span class="muted">· up to 1</span></summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Use short description when available</td><td>Checkbox</td><td>On</td><td></td></tr></tbody></table></details><details><summary>Buy buttons <span class="muted">· up to 1</span></summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Add to bag label</td><td>Text</td><td>Add to bag</td><td></td></tr><tr><td>Show dynamic checkout buttons</td><td>Checkbox</td><td>On</td><td></td></tr><tr><td>Note</td><td>Text</td><td>Free delivery over $150 · 30-day returns, even opened</td><td></td></tr></tbody></table></details><details><summary>Pickup availability <span class="muted">· up to 1</span></summary><p class="muted">No settings.</p></details><details><summary>Product details <span class="muted">· up to 1</span></summary><p class="muted">No settings.</p></details><details><summary>Share <span class="muted">· up to 1</span></summary><p class="muted">No settings.</p></details><details><summary>Text</summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Text</td><td>Rich text</td><td>Add a short note about this product.</td><td></td></tr></tbody></table></details><details><summary>Custom Liquid</summary><table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Custom Liquid</td><td>Liquid</td><td><span class="muted">—</span></td><td></td></tr></tbody></table></details>
+    <p class="muted">Also accepts app blocks.</p>
+  </article><article class="ref" id="product-recommendations">
+    <h3>Product recommendations <code>vr-product-recommendations</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Heading</td><td>Text</td><td>Pairs well with</td><td></td></tr><tr><td>Products to show</td><td>Select</td><td>Related</td><td>Complementary products are chosen in the Search &amp; Discovery app.</td></tr><tr><td>Number of products</td><td>Range</td><td>4 (2–8)</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="product-grid">
+    <h3>Product grid <code>vr-main-collection</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Products per page</td><td>Range</td><td>24 (8–48)</td><td></td></tr><tr><td>Show collection description</td><td>Checkbox</td><td>On</td><td></td></tr><tr><td>Show filtering and sorting</td><td>Checkbox</td><td>On</td><td>Choose filters in the Search &amp; Discovery app.</td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="collection-list">
+    <h3>Collection list <code>vr-main-list-collections</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Heading</td><td>Text</td><td>Collections</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="search-results">
+    <h3>Search results <code>vr-main-search</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Heading</td><td>Text</td><td>Search</td><td></td></tr><tr><td>Results heading</td><td>Text</td><td>Results for</td><td></td></tr><tr><td>Search field placeholder</td><td>Text</td><td>Search formulations, botanicals, rituals</td><td></td></tr><tr><td>Results per page</td><td>Range</td><td>24 (8–48)</td><td></td></tr><tr><td>Show filtering and sorting</td><td>Checkbox</td><td>On</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="cart">
+    <h3>Cart <code>vr-main-cart</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Heading</td><td>Text</td><td>Bag</td><td></td></tr><tr><td>Show free delivery meter</td><td>Checkbox</td><td>On</td><td></td></tr><tr><td>Show order note</td><td>Checkbox</td><td>On</td><td></td></tr><tr><td>Order note label</td><td>Text</td><td>A note for the atelier</td><td></td></tr><tr><td>Tax note</td><td>Text</td><td>Taxes and delivery are calculated at checkout.</td><td></td></tr><tr><td>Empty bag heading</td><td>Text</td><td>Your bag is empty.</td><td></td></tr><tr><td>Empty bag text</td><td>Text</td><td>Sixteen formulations are waiting.</td><td></td></tr><tr><td>Empty bag button</td><td>Text</td><td>Explore</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="blog-posts">
+    <h3>Blog posts <code>vr-main-blog</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Articles per page</td><td>Range</td><td>9 (3–24)</td><td></td></tr><tr><td>Show topic filter</td><td>Checkbox</td><td>On</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="blog-post">
+    <h3>Blog post <code>vr-main-article</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Show cover image</td><td>Checkbox</td><td>On</td><td></td></tr><tr><td>Show author</td><td>Checkbox</td><td>On</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="page">
+    <h3>Page <code>vr-main-page</code></h3>
+    <p class="muted">No settings.</p>
+    
+    
+  </article><article class="ref" id="contact-form">
+    <h3>Contact form <code>vr-contact-form</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Eyebrow</td><td>Text</td><td>Write to us</td><td></td></tr><tr><td>Heading</td><td>Text</td><td>The atelier</td><td></td></tr><tr><td>Heading ending</td><td>Text</td><td>replies within a day.</td><td>Shown in italics in the accent color.</td></tr><tr><td>Text</td><td>Rich text</td><td>Questions about a formula, an order or your ritual. We answer every message by hand.</td><td></td></tr><tr><td>Button label</td><td>Text</td><td>Send</td><td></td></tr><tr><td>Success message</td><td>Text</td><td>Thank you. We'll reply shortly.</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="page-not-found">
+    <h3>Page not found <code>vr-main-404</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Heading</td><td>Text</td><td>Lost,</td><td></td></tr><tr><td>Heading second line</td><td>Text</td><td>in the garden.</td><td></td></tr><tr><td>Text</td><td>Text</td><td>The page you're looking for has moved or never grew here.</td><td></td></tr><tr><td>Button label</td><td>Text</td><td>Back to Verenne</td><td></td></tr></tbody></table>
+    
+    
+  </article><article class="ref" id="password-page">
+    <h3>Password page <code>vr-main-password</code></h3>
+    <table><thead><tr><th>Setting</th><th>Type</th><th>Default</th><th>Notes</th></tr></thead><tbody><tr><td>Logo tagline</td><td>Text</td><td>Paris · Grasse</td><td></td></tr><tr><td>Eyebrow</td><td>Text</td><td>Opening soon</td><td></td></tr><tr><td>Heading</td><td>Text</td><td>Distilling</td><td></td></tr><tr><td>Heading second line</td><td>Text</td><td>the first harvest.</td><td></td></tr><tr><td>Image</td><td>Image</td><td><span class="muted">—</span></td><td></td></tr><tr><td>Sign-up button</td><td>Text</td><td>Notify me</td><td></td></tr><tr><td>Sign-up success message</td><td>Text</td><td>You're on the list. We'll write when the atelier opens.</td><td></td></tr></tbody></table>
+    
+    
+  </article>
+      </section>
+
+      <section id="changelog">
+        <h2>Release notes</h2>
+        <h3>1.0.0</h3>
+        <ul>
+          <li>First release: editorial home page with product dossier, ritual dial, origins and FAQ.</li>
+          <li>Product page with magnifier, media views, 3D glass bottle, dynamic checkout, Shop Pay Installments, pickup availability and recommendations.</li>
+          <li>Collection, search and collection list pages with storefront filtering, sorting and predictive search.</li>
+          <li>Cart drawer and cart page with discounts, unit prices and accelerated checkout; blog, article, contact, 404, password and gift card pages.</li>
+          <li>Customer account button, country and language selectors, and fully translatable text.</li>
+        </ul>
+      </section>
+
+      <footer class="foot">
+        <p>Need help? <a href="../support/">Contact support</a>. We reply within two business days.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

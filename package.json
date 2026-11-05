@@ -9,7 +9,8 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "build:shopify": "vite build && node scripts/build-shopify.mjs"
+    "build:shopify": "vite build && node scripts/build-shopify.mjs",
+    "build:docs": "node scripts/build-theme-docs.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verenne theme support</title>
+  <meta name="description" content="Contact support for the Verenne Shopify theme. We reply within two business days.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&family=Figtree:wght@300..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="../">Verenne <span>Theme support</span></a>
+    <nav><a href="../docs/">Documentation</a><a href="./">Support</a></nav>
+  </header>
+
+  <div class="layout">
+    <div></div>
+    <main>
+      <section class="hero">
+        <p class="label">Support</p>
+        <h1>Write to us, <em>we reply within two business days.</em></h1>
+        <p class="lead">Questions about setting up Verenne, a bug, or a feature you need. Many answers are already in the <a href="../docs/">documentation</a>.</p>
+
+        <!--
+          Submissions open a pre-filled request in the theme's GitHub repository.
+          To receive them by email instead, set data-endpoint to a form service URL (for example Formspree).
+        -->
+        <form class="form" id="support-form" data-endpoint="" data-repo="Oluwapelum1/Verenne" novalidate>
+          <div class="row">
+            <label><span>Name</span><input class="field" name="name" autocomplete="name" required></label>
+            <label><span>Email</span><input class="field" type="email" name="email" autocomplete="email" required></label>
+          </div>
+          <div class="row">
+            <label><span>Store URL</span><input class="field" name="store" placeholder="your-store.myshopify.com" inputmode="url"></label>
+            <label><span>Topic</span>
+              <select class="field" name="topic">
+                <option>Setup question</option>
+                <option>Bug report</option>
+                <option>Feature request</option>
+                <option>Other</option>
+              </select>
+            </label>
+          </div>
+          <label><span>Message</span><textarea class="field" name="message" rows="7" required></textarea></label>
+          <button class="button" type="submit">Send request →</button>
+          <p class="status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('support-form');
+      var status = form.querySelector('.status');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!form.checkValidity()) {
+          status.textContent = 'Please add your name, email and a message.';
+          form.reportValidity();
+          return;
+        }
+        var data = Object.fromEntries(new FormData(form));
+        var endpoint = form.dataset.endpoint;
+        if (endpoint) {
+          status.textContent = 'Sending…';
+          fetch(endpoint, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+            .then(function (r) {
+              if (!r.ok) throw new Error();
+              form.reset();
+              status.textContent = 'Thank you. We will reply within two business days.';
+            })
+            .catch(function () {
+              status.textContent = 'Something went wrong. Please try again.';
+            });
+          return;
+        }
+        var title = '[' + data.topic + '] ' + data.message.split('\n')[0].slice(0, 80);
+        var body = '**Topic:** ' + data.topic + '\n**Store:** ' + (data.store || '—') + '\n**Contact:** ' + data.name + '\n\n' + data.message +
+          '\n\n_Please do not post passwords or private keys. Leave your email out of this public request; we will reply here._';
+        var url = 'https://github.com/' + form.dataset.repo + '/issues/new?labels=support&title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(body);
+        window.open(url, '_blank', 'noopener');
+        status.textContent = 'Your request opened in a new tab. Submit it there and we will reply within two business days.';
+      });
+    })();
+  </script>
+</body>
+</html>
