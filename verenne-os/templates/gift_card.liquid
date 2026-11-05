@@ -3,63 +3,57 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
-    {% # Inlined CSS Variables %}
-    {% render 'css-variables' %}
-
-    {% # Load and preload the critical CSS %}
-    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
-    {{ 'base.css' | asset_url | stylesheet_tag }}
-
-    {% # Social, title, etc. %}
     {% render 'meta-tags' %}
-
+    <title>{{ 'gift_card.card' | t }} — {{ shop.name }}</title>
+    <meta name="robots" content="noindex">
+    {{ 'vr-app.css' | asset_url | stylesheet_tag }}
+    {{ 'vr-theme.css' | asset_url | stylesheet_tag }}
+    {% render 'css-variables' %}
+    <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
     {{ content_for_header }}
   </head>
 
-  <body class="template-gift-card">
-    <main>
-      <div>
-        <h1>{{ gift_card.balance | money }}</h1>
+  <body class="antialiased">
+    <main class="grid min-h-screen place-items-center bg-[var(--bg-primary)] px-5 py-16 text-[var(--text-primary)]">
+      <div class="w-full max-w-md text-center">
+        {% render 'vr-logo', mark_class: 'h-8 w-8' %}
 
-        {% if gift_card.enabled == false or gift_card.expired %}
-          <p>{{ 'gift_card.expired' | t }}</p>
-        {% endif %}
+        <div class="mt-10 border border-[var(--border-strong)] p-8">
+          <p class="label">{{ 'gift_card.card' | t }}</p>
+          <p class="mt-3 font-serif text-6xl">{{ gift_card.balance | money }}</p>
+          {%- if gift_card.balance != gift_card.initial_value -%}
+            <p class="mt-1 text-[13px] text-[var(--text-muted)]">{{ gift_card.initial_value | money }}</p>
+          {%- endif -%}
+          {%- if gift_card.enabled == false or gift_card.expired -%}
+            <p class="mt-3 text-[14px] text-[var(--accent)]">{{ 'gift_card.expired' | t }}</p>
+          {%- elsif gift_card.expires_on -%}
+            {%- assign expires_on = gift_card.expires_on | date: '%B %e, %Y' -%}
+            <p class="mt-3 text-[13px] text-[var(--text-secondary)]">{{ 'gift_card.expires_on' | t: expires_on: expires_on }}</p>
+          {%- endif -%}
 
-        {% if gift_card.expires_on %}
-          {% assign expires_on = gift_card.expires_on | date: '%B %e, %Y' %}
-          <p>
-            {{ 'gift_card.expires_on' | t: expires_on: expires_on }}
-          </p>
-        {% endif %}
+          <p class="mt-8 text-[14px] text-[var(--text-secondary)]">{{ 'gift_card.use_at_checkout' | t }}</p>
+          <p class="mt-2 font-mono text-[18px] tracking-[0.2em]" aria-label="Gift card code">{{ gift_card.code | format_code }}</p>
 
-        <p>
-          {% if settings.logo %}
-            {{ settings.logo | image_url: width: 300 | image_tag: alt: shop.name }}
-          {% else %}
-            <img
-              src="{{ 'gift-card/card.svg' | shopify_asset_url }}"
-              alt="{{ 'gift_card.card' | t }}"
-              width="300"
-              height="200"
-            >
-          {% endif %}
-        </p>
+          <div id="gift-card-qr" class="mx-auto mt-6 grid w-[136px] place-items-center bg-white p-2" data-identifier="{{ gift_card.qr_identifier }}"></div>
 
-        <h2>{{ shop.name }}</h2>
-        <p>{{ 'gift_card.use_at_checkout' | t }}</p>
-        <p>{{ gift_card.code | format_code }}</p>
+          {%- if gift_card.pass_url -%}
+            <a href="{{ gift_card.pass_url }}" class="mt-6 inline-block">
+              <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" alt="{{ 'gift_card.add_to_apple_wallet' | t }}" width="200" height="60" loading="lazy">
+            </a>
+          {%- endif -%}
+        </div>
 
-        {% if gift_card.pass_url %}
-          <a href="{{ gift_card.pass_url }}">
-            <img
-              src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
-              alt="{{ 'gift_card.add_to_apple_wallet' | t }}"
-              width="200"
-              height="60"
-            >
-          </a>
-        {% endif %}
+        <div class="mt-8 flex items-center justify-center gap-6 text-[15px]">
+          <button type="button" onclick="window.print()" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">Print</button>
+          <a href="{{ shop.url }}" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">Shop at {{ shop.name }}</a>
+        </div>
       </div>
     </main>
+    <script>
+      window.addEventListener('load', function () {
+        var el = document.getElementById('gift-card-qr');
+        if (el && window.QRCode) new QRCode(el, { text: el.dataset.identifier, width: 120, height: 120 });
+      });
+    </script>
   </body>
 </html>

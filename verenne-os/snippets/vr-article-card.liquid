@@ -1,0 +1,21 @@
+{%- doc -%}
+  Article card: landscape photo, date, serif title and excerpt.
+
+  @param {article} article - The article to show
+  @param {boolean} [eager] - Load the image eagerly
+{%- enddoc -%}
+{%- if eager -%}{%- assign loading = 'eager' -%}{%- else -%}{%- assign loading = 'lazy' -%}{%- endif -%}
+<li>
+  <a href="{{ article.url }}" class="group block">
+    <span class="relative block aspect-[3/2] overflow-hidden bg-[var(--bg-secondary)]">
+      {%- if article.image -%}
+        {{ article.image | image_url: width: 1200 | image_tag: widths: '400, 600, 900, 1200', sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw', loading: loading, class: 'absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]' }}
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'absolute inset-0 h-full w-full text-[var(--text-muted)]' }}
+      {%- endif -%}
+    </span>
+    <span class="label mt-4 block">{{ article.published_at | time_tag: format: 'date' }}{% if article.tags.size > 0 %} · {{ article.tags.first }}{% endif %}</span>
+    <span class="mt-2 block font-serif text-[clamp(1.6rem,2.4vw,2.2rem)] leading-tight group-hover:italic">{{ article.title }}</span>
+    <span class="mt-2 block text-[15px] leading-relaxed text-[var(--text-secondary)]">{{ article.excerpt_or_content | strip_html | truncatewords: 28 }}</span>
+  </a>
+</li>

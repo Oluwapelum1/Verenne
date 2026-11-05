@@ -1,0 +1,1 @@
+{ "sections": { "main": { "type": "vr-main-page", "settings": {} }, "form": { "type": "vr-contact-form", "settings": {} } }, "order": ["main", "form"] }

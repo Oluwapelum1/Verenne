@@ -1603,6 +1603,39 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Cart page (sections/vr-main-cart.liquid)                            */
+  /* ------------------------------------------------------------------ */
+  function initCartPage() {
+    const root = $('[data-vr-cart-page]');
+    if (!root) return;
+    // Quantity changes apply instantly, then the page re-renders with fresh totals and discounts
+    const change = (key, quantity) => cartRequest(ROUTES.cartChange, { id: key, quantity }).then(() => window.location.reload());
+    $$('[data-vr-line]', root).forEach((line) => {
+      const key = line.dataset.vrLine;
+      const input = $('[data-vr-line-input]', line);
+      $$('[data-vr-line-qty]', line).forEach((b) =>
+        b.addEventListener('click', () => change(key, Math.max(0, (parseInt(input.value, 10) || 0) + Number(b.dataset.vrLineQty))))
+      );
+      input.addEventListener('change', () => change(key, Math.max(0, parseInt(input.value, 10) || 0)));
+      const remove = $('[data-vr-line-remove]', line);
+      if (remove)
+        remove.addEventListener('click', (e) => {
+          e.preventDefault();
+          animate(line, [{ opacity: 1, transform: 'translateX(0)' }, { opacity: 0, transform: 'translateX(-20px)' }], { duration: 250, easing: 'ease-in' });
+          change(key, 0);
+        });
+    });
+    const note = $('[data-vr-cart-note]', root);
+    if (note) {
+      let timer = null;
+      note.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => cartRequest(ROUTES.cartUpdate, { note: note.value }).catch(() => {}), 500);
+      });
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Boot                                                                */
   /* ------------------------------------------------------------------ */
   function syncBag() {
@@ -1627,6 +1660,7 @@
   initFooter();
   initProductPage();
   initCards();
+  initCartPage();
   initFacets();
   initPredictive();
   initRecommendations();

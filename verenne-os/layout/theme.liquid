@@ -25,12 +25,7 @@
     {{ 'vr-app.css' | asset_url | stylesheet_tag }}
     {{ 'vr-theme.css' | asset_url | stylesheet_tag }}
     {% render 'css-variables' %}
-    {%- comment -%} Skeleton's starter styles, only for pages that still use its plain templates {%- endcomment -%}
-    {%- assign designed_templates = 'index,product,collection,search,list-collections' | split: ',' -%}
-    {%- unless designed_templates contains template.name -%}
-      {{ 'base.css' | asset_url | stylesheet_tag }}
-    {%- endunless -%}
-
+    
     <script>
       window.VR_CURRENCY = {{ cart.currency.symbol | default: '$' | json }};
       window.VR_FREE_SHIPPING = {{ settings.free_shipping_threshold | default: 120 }};

@@ -1,0 +1,150 @@
+{%- comment -%}
+  Cart page: the bag drawer's design as a full page. Works without JavaScript (update and checkout
+  submit the form); with JavaScript, quantity changes apply instantly (assets/vr-app.js).
+{%- endcomment -%}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | default: 120 | times: 100
+  assign need = threshold | minus: cart.items_subtotal_price
+  assign pct = cart.items_subtotal_price | times: 100 | divided_by: threshold
+  if pct > 100
+    assign pct = 100
+  endif
+-%}
+<section class="px-5 pb-20 pt-[160px] sm:px-10 sm:pb-28 sm:pt-[185px]" data-vr-cart-page aria-labelledby="cart-title-{{ section.id }}">
+  <div class="mx-auto max-w-[1600px]">
+    <h1 id="cart-title-{{ section.id }}" class="border-b border-[var(--border-subtle)] pb-6 font-serif text-[clamp(2.6rem,5.5vw,5.4rem)] leading-none tracking-[-0.02em]">
+      {{ section.settings.heading }} <sup class="font-mono text-[13px] text-[var(--text-muted)]">{{ cart.item_count }}</sup>
+    </h1>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="flex flex-col items-center justify-center py-24 text-center">
+        <p class="font-serif text-3xl">{{ section.settings.empty_heading }}</p>
+        <p class="mt-2 text-[14px] text-[var(--text-secondary)]">{{ section.settings.empty_text }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="group relative mt-6 inline-flex items-center justify-center gap-2 overflow-hidden px-7 py-4 text-[15px] font-medium transition-colors duration-500 bg-[var(--text-primary)] text-[var(--accent-ink)]">
+          <span aria-hidden="true" class="absolute inset-0 translate-y-[101%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 bg-[var(--accent)]"></span>
+          <span class="relative z-10 inline-flex items-center gap-2">{{ section.settings.empty_button }} {% render 'vr-icon', name: 'arrow-right', class: 'h-3.5 w-3.5' %}</span>
+        </a>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" id="cart-form-{{ section.id }}" class="mt-10 grid grid-cols-1 gap-12 lg:grid-cols-12" novalidate>
+        <div class="lg:col-span-7">
+          {%- if section.settings.show_meter -%}
+            <div class="mb-8 border-b border-[var(--border-subtle)] pb-4">
+              <p class="text-[13px] text-[var(--text-secondary)]">
+                {%- if need > 0 -%}{{ need | money_without_trailing_zeros }} away from free delivery{%- else -%}Free delivery unlocked{%- endif -%}
+              </p>
+              <div class="mt-2 h-px bg-[var(--border-strong)]"><div class="h-px bg-[var(--accent)]" style="width: {{ pct }}%"></div></div>
+            </div>
+          {%- endif -%}
+
+          <ul class="space-y-6">
+            {%- for item in cart.items -%}
+              {%- liquid
+                assign first_word = item.product.title | split: ' ' | first
+                if first_word contains 'N°'
+                  assign item_name = item.product.title | remove_first: first_word | strip
+                else
+                  assign item_name = item.product.title
+                endif
+              -%}
+              <li class="flex gap-5 border-b border-[var(--border-subtle)] pb-6" data-vr-line="{{ item.key }}">
+                <a href="{{ item.url }}" class="shrink-0">
+                  {%- if item.image -%}
+                    {{ item.image | image_url: width: 320 | image_tag: loading: 'lazy', class: 'h-32 w-24 rounded-none object-cover', alt: item.product.title }}
+                  {%- endif -%}
+                </a>
+                <div class="flex flex-1 flex-col justify-between gap-3">
+                  <div class="flex justify-between gap-3">
+                    <div>
+                      <a href="{{ item.url }}" class="font-serif text-2xl leading-tight hover:italic">{{ item_name }}</a>
+                      {%- unless item.product.has_only_default_variant -%}
+                        <p class="label mt-1">{{ item.variant.title }}</p>
+                      {%- endunless -%}
+                      {%- for property in item.properties -%}
+                        {%- unless property.first contains '_' or property.last == blank -%}
+                          <p class="label mt-1">{{ property.first }}: {{ property.last }}</p>
+                        {%- endunless -%}
+                      {%- endfor -%}
+                      {%- if item.selling_plan_allocation -%}
+                        <p class="label mt-1">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                      {%- endif -%}
+                      {%- for discount in item.line_level_discount_allocations -%}
+                        <p class="mt-1 text-[12px] text-[var(--accent)]">{{ discount.discount_application.title }} (−{{ discount.amount | money }})</p>
+                      {%- endfor -%}
+                      {%- if item.unit_price_measurement -%}
+                        <p class="mt-1 text-[12px] text-[var(--text-muted)]">{{ item.unit_price | money }}/{% if item.unit_price_measurement.reference_value != 1 %}{{ item.unit_price_measurement.reference_value }}{% endif %}{{ item.unit_price_measurement.reference_unit }}</p>
+                      {%- endif -%}
+                    </div>
+                    <div class="text-right">
+                      <p class="font-mono text-[14px] tabular-nums">{{ item.final_line_price | money }}</p>
+                      {%- if item.original_line_price != item.final_line_price -%}
+                        <s class="font-mono text-[12px] text-[var(--text-muted)]">{{ item.original_line_price | money }}</s>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center rounded-full border border-[var(--border-subtle)]">
+                      <button type="button" data-vr-line-qty="-1" class="grid h-9 w-9 place-items-center" aria-label="Decrease quantity of {{ item_name | escape }}">{% render 'vr-icon', name: 'minus', class: 'h-3 w-3' %}</button>
+                      <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="w-8 bg-transparent text-center font-mono text-[12px] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none" aria-label="Quantity of {{ item_name | escape }}" data-vr-line-input>
+                      <button type="button" data-vr-line-qty="1" class="grid h-9 w-9 place-items-center" aria-label="Increase quantity of {{ item_name | escape }}">{% render 'vr-icon', name: 'plus', class: 'h-3 w-3' %}</button>
+                    </div>
+                    <a href="{{ item.url_to_remove }}" class="label underline-offset-4 hover:text-[var(--text-primary)] hover:underline" data-vr-line-remove>Remove</a>
+                  </div>
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+          <noscript><button type="submit" name="update" class="mt-6 border border-[var(--border-strong)] px-4 py-2 text-[12px]">Update bag</button></noscript>
+
+          {%- if section.settings.show_note -%}
+            <div class="mt-10">
+              <label for="cart-note-{{ section.id }}" class="label">{{ section.settings.note_label }}</label>
+              <textarea id="cart-note-{{ section.id }}" name="note" rows="3" class="vr-field mt-2" data-vr-cart-note>{{ cart.note }}</textarea>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <aside class="lg:col-span-4 lg:col-start-9">
+          <div class="space-y-4 border border-[var(--border-subtle)] p-6 lg:sticky lg:top-[125px]">
+            <dl class="space-y-1.5 text-[14px] text-[var(--text-secondary)]">
+              <div class="flex justify-between"><dt>Subtotal</dt><dd class="tabular-nums">{{ cart.items_subtotal_price | money }}</dd></div>
+              {%- for discount in cart.cart_level_discount_applications -%}
+                <div class="flex justify-between text-[var(--accent)]"><dt>{{ discount.title }}</dt><dd class="tabular-nums">−{{ discount.total_allocated_amount | money }}</dd></div>
+              {%- endfor -%}
+              <div class="flex justify-between"><dt>Delivery</dt><dd>{% if need <= 0 %}Free{% else %}Calculated at checkout{% endif %}</dd></div>
+              <div class="flex items-baseline justify-between pt-2 text-[var(--text-primary)]">
+                <dt>Total</dt>
+                <dd class="font-serif text-3xl">{{ cart.total_price | money }}</dd>
+              </div>
+            </dl>
+            <p class="text-[12px] text-[var(--text-muted)]">{{ section.settings.tax_note }}</p>
+            <button type="submit" name="checkout" class="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden px-7 py-4 text-[15px] font-medium transition-colors duration-500 bg-[var(--text-primary)] text-[var(--accent-ink)]">
+              <span aria-hidden="true" class="absolute inset-0 translate-y-[101%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 bg-[var(--accent)]"></span>
+              <span class="relative z-10 inline-flex items-center gap-2">Checkout {% render 'vr-icon', name: 'arrow-right', class: 'h-3.5 w-3.5' %}</span>
+            </button>
+            {%- if additional_checkout_buttons -%}
+              <div class="vr-payment">{{ content_for_additional_checkout_buttons }}</div>
+            {%- endif -%}
+          </div>
+        </aside>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "class": "vr-section-main-cart",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Bag" },
+    { "type": "checkbox", "id": "show_meter", "label": "Show free delivery meter", "default": true },
+    { "type": "checkbox", "id": "show_note", "label": "Show order note", "default": true },
+    { "type": "text", "id": "note_label", "label": "Order note label", "default": "A note for the atelier" },
+    { "type": "text", "id": "tax_note", "label": "Tax note", "default": "Taxes and delivery are calculated at checkout." },
+    { "type": "text", "id": "empty_heading", "label": "Empty bag heading", "default": "Your bag is empty." },
+    { "type": "text", "id": "empty_text", "label": "Empty bag text", "default": "Sixteen formulations are waiting." },
+    { "type": "text", "id": "empty_button", "label": "Empty bag button", "default": "Explore" }
+  ]
+}
+{% endschema %}

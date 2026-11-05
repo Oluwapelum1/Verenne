@@ -36,3 +36,67 @@
 .vr-payment-terms shopify-payment-terms {
   color: var(--text-secondary);
 }
+
+/* Rich text from the Shopify editor (pages, articles, policies, product descriptions) */
+.vr-rte {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.vr-rte > * + * {
+  margin-top: 1.1em;
+}
+.vr-rte h1,
+.vr-rte h2,
+.vr-rte h3,
+.vr-rte h4 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-top: 1.6em;
+}
+.vr-rte h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); }
+.vr-rte h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); }
+.vr-rte h3 { font-size: 1.6rem; }
+.vr-rte h4 { font-size: 1.3rem; }
+.vr-rte a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+.vr-rte a:hover { color: var(--accent); }
+.vr-rte strong { color: var(--text-primary); font-weight: 600; }
+.vr-rte ul,
+.vr-rte ol { padding-left: 1.25em; }
+.vr-rte ul { list-style: disc; }
+.vr-rte ol { list-style: decimal; }
+.vr-rte li + li { margin-top: 0.35em; }
+.vr-rte blockquote {
+  border-left: 1px solid var(--border-strong);
+  padding-left: 1.25em;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+.vr-rte img { max-width: 100%; height: auto; }
+.vr-rte table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.vr-rte th,
+.vr-rte td { border-bottom: 1px solid var(--border-subtle); padding: 0.6em 0.5em; text-align: left; }
+.vr-rte hr { border: 0; border-top: 1px solid var(--border-subtle); }
+
+/* Form fields shared by contact, comments, password and cart note */
+.vr-field {
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  background: color-mix(in srgb, var(--bg-secondary) 60%, transparent);
+  padding: 0.85rem 1.1rem;
+  font-size: 14px;
+  color: var(--text-primary);
+  border-radius: 0;
+  transition: border-color 0.3s;
+}
+.vr-field::placeholder { color: var(--text-muted); }
+.vr-field:focus { outline: none; border-color: var(--text-primary); }

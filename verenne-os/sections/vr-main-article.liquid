@@ -1,0 +1,75 @@
+{%- comment -%} Article: large serif title, cover photo, rich text and comments. {%- endcomment -%}
+<article class="tone-light px-5 pb-20 pt-[185px] sm:px-10 sm:pb-28 sm:pt-[217px]" aria-labelledby="article-title-{{ section.id }}">
+  <div class="mx-auto max-w-[1600px]">
+    <header class="mx-auto max-w-4xl text-center">
+      <p class="label">{{ article.published_at | time_tag: format: 'date' }}{% if section.settings.show_author %} · {{ article.author }}{% endif %}</p>
+      <h1 id="article-title-{{ section.id }}" class="mt-4 font-serif text-[clamp(2.6rem,6vw,5.6rem)] leading-[0.95] tracking-[-0.02em]">{{ article.title }}</h1>
+    </header>
+
+    {%- if article.image and section.settings.show_image -%}
+      <div class="relative mt-12 aspect-[16/9] overflow-hidden bg-[var(--bg-secondary)]">
+        {{ article.image | image_url: width: 2400 | image_tag: widths: '800, 1200, 1600, 2400', sizes: '(min-width: 1600px) 1600px, 100vw', loading: 'eager', fetchpriority: 'high', class: 'absolute inset-0 h-full w-full object-cover' }}
+      </div>
+    {%- endif -%}
+
+    <div class="vr-rte mx-auto mt-12 max-w-2xl">{{ article.content }}</div>
+
+    {%- if article.tags.size > 0 -%}
+      <div class="mx-auto mt-10 flex max-w-2xl flex-wrap gap-2">
+        {%- for tag in article.tags -%}
+          <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="rounded-none border border-[var(--border-subtle)] px-3 py-1 text-[13px] hover:border-[var(--border-strong)]">{{ tag }}</a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="mx-auto mt-10 flex max-w-2xl items-center justify-between border-t border-[var(--border-strong)] pt-6 text-[15px]">
+      <a href="{{ blog.url }}" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">Back to {{ blog.title }}</a>
+      <span class="flex gap-4 text-[13px] text-[var(--text-secondary)]">
+        <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: article.url | url_encode }}">Facebook</a>
+        <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url={{ shop.url | append: article.url | url_encode }}&text={{ article.title | url_encode }}">X</a>
+      </span>
+    </div>
+
+    {%- if blog.comments_enabled? -%}
+      <section class="mx-auto mt-16 max-w-2xl" aria-labelledby="comments-{{ section.id }}">
+        <h2 id="comments-{{ section.id }}" class="font-serif text-3xl">{{ article.comments_count }} {% if article.comments_count == 1 %}comment{% else %}comments{% endif %}</h2>
+        {%- paginate article.comments by 20 -%}
+          <ul class="mt-6 border-t border-[var(--border-subtle)]">
+            {%- for comment in article.comments -%}
+              <li class="border-b border-[var(--border-subtle)] py-6">
+                <div class="vr-rte text-[15px]">{{ comment.content }}</div>
+                <p class="label mt-3">{{ comment.author }} · {{ comment.created_at | time_tag: format: 'date' }}</p>
+              </li>
+            {%- endfor -%}
+          </ul>
+          {% render 'vr-pagination', paginate: paginate %}
+        {%- endpaginate -%}
+
+        {%- form 'new_comment', article, class: 'mt-10 space-y-3' -%}
+          <h3 class="font-serif text-2xl">Leave a comment</h3>
+          {%- if form.posted_successfully? -%}
+            <p class="text-[14px] text-[var(--accent)]">{% if blog.moderated? %}Thank you. Your comment will appear once approved.{% else %}Thank you for your comment.{% endif %}</p>
+          {%- endif -%}
+          {%- if form.errors -%}<div class="text-[13px] text-red-700">{{ form.errors | default_errors }}</div>{%- endif -%}
+          <div class="grid gap-3 sm:grid-cols-2">
+            <label class="block"><span class="sr-only">Name</span><input class="vr-field" type="text" name="comment[author]" placeholder="Name" value="{{ form.author }}" required autocomplete="name"></label>
+            <label class="block"><span class="sr-only">Email</span><input class="vr-field" type="email" name="comment[email]" placeholder="Email" value="{{ form.email }}" required autocomplete="email"></label>
+          </div>
+          <label class="block"><span class="sr-only">Comment</span><textarea class="vr-field" name="comment[body]" rows="5" placeholder="Comment" required>{{ form.body }}</textarea></label>
+          <button type="submit" class="h-13 px-8 rounded-none bg-[var(--text-primary)] text-[var(--accent-ink)] font-mono text-[11px] uppercase tracking-widest font-semibold transition-all hover:bg-[var(--accent)]">Post comment</button>
+        {%- endform -%}
+      </section>
+    {%- endif -%}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Blog post",
+  "class": "vr-section-main-article",
+  "settings": [
+    { "type": "checkbox", "id": "show_image", "label": "Show cover image", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": true }
+  ]
+}
+{% endschema %}
