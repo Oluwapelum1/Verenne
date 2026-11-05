@@ -1,68 +1,74 @@
 {%- comment -%}
   Verenne Luxury Header
-  Online Store 2.0 section with crest, customizable navigation, and cart counter
+  1:1 Replica of Navbar.jsx from https://oluwapelum1.github.io/Verenne/
 {%- endcomment -%}
 
-<header class="verenne-header{% if section.settings.enable_sticky_header %} verenne-header--sticky{% endif %}" role="banner">
-  <div class="verenne-header-inner">
-    {%- comment -%} Left: Main Menu Navigation {%- endcomment -%}
-    <nav class="verenne-nav" role="navigation" aria-label="Main Navigation">
-      <ul class="verenne-nav-links">
-        {%- if linklists[section.settings.menu].links.size > 0 -%}
-          {%- for link in linklists[section.settings.menu].links -%}
-            {%- assign link_href = link.url -%}
-            {%- assign link_text = link.title | escape -%}
-            {%- if link.url contains '/collections/all' or link.title == 'Catalog' -%}
-              {%- assign link_href = routes.root_url | append: '#collection' -%}
-              {%- assign link_text = 'Collection' -%}
-            {%- elsif link.title == 'Home' -%}
-              {%- assign link_href = routes.root_url -%}
-            {%- endif -%}
-            <li>
-              <a href="{{ link_href }}" {% if link.current %}aria-current="page"{% endif %}>
-                {{ link_text }}
-              </a>
-            </li>
-          {%- endfor -%}
-        {%- else -%}
-          <li><a href="{{ routes.root_url }}#collection">Collection</a></li>
-          <li><a href="{{ routes.root_url }}#ritual">Ritual</a></li>
-          <li><a href="{{ routes.root_url }}#origins">Origins</a></li>
-          <li><a href="{{ routes.root_url }}#faq">FAQ</a></li>
-        {%- endif -%}
+<header class="verenne-navbar tone-light" role="banner">
+  <div class="verenne-nav-inner">
+    <!-- Brand Logo (Left) -->
+    <a href="{{ routes.root_url }}#top" class="verenne-logo-link" aria-label="Verenne Home">
+      <div class="verenne-brand-lockup">
+        <!-- Exact SVG Monogram from ui.jsx VerenneMark -->
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="verenne-brand-mark" aria-hidden="true">
+          <circle cx="50" cy="50" r="47" stroke="#99481F" stroke-width="1.5" stroke-opacity="0.35" />
+          <circle cx="50" cy="50" r="42" stroke="#99481F" stroke-width="0.75" stroke-dasharray="2 3" stroke-opacity="0.5" />
+          <path d="M50 11 L51.5 15 L50 16.5 L48.5 15 Z" fill="#99481F" />
+          <circle cx="50" cy="87" r="1.5" fill="#99481F" />
+          <path d="M30 30 H41 L50 72 L44.5 72 Z" fill="#99481F" />
+          <path d="M68 30 H70.5 L51 74 L48.5 74 Z" fill="#99481F" />
+          <path d="M27 29 H43 V31.5 H36 V31.5 Z" fill="#99481F" />
+          <path d="M64 29 H73 V31.5 H69 V31.5 Z" fill="#99481F" />
+          <polygon points="50,42 54,47 50,52 46,47" fill="#99481F" />
+        </svg>
+        <div class="verenne-brand-text">
+          <span class="verenne-brand-name">VERENNE</span>
+          <span class="verenne-brand-sub">PARIS · GRASSE</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Center Navigation Links -->
+    <nav class="verenne-nav-center" role="navigation" aria-label="Main Navigation">
+      <ul class="verenne-nav-menu">
+        <li><a href="{{ routes.root_url }}#collection" class="verenne-nav-item">Collection</a></li>
+        <li><a href="{{ routes.root_url }}#ritual" class="verenne-nav-item">Ritual</a></li>
+        <li><a href="{{ routes.root_url }}#origins" class="verenne-nav-item">Origins</a></li>
+        <li><a href="{{ routes.root_url }}#faq" class="verenne-nav-item">FAQ</a></li>
       </ul>
     </nav>
 
-    {%- comment -%} Center: Brand Crest & Wordmark {%- endcomment -%}
-    <div class="verenne-brand-wrapper">
-      <a href="{{ routes.root_url }}" class="verenne-brand-crest">
-        {%- if section.settings.logo != blank -%}
-          {{ section.settings.logo | image_url: width: 240 | image_tag: class: 'verenne-brand-img', alt: shop.name }}
-        {%- else -%}
-          <svg class="verenne-crest-icon" width="28" height="28" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="64" cy="64" r="62" stroke="#E0935F" stroke-width="2.5" />
-            <path d="M40 37 L50 37 L64 89 L57 89 Z" fill="#E0935F" />
-            <path d="M87 37 L89.5 37 L65 91 L62.5 91 Z" fill="#E0935F" />
-            <polygon points="64,52 68,58 64,64 60,58" fill="#FCEFD2" />
-          </svg>
-          <span class="verenne-brand-logo">{{ shop.name }}</span>
-        {%- endif -%}
-      </a>
-    </div>
-
-    {%- comment -%} Right: Actions (Search & Cart) {%- endcomment -%}
-    <div class="verenne-header-actions">
-      <a href="{{ routes.search_url }}" class="verenne-action-link" aria-label="{{ 'general.search.search' | t }}">
-        <span>Search</span>
-      </a>
-
-      <a href="{{ routes.cart_url }}" class="verenne-cart-trigger" id="cart-icon-bubble" aria-label="{{ 'templates.cart.cart' | t }}">
+    <!-- Right Actions: Bag & Mobile Menu -->
+    <div class="verenne-nav-right">
+      <a href="{{ routes.cart_url }}" class="verenne-bag-trigger" id="cart-icon-bubble" aria-label="Shopping bag">
         <span>Bag</span>
-        <span class="verenne-cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+        <span class="verenne-bag-paren">(<span class="verenne-bag-count">{{ cart.item_count }}</span>)</span>
       </a>
+      <button type="button" class="verenne-menu-toggle" onclick="toggleVerenneMobileNav()" aria-label="Toggle menu">
+        <span class="verenne-menu-icon">☰</span>
+        <span>Menu</span>
+      </button>
     </div>
   </div>
+
+  <!-- Mobile Dropdown Menu -->
+  <div id="verenne-mobile-nav" class="verenne-mobile-nav" style="display: none;">
+    <ul>
+      <li><a href="{{ routes.root_url }}#collection" onclick="toggleVerenneMobileNav()">Collection</a></li>
+      <li><a href="{{ routes.root_url }}#ritual" onclick="toggleVerenneMobileNav()">Ritual</a></li>
+      <li><a href="{{ routes.root_url }}#origins" onclick="toggleVerenneMobileNav()">Origins</a></li>
+      <li><a href="{{ routes.root_url }}#faq" onclick="toggleVerenneMobileNav()">FAQ</a></li>
+    </ul>
+  </div>
 </header>
+
+<script>
+  function toggleVerenneMobileNav() {
+    const nav = document.getElementById('verenne-mobile-nav');
+    if (nav) {
+      nav.style.display = (nav.style.display === 'none' || nav.style.display === '') ? 'block' : 'none';
+    }
+  }
+</script>
 
 {% schema %}
 {
@@ -70,23 +76,11 @@
   "class": "section-header",
   "settings": [
     {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Custom logo image"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "default": "main-menu",
-      "label": "Navigation menu"
-    },
-    {
       "type": "checkbox",
-      "id": "enable_sticky_header",
+      "id": "enable_sticky",
       "default": true,
       "label": "Enable sticky header"
     }
   ]
 }
 {% endschema %}
-

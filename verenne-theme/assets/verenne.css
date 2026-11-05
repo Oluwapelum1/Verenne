@@ -3317,3 +3317,582 @@ select.verenne-input option {
   border-radius: 50%;
   background: #E0935F;
 }
+
+/* ==========================================================================
+   EXACT 1:1 REPLICATION: HEADER, HERO & CIRCADIAN RITUAL
+   ========================================================================== */
+
+/* 1. VERENNE NAVBAR */
+.verenne-navbar {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 120;
+  background-color: #EBE5DF;
+  border-bottom: 1px solid rgba(31, 22, 16, 0.18);
+  transition: transform 0.4s ease;
+}
+
+.verenne-nav-inner {
+  max-width: 1600px;
+  height: 68px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 640px) {
+  .verenne-nav-inner {
+    padding: 0 2.5rem;
+  }
+}
+
+.verenne-logo-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.verenne-brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.verenne-brand-mark {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.verenne-brand-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.verenne-brand-name {
+  font-family: 'Bodoni Moda', 'Times New Roman', serif;
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: #1F1610;
+  text-transform: uppercase;
+}
+
+.verenne-brand-sub {
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
+  font-size: 7.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  color: #99481F;
+  margin-top: 2px;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.verenne-nav-center {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .verenne-nav-center {
+    display: block;
+  }
+}
+
+.verenne-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.verenne-nav-item {
+  color: #1F1610;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 400;
+  opacity: 0.75;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.verenne-nav-item:hover {
+  opacity: 1;
+  color: #99481F;
+}
+
+.verenne-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.verenne-bag-trigger {
+  color: #1F1610;
+  text-decoration: none;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  transition: color 0.2s;
+}
+
+.verenne-bag-trigger:hover {
+  color: #99481F;
+}
+
+.verenne-menu-toggle {
+  background: none;
+  border: none;
+  color: #1F1610;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+}
+
+@media (min-width: 1024px) {
+  .verenne-menu-toggle {
+    display: inline-flex;
+  }
+}
+
+.verenne-mobile-nav {
+  background: #EBE5DF;
+  border-top: 1px solid rgba(31, 22, 16, 0.12);
+  padding: 1.5rem;
+}
+
+.verenne-mobile-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.verenne-mobile-nav a {
+  color: #1F1610;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+/* 2. VERENNE HERO SECTION */
+.verenne-hero-section {
+  background-color: #EBE5DF;
+  color: #1F1610;
+  min-height: 100vh;
+  padding-top: 68px;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .verenne-hero-section {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+.verenne-hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 2.5rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .verenne-hero-left {
+    padding: 3.5rem 2.5rem;
+  }
+}
+
+.verenne-hero-heading {
+  font-family: 'Bodoni Moda', 'Times New Roman', serif;
+  font-size: clamp(3.4rem, 8.6vw, 8.8rem);
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  color: #1F1610;
+  margin: 0;
+}
+
+.verenne-hero-italic {
+  display: block;
+  font-style: italic;
+  font-family: 'Bodoni Moda', 'Times New Roman', serif;
+}
+
+.verenne-hero-bottom {
+  border-top: 1px solid rgba(31, 22, 16, 0.2);
+  padding-top: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .verenne-hero-bottom {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+  }
+}
+
+.verenne-hero-blurb {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #554739;
+  max-width: 440px;
+  margin: 0;
+}
+
+.verenne-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .verenne-hero-ctas {
+    justify-content: flex-end;
+  }
+}
+
+.verenne-btn-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.85rem;
+  background-color: #1A130E;
+  color: #FAF6EE;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid #1A130E;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.verenne-btn-solid:hover {
+  background-color: #99481F;
+  border-color: #99481F;
+  color: #FFFFFF;
+}
+
+.verenne-link-routine {
+  color: #1F1610;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
+  transition: color 0.2s;
+}
+
+.verenne-link-routine:hover {
+  color: #99481F;
+}
+
+.verenne-hero-right {
+  position: relative;
+  min-height: 65vh;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .verenne-hero-right {
+    min-height: auto;
+  }
+}
+
+.verenne-hero-model-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: 62% 72%;
+  transform: scale(1.28);
+}
+
+/* 3. VERENNE CIRCADIAN RITUAL SECTION */
+.verenne-ritual-section {
+  position: relative;
+  overflow: hidden;
+  background-color: #1A130E;
+  color: #FAF6EE;
+  padding: 5rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .verenne-ritual-section {
+    padding: 7rem 2.5rem;
+  }
+}
+
+.verenne-ritual-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .verenne-ritual-container {
+    grid-template-columns: 5fr 7fr;
+  }
+}
+
+/* Left Column */
+.verenne-ritual-col-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.verenne-ritual-eyebrow {
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
+  font-size: 13px;
+  color: #C2B5A4;
+  margin: 0 0 1rem 0;
+}
+
+.verenne-ritual-headline {
+  font-family: 'Bodoni Moda', 'Times New Roman', serif;
+  font-size: clamp(2.6rem, 5vw, 4.5rem);
+  line-height: 0.95;
+  color: #FAF6EE;
+  margin: 0 0 2rem 0;
+}
+
+.verenne-ritual-accent-text {
+  font-style: italic;
+  color: #E0935F;
+}
+
+.verenne-ritual-pill-tabs {
+  display: inline-flex;
+  border-radius: 9999px;
+  border: 1px solid rgba(239, 231, 218, 0.15);
+  padding: 4px;
+  width: fit-content;
+  margin-bottom: 2.5rem;
+}
+
+.verenne-mode-btn {
+  background: transparent;
+  border: none;
+  color: #C2B5A4;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.verenne-mode-btn.active {
+  background-color: #FAF6EE;
+  color: #1A130E;
+}
+
+.verenne-steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid rgba(239, 231, 218, 0.12);
+}
+
+.verenne-ritual-row {
+  border-bottom: 1px solid rgba(239, 231, 218, 0.12);
+  padding: 1.1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.verenne-row-time {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: #A39585;
+}
+
+.verenne-row-verb {
+  font-family: 'Bodoni Moda', 'Times New Roman', serif;
+  font-size: 1.85rem;
+  color: #C2B5A4;
+  transition: all 0.3s ease;
+}
+
+.verenne-ritual-row.active .verenne-row-verb {
+  font-style: italic;
+  color: #FAF6EE;
+  transform: translateX(4px);
+}
+
+.verenne-row-product {
+  margin-left: auto;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+}
+
+.verenne-product-name {
+  font-size: 13px;
+  color: #C2B5A4;
+}
+
+.verenne-product-price {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: #A39585;
+  margin-top: 2px;
+}
+
+.verenne-ritual-footer-action {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.verenne-btn-add-routine {
+  background-color: #FAF6EE;
+  color: #1A130E;
+  border: 1px solid #FAF6EE;
+  padding: 1rem 1.85rem;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.verenne-btn-add-routine:hover {
+  background-color: #E0935F;
+  border-color: #E0935F;
+  color: #FFFFFF;
+}
+
+.verenne-ritual-ships-label {
+  font-size: 13px;
+  color: #C2B5A4;
+}
+
+/* Right Column (Dial) */
+.verenne-ritual-col-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.verenne-dial-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  aspect-ratio: 1 / 1;
+}
+
+.verenne-dial-svg-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 1.6s cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+.verenne-dial-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.verenne-orbit-nodes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.verenne-orbit-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.4s ease;
+}
+
+.verenne-orbit-node.active {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.verenne-node-thumb-wrap {
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(239, 231, 218, 0.2);
+  transition: border-color 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .verenne-node-thumb-wrap {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.verenne-orbit-node.active .verenne-node-thumb-wrap {
+  border-color: #FAF6EE;
+  box-shadow: 0 0 20px rgba(239, 231, 218, 0.4);
+}
+
+.verenne-node-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.verenne-node-num {
+  font-size: 12px;
+  color: #C2B5A4;
+  margin-top: 6px;
+}
+
+/* Center Photograph Box */
+.verenne-dial-center-box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 44%;
+  height: 54%;
+  overflow: hidden;
+  border: 1px solid rgba(239, 231, 218, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.verenne-dial-center-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
