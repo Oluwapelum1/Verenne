@@ -3896,3 +3896,81 @@ select.verenne-input option {
   height: 100%;
   object-fit: cover;
 }
+
+/* ==========================================================================
+   GLOBAL HAUTE-BOTANIQUE TYPOGRAPHY & CONTRAST (1:1 with GitHub Webapp)
+   ========================================================================== */
+.verenne-hero-heading,
+.verenne-collection-title,
+.verenne-manifesto-heading,
+.verenne-ritual-headline,
+.verenne-origins-title,
+.verenne-faq-title,
+.verenne-modal-title,
+.verenne-cart-heading,
+.verenne-editorial-name {
+  font-family: 'Bodoni Moda', 'Times New Roman', serif !important;
+  font-weight: 600 !important;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+.verenne-hero-heading {
+  font-size: clamp(3.4rem, 8.6vw, 9rem) !important;
+  line-height: 0.94 !important;
+  letter-spacing: -0.03em !important;
+  color: #1F1610 !important;
+}
+
+.verenne-hero-italic {
+  font-family: 'Bodoni Moda', 'Times New Roman', serif !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+  display: block;
+}
+
+.verenne-hero-blurb {
+  font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
+  font-size: 17px !important;
+  line-height: 1.62 !important;
+  color: #554739 !important;
+  font-weight: 450 !important;
+}
+
+.verenne-btn-solid {
+  background: #1A130E !important;
+  color: #FAF6EE !important;
+  font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  padding: 1rem 1.85rem !important;
+  border-radius: 9999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+  box-shadow: 0 0 0 1px rgba(31, 22, 16, 0.18) !important;
+  transition: all 0.4s ease !important;
+}
+
+.verenne-btn-solid:hover {
+  background: #99481F !important;
+  color: #FAF6EE !important;
+}
+
+.verenne-link-routine {
+  font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: #1F1610 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 6px !important;
+  text-decoration-thickness: 1px !important;
+  transition: color 0.3s ease !important;
+}
+
+.verenne-link-routine:hover {
+  color: #99481F !important;
+}

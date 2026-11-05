@@ -19,7 +19,7 @@
 
       <div class="verenne-hero-ctas">
         <a href="#collection" class="verenne-btn-solid">
-          Shop from $56
+          <span>Shop from $56</span>
         </a>
         <a href="#ritual" class="verenne-link-routine">
           See the routine
@@ -41,6 +41,131 @@
     >
   </div>
 </section>
+
+<style>
+  .verenne-hero-section {
+    position: relative;
+    background-color: #E9E1D4 !important;
+    color: #1F1610 !important;
+    min-height: 100svh;
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-top: 68px;
+  }
+  @media (min-width: 1024px) {
+    .verenne-hero-section {
+      grid-template-columns: 7fr 5fr;
+      padding-top: 104px;
+    }
+  }
+  .verenne-hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 2.5rem 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .verenne-hero-left {
+      padding: 3.5rem 2.5rem;
+    }
+  }
+  .verenne-hero-heading {
+    font-family: 'Bodoni Moda', 'Times New Roman', serif !important;
+    font-size: clamp(3.4rem, 8.6vw, 9rem) !important;
+    font-weight: 600 !important;
+    line-height: 0.94 !important;
+    letter-spacing: -0.03em !important;
+    color: #1F1610 !important;
+    margin: 0 !important;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .verenne-hero-italic {
+    font-family: 'Bodoni Moda', 'Times New Roman', serif !important;
+    font-style: italic !important;
+    font-weight: 600 !important;
+    display: block !important;
+  }
+  .verenne-hero-bottom {
+    border-top: 1px solid rgba(31, 22, 16, 0.22) !important;
+    padding-top: 1.5rem !important;
+    display: grid;
+    gap: 2rem;
+  }
+  @media (min-width: 640px) {
+    .verenne-hero-bottom {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+    }
+  }
+  .verenne-hero-blurb {
+    font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
+    font-size: 17px !important;
+    line-height: 1.62 !important;
+    color: #554739 !important;
+    font-weight: 450 !important;
+    max-width: 28rem;
+    margin: 0;
+  }
+  .verenne-hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .verenne-btn-solid {
+    background: #1A130E !important;
+    color: #FAF6EE !important;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    padding: 1rem 1.85rem !important;
+    border-radius: 9999px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+    box-shadow: 0 0 0 1px rgba(31, 22, 16, 0.25) !important;
+    transition: all 0.4s ease !important;
+  }
+  .verenne-btn-solid:hover {
+    background: #99481F !important;
+    color: #FAF6EE !important;
+  }
+  .verenne-link-routine {
+    font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: #1F1610 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 6px !important;
+    text-decoration-thickness: 1px !important;
+    transition: color 0.3s ease !important;
+  }
+  .verenne-link-routine:hover {
+    color: #99481F !important;
+  }
+  .verenne-hero-right {
+    position: relative;
+    min-height: 70vh;
+    overflow: hidden;
+  }
+  @media (min-width: 1024px) {
+    .verenne-hero-right {
+      min-height: 100%;
+    }
+  }
+  .verenne-hero-model-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 72%;
+    transform: scale(1.28);
+  }
+</style>
 
 {% schema %}
 {
