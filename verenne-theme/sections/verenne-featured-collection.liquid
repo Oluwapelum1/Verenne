@@ -7,7 +7,7 @@
   - Interactive Formulation Dossier Modal with:
     * Bottle view with cursor-following 300% optical magnifying lens
     * Authentic on-skin editorial category model photography
-    * Three.js WebGL procedural rotating glass flacon
+    * Three.js WebGL glass flacon per formulation (port of GlassScene.jsx)
     * Specs row (pH Balance & Finish), size selector, quantity stepper, and live cart drawer connection
 {%- endcomment -%}
 
@@ -1247,10 +1247,263 @@
     }, 3800);
   }
 
-  // Three.js Procedural WebGL Glass Flacon
+  // Three.js glass flacon — port of src/components/three/GlassScene.jsx
+  // Each formulation gets its own vessel (dropper, jar, mist, pump, tube), glass and liquid colour.
+  const VERENNE_GLASS = {
+    'eclat-sauvage': { shape: 'dropper', color: '#7A3F12', liquid: '#E08A2E', glow: '#F2A65A' },
+    'baume-resineux': { shape: 'jar', color: '#D9D2C3', liquid: '#F1E2BE', glow: '#E9D3A4' },
+    'brume-botanique': { shape: 'mist', color: '#E9DCCB', liquid: '#F7E6D0', glow: '#F5D2AE' },
+    'seve-doree': { shape: 'dropper', color: '#2A1652', liquid: '#E4A63A', glow: '#E7B356' },
+    'argile-purifiante': { shape: 'tube', color: '#CFC3AE', liquid: '#CFC3AE', glow: '#D6C6A8' },
+    'creme-radieuse': { shape: 'pump', color: '#EDE6D6', liquid: '#F3EBDA', glow: '#F4EAD2' },
+    'lait-nectar': { shape: 'pump', color: '#EDE3D1', liquid: '#F7EDDE', glow: '#F3DFC1' },
+    'gel-glaciaire': { shape: 'tube', color: '#B6D6C6', liquid: '#CEE8DC', glow: '#A8D4BF' },
+    'huile-soyeuse': { shape: 'pump', color: '#E8B96E', liquid: '#F8CE8B', glow: '#F6C174' },
+    'resurfacing-nectar': { shape: 'dropper', color: '#822338', liquid: '#B84A62', glow: '#E27B91' },
+    'cuivre-peptides': { shape: 'dropper', color: '#14465F', liquid: '#2B7FA8', glow: '#56B3DF' },
+    'essence-fleurie': { shape: 'mist', color: '#E0D0AE', liquid: '#F5E8C9', glow: '#EED9A6' },
+    'voile-hydratant': { shape: 'pump', color: '#F1E7D5', liquid: '#FDF7EB', glow: '#F6E6C7' },
+    'cire-nocturne': { shape: 'jar', color: '#774C1E', liquid: '#B87A31', glow: '#EBB474' },
+    'baume-regard': { shape: 'jar', color: '#8F7F67', liquid: '#D2C1A8', glow: '#DFCBB0' },
+    'onguent-protecteur': { shape: 'jar', color: '#6A5E50', liquid: '#B4A593', glow: '#D2C4B1' }
+  };
+
+  // Procedural bottle profiles (radius, height) — revolved with Lathe
+  const VERENNE_SHAPES = {
+    dropper: {
+      body: [[0, 0], [0.6, 0], [0.66, 0.04], [0.68, 0.14], [0.68, 1.22], [0.63, 1.36], [0.46, 1.47], [0.27, 1.53], [0.24, 1.6], [0.24, 1.7], [0, 1.7]],
+      fill: 0.95, height: 2.35, frost: 0.04
+    },
+    jar: {
+      body: [[0, 0], [0.98, 0], [1.04, 0.06], [1.06, 0.16], [1.06, 0.82], [1.0, 0.9], [0.94, 0.94], [0, 0.94]],
+      fill: 0.78, height: 1.3, frost: 0.32
+    },
+    mist: {
+      body: [[0, 0], [0.5, 0], [0.55, 0.05], [0.56, 0.14], [0.56, 1.86], [0.5, 1.95], [0.24, 2.0], [0, 2.0]],
+      fill: 0.85, height: 2.6, frost: 0.28
+    },
+    pump: {
+      body: [[0, 0], [0.6, 0], [0.65, 0.05], [0.66, 0.14], [0.66, 1.36], [0.6, 1.47], [0.3, 1.54], [0, 1.54]],
+      fill: 0.9, height: 2.25, frost: 0.3
+    },
+    tube: {
+      body: [[0, 0], [0.42, 0], [0.52, 0.06], [0.54, 0.2], [0.54, 1.75], [0.5, 1.95], [0.3, 2.02], [0, 2.02]],
+      fill: 0, height: 2.3, frost: 1
+    }
+  };
+
+  let threeRig = null; // { group, swap, light, glow, shown, pending, phase, manualRot, velocity, pointer, clock }
+
+  function verenneLathe(points, segments) {
+    const g = new THREE.LatheGeometry(points.map((p) => new THREE.Vector2(p[0], p[1])), segments);
+    g.computeVertexNormals();
+    return g;
+  }
+
+  // CapsuleGeometry arrived after r128, so revolve a capsule profile instead
+  function verenneCapsule(radius, length) {
+    const pts = [];
+    for (let i = 0; i <= 12; i++) {
+      const a = -Math.PI / 2 + (i / 12) * (Math.PI / 2);
+      pts.push([Math.cos(a) * radius, -length / 2 + Math.sin(a) * radius]);
+    }
+    for (let i = 0; i <= 12; i++) {
+      const a = (i / 12) * (Math.PI / 2);
+      pts.push([Math.cos(a) * radius, length / 2 + Math.sin(a) * radius]);
+    }
+    pts[0][0] = 0;
+    pts[pts.length - 1][0] = 0;
+    return verenneLathe(pts, 32);
+  }
+
+  function verenneMesh(geo, mat, y) {
+    const m = new THREE.Mesh(geo, mat);
+    if (y) m.position.y = y;
+    return m;
+  }
+
+  // Paper apothecary label wrapped on the bottle front
+  function verenneLabel(product, shapeKey) {
+    if (shapeKey === 'tube') return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 768;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#FAF7F2';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#C9A05A';
+    ctx.lineWidth = 6;
+    ctx.strokeRect(32, 32, canvas.width - 64, canvas.height - 64);
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(44, 44, canvas.width - 88, canvas.height - 88);
+
+    ctx.fillStyle = '#111110';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = 'bold 30px "Geist Mono", monospace';
+    ctx.letterSpacing = '6px';
+    ctx.fillText('VERENNE', canvas.width / 2, 130);
+
+    ctx.font = '20px "Geist Mono", monospace';
+    ctx.fillStyle = '#777';
+    ctx.fillText('PARIS · GRASSE', canvas.width / 2, 185);
+
+    ctx.strokeStyle = '#C9A05A';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2 - 120, 230);
+    ctx.lineTo(canvas.width / 2 + 120, 230);
+    ctx.stroke();
+
+    ctx.font = 'italic 58px "Instrument Serif", Georgia, serif';
+    ctx.fillStyle = '#111110';
+    ctx.fillText(product.name || 'Éclat Sauvage', canvas.width / 2, 330);
+
+    ctx.font = 'bold 22px "Geist Mono", monospace';
+    ctx.fillStyle = '#444';
+    ctx.fillText((product.subtitle || 'Active Botanical Serum').toUpperCase(), canvas.width / 2, 420);
+
+    ctx.font = 'italic 26px "Instrument Serif", Georgia, serif';
+    ctx.fillStyle = '#666';
+    ctx.fillText(product.latin || 'Helichrysum Stoechas', canvas.width / 2, 480);
+
+    ctx.font = '22px "Geist Mono", monospace';
+    ctx.fillStyle = '#888';
+    ctx.fillText('30 ML · 1.0 FL. OZ · BIO-ACTIF', canvas.width / 2, 600);
+
+    ctx.font = '18px "Geist Mono", monospace';
+    ctx.fillStyle = '#999';
+    ctx.fillText('MADE IN FRANCE', canvas.width / 2, 650);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.encoding = THREE.sRGBEncoding;
+    tex.anisotropy = 8;
+
+    const radius = shapeKey === 'jar' ? 1.065 : shapeKey === 'mist' ? 0.565 : 0.685;
+    const height = shapeKey === 'jar' ? 0.62 : shapeKey === 'mist' ? 1.15 : 0.88;
+    const posY = shapeKey === 'jar' ? 0.52 : shapeKey === 'mist' ? 0.95 : 0.72;
+    return verenneMesh(
+      new THREE.CylinderGeometry(radius, radius, height, 48, 1, true, -Math.PI * 0.44, Math.PI * 0.88),
+      new THREE.MeshStandardMaterial({ map: tex, roughness: 0.75, metalness: 0.08, side: THREE.DoubleSide }),
+      posY
+    );
+  }
+
+  // Caps & hardware
+  function verenneHardware(shape, accentGold) {
+    const black = new THREE.MeshStandardMaterial({ color: '#111110', roughness: 0.45, metalness: 0.2 });
+    const gold = new THREE.MeshStandardMaterial({ color: '#c9a05a', roughness: 0.18, metalness: 0.95 });
+    const pipette = new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.05, transmission: 0.98, thickness: 0.2, ior: 1.5 });
+    const g = new THREE.Group();
+
+    switch (shape) {
+      case 'dropper':
+        g.position.y = 1.7;
+        g.add(verenneMesh(new THREE.CylinderGeometry(0.32, 0.32, 0.12, 64), gold, 0.06));
+        g.add(verenneMesh(new THREE.CylinderGeometry(0.3, 0.3, 0.4, 64), accentGold ? gold : black, 0.28));
+        g.add(verenneMesh(verenneCapsule(0.18, 0.3), black, 0.66));
+        g.add(verenneMesh(new THREE.CylinderGeometry(0.045, 0.045, 1.6, 16), pipette, -0.85));
+        g.add(verenneMesh(new THREE.ConeGeometry(0.045, 0.1, 16), pipette, -1.68));
+        break;
+      case 'jar':
+        g.add(verenneMesh(new THREE.CylinderGeometry(1.08, 1.08, 0.34, 96), gold, 0.94 + 0.17));
+        break;
+      case 'mist':
+        g.position.y = 2.0;
+        g.add(verenneMesh(new THREE.CylinderGeometry(0.34, 0.34, 0.14, 64), gold, 0.08));
+        g.add(verenneMesh(new THREE.CylinderGeometry(0.3, 0.3, 0.46, 64), black, 0.36));
+        break;
+      case 'pump':
+        g.position.y = 1.54;
+        g.add(verenneMesh(new THREE.CylinderGeometry(0.3, 0.32, 0.24, 64), gold, 0.12));
+        g.add(verenneMesh(new THREE.CylinderGeometry(0.09, 0.09, 0.3, 32), gold, 0.36));
+        g.add(verenneMesh(new THREE.CylinderGeometry(0.2, 0.2, 0.16, 48), gold, 0.56));
+        break;
+      case 'tube':
+        g.add(verenneMesh(new THREE.CylinderGeometry(0.42, 0.42, 0.44, 64), black, -0.22));
+        break;
+    }
+    return g;
+  }
+
+  // A single bottle
+  function verenneBottle(product) {
+    const glass = VERENNE_GLASS[product.id] || VERENNE_GLASS['eclat-sauvage'];
+    const shapeKey = glass.shape;
+    const shape = VERENNE_SHAPES[shapeKey] || VERENNE_SHAPES.dropper;
+    const isTube = shapeKey === 'tube';
+    const root = new THREE.Group();
+    root.position.y = -shape.height / 2 + 0.1;
+    if (isTube) root.scale.set(1, 1, 0.62);
+
+    const bodyMat = isTube
+      ? new THREE.MeshPhysicalMaterial({ color: glass.color, roughness: 0.55, clearcoat: 0.4, clearcoatRoughness: 0.4 })
+      : new THREE.MeshPhysicalMaterial({ transparent: true, opacity: 0.86, roughness: shape.frost, clearcoat: 1, clearcoatRoughness: 0.08, color: glass.color });
+    root.add(new THREE.Mesh(verenneLathe(shape.body, 96), bodyMat));
+
+    if (shape.fill) {
+      const maxY = shape.body[shape.body.length - 1][1] * shape.fill;
+      const pts = shape.body.filter((p) => p[1] <= maxY).map((p) => [Math.max(0, p[0] * 0.9), Math.max(0.06, p[1])]);
+      pts.push([0, maxY]);
+      pts.unshift([0, 0.06]);
+      root.add(new THREE.Mesh(
+        verenneLathe(pts, 64),
+        new THREE.MeshPhysicalMaterial({ color: glass.liquid, emissive: glass.liquid, emissiveIntensity: 0.08, roughness: 0.12, transparent: true, opacity: 0.95 })
+      ));
+    }
+
+    const label = verenneLabel(product, shapeKey);
+    if (label) root.add(label);
+    root.add(verenneHardware(shapeKey, product.id === 'seve-doree'));
+    return root;
+  }
+
+  function verenneDispose(obj) {
+    obj.traverse((o) => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) {
+        if (o.material.map) o.material.map.dispose();
+        o.material.dispose();
+      }
+    });
+  }
+
+  // Studio light strips reflected in the glass (stands in for drei <Environment> + <Lightformer>)
+  function verenneStudioEnvironment(renderer) {
+    const env = new THREE.Scene();
+    const add = (parent, geo, intensity, pos, color) => {
+      const mat = new THREE.MeshBasicMaterial({ color: color || '#ffffff', side: THREE.DoubleSide, toneMapped: false });
+      mat.color.multiplyScalar(intensity);
+      const m = new THREE.Mesh(geo, mat);
+      m.position.set(pos[0], pos[1], pos[2]);
+      parent.add(m);
+      parent.updateMatrixWorld(true);
+      m.lookAt(0, 0, 0);
+      return m;
+    };
+    const ring = new THREE.Group();
+    ring.rotation.set(-Math.PI / 3, 0, 1);
+    env.add(ring);
+    const circle = (s) => new THREE.CircleGeometry(s / 2, 48);
+    add(ring, circle(2), 4, [0, 5, -9]);
+    add(ring, circle(2), 2, [-5, 1, -1]);
+    add(ring, circle(2), 2, [-5, -1, -1]);
+    add(ring, circle(8), 2, [10, 1, 0]);
+    add(env, new THREE.PlaneGeometry(0.4, 6), 3, [-3, 0, 4], '#fff4e0');
+    add(env, new THREE.PlaneGeometry(0.4, 6), 3, [3, 0, 4], '#fff4e0');
+
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const target = pmrem.fromScene(env, 0, 0.1, 100);
+    pmrem.dispose();
+    verenneDispose(env);
+    return target.texture;
+  }
+
   function initThreeBottle(product) {
     const canvas = document.getElementById('verenne-three-canvas');
-    if (!canvas || typeof THREE === 'undefined') return;
+    if (!canvas || typeof THREE === 'undefined' || !product) return;
 
     if (threeAnimFrame) {
       cancelAnimationFrame(threeAnimFrame);
@@ -1258,182 +1511,148 @@
     }
 
     const container = canvas.parentElement;
-    const width = container.clientWidth || 450;
-    const height = container.clientHeight || 550;
+    const size = () => [container.clientWidth || 450, container.clientHeight || 550];
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (!threeRenderer) {
+      const quality = window.innerWidth < 768 || (navigator.hardwareConcurrency || 8) <= 4 ? 'low' : 'high';
       threeRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
-      threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      threeRenderer.setSize(width, height);
+      threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, quality === 'high' ? 1.75 : 1.25));
+      threeRenderer.outputEncoding = THREE.sRGBEncoding;
       threeRenderer.toneMapping = THREE.ACESFilmicToneMapping;
-      threeRenderer.toneMappingExposure = 1.25;
+      threeRenderer.physicallyCorrectLights = true;
+      canvas.style.touchAction = 'none';
+      canvas.style.cursor = 'grab';
 
       threeScene = new THREE.Scene();
-      threeCamera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-      threeCamera.position.set(0, 0, 5.2);
+      threeScene.environment = verenneStudioEnvironment(threeRenderer);
+      threeCamera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+      threeCamera.position.set(0, 0, 7);
 
-      // Studio Lighting
-      const amb = new THREE.AmbientLight(0xfff5eb, 1.4);
-      threeScene.add(amb);
-
-      const dirLight = new THREE.DirectionalLight(0xffffff, 2.8);
-      dirLight.position.set(4, 6, 4);
+      threeScene.add(new THREE.AmbientLight(0xffffff, 0.25));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.6);
+      dirLight.position.set(3, 5, 4);
       threeScene.add(dirLight);
 
-      const rimLight = new THREE.DirectionalLight(0xd99058, 2.2);
-      rimLight.position.set(-4, -2, -3);
-      threeScene.add(rimLight);
+      const glowLight = new THREE.PointLight(0xffffff, 18, 7);
+      glowLight.position.set(0, 0.4, -1.4);
+      threeScene.add(glowLight);
 
-      // Drag to rotate controls
-      canvas.addEventListener('mousedown', (e) => {
+      threeBottleGroup = new THREE.Group();
+      const swap = new THREE.Group();
+      threeBottleGroup.add(swap);
+      threeScene.add(threeBottleGroup);
+
+      threeRig = {
+        swap: swap,
+        light: glowLight,
+        glow: new THREE.Color(),
+        shown: null,
+        pending: null,
+        phase: 'in',
+        manualRot: { x: 0, y: 0 },
+        velocity: { x: 0, y: 0 },
+        pointer: { x: 0, y: 0 },
+        last: { x: 0, y: 0 },
+        clock: new THREE.Clock()
+      };
+
+      // Direct 360° drag with inertia
+      canvas.addEventListener('pointerdown', (e) => {
         isDragging3D = true;
         previousMousePosition = { x: e.clientX, y: e.clientY };
+        canvas.style.cursor = 'grabbing';
       });
-      window.addEventListener('mouseup', () => { isDragging3D = false; });
-      canvas.addEventListener('mousemove', (e) => {
-        if (!isDragging3D || !threeBottleGroup) return;
-        const deltaX = e.clientX - previousMousePosition.x;
-        const deltaY = e.clientY - previousMousePosition.y;
-        threeBottleGroup.rotation.y += deltaX * 0.012;
-        threeBottleGroup.rotation.x += deltaY * 0.008;
-        previousMousePosition = { x: e.clientX, y: e.clientY };
-      });
-
-      canvas.addEventListener('touchstart', (e) => {
-        if (e.touches.length > 0) {
-          isDragging3D = true;
-          previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      window.addEventListener('pointermove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width) {
+          threeRig.pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+          threeRig.pointer.y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
         }
-      });
-      window.addEventListener('touchend', () => { isDragging3D = false; });
-      canvas.addEventListener('touchmove', (e) => {
-        if (!isDragging3D || !threeBottleGroup || e.touches.length === 0) return;
-        const deltaX = e.touches[0].clientX - previousMousePosition.x;
-        const deltaY = e.touches[0].clientY - previousMousePosition.y;
-        threeBottleGroup.rotation.y += deltaX * 0.012;
-        threeBottleGroup.rotation.x += deltaY * 0.008;
+        if (!isDragging3D) return;
+        const dx = e.clientX - previousMousePosition.x;
+        const dy = e.clientY - previousMousePosition.y;
         previousMousePosition = { x: e.clientX, y: e.clientY };
+        threeRig.manualRot.y += dx * 0.008;
+        threeRig.manualRot.x = Math.max(-0.45, Math.min(0.45, threeRig.manualRot.x + dy * 0.006));
+        threeRig.velocity = { x: dx * 0.008, y: dy * 0.006 };
       });
-    } else {
-      threeRenderer.setSize(width, height);
-      threeCamera.aspect = width / height;
-      threeCamera.updateProjectionMatrix();
+      const release = () => {
+        isDragging3D = false;
+        canvas.style.cursor = 'grab';
+      };
+      window.addEventListener('pointerup', release);
+      window.addEventListener('pointercancel', release);
     }
 
-    if (threeBottleGroup) {
-      threeScene.remove(threeBottleGroup);
+    const [width, height] = size();
+    threeRenderer.setSize(width, height);
+    threeCamera.aspect = width / height;
+    threeCamera.updateProjectionMatrix();
+
+    const rig = threeRig;
+    const glass = VERENNE_GLASS[product.id] || VERENNE_GLASS['eclat-sauvage'];
+    rig.glow.set(glass.glow);
+    if (!rig.shown) {
+      rig.light.color.set(glass.glow);
+      rig.shown = { id: product.id, mesh: verenneBottle(product) };
+      rig.swap.add(rig.shown.mesh);
+    } else if (rig.shown.id !== product.id) {
+      // swap: shrink + twist out, change, grow back
+      rig.pending = product;
+      rig.phase = 'out';
     }
-    threeBottleGroup = new THREE.Group();
 
-    const liquidHex = (product && product.color) ? parseInt(product.color.replace('#', '0x')) : 0xc8782a;
+    const damp = THREE.MathUtils.damp;
+    rig.clock.getDelta();
 
-    // 1. Violet/Amber Miron Glass Body
-    const glassMat = new THREE.MeshPhysicalMaterial({
-      color: 0x18110b,
-      roughness: 0.08,
-      metalness: 0.1,
-      transmission: 0.65,
-      ior: 1.52,
-      thickness: 1.2,
-      transparent: true,
-      opacity: 0.94
-    });
-    const bodyGeom = new THREE.CylinderGeometry(0.72, 0.72, 1.85, 48);
-    const bodyMesh = new THREE.Mesh(bodyGeom, glassMat);
-    threeBottleGroup.add(bodyMesh);
-
-    // 2. Liquid Tincture Column Inside
-    const liquidMat = new THREE.MeshStandardMaterial({
-      color: liquidHex,
-      roughness: 0.2,
-      metalness: 0.15,
-      transparent: true,
-      opacity: 0.78
-    });
-    const liquidGeom = new THREE.CylinderGeometry(0.66, 0.66, 1.65, 36);
-    const liquidMesh = new THREE.Mesh(liquidGeom, liquidMat);
-    liquidMesh.position.y = -0.05;
-    threeBottleGroup.add(liquidMesh);
-
-    // 3. Gold Knurled Collar
-    const goldMat = new THREE.MeshStandardMaterial({
-      color: 0xd4a359,
-      roughness: 0.28,
-      metalness: 0.92
-    });
-    const collarGeom = new THREE.CylinderGeometry(0.38, 0.44, 0.28, 36);
-    const collarMesh = new THREE.Mesh(collarGeom, goldMat);
-    collarMesh.position.y = 1.05;
-    threeBottleGroup.add(collarMesh);
-
-    // 4. Black Dropper Neck
-    const neckMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.4 });
-    const neckGeom = new THREE.CylinderGeometry(0.26, 0.26, 0.42, 32);
-    const neckMesh = new THREE.Mesh(neckGeom, neckMat);
-    neckMesh.position.y = 1.35;
-    threeBottleGroup.add(neckMesh);
-
-    // 5. Rubber Bulb
-    const bulbMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.85 });
-    const bulbGeom = new THREE.SphereGeometry(0.28, 32, 24);
-    bulbGeom.scale(1, 1.45, 1);
-    const bulbMesh = new THREE.Mesh(bulbGeom, bulbMat);
-    bulbMesh.position.y = 1.72;
-    threeBottleGroup.add(bulbMesh);
-
-    // 6. Label with Gold Hairlines
-    const labelCanvas = document.createElement('canvas');
-    labelCanvas.width = 1024;
-    labelCanvas.height = 768;
-    const ctx = labelCanvas.getContext('2d');
-    ctx.fillStyle = '#FAF6EE';
-    ctx.fillRect(0, 0, 1024, 768);
-    ctx.strokeStyle = '#C99E64';
-    ctx.lineWidth = 6;
-    ctx.strokeRect(32, 32, 960, 704);
-    ctx.strokeRect(44, 44, 936, 680);
-    ctx.fillStyle = '#1A130E';
-    ctx.font = '600 48px Bodoni Moda, serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('VERENNE', 512, 170);
-    ctx.font = '500 24px Hanken Grotesk, sans-serif';
-    ctx.letterSpacing = '6px';
-    ctx.fillText('PARIS · GRASSE', 512, 220);
-    ctx.strokeStyle = '#D9822B';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(380, 270);
-    ctx.lineTo(644, 270);
-    ctx.stroke();
-    ctx.fillStyle = '#1A130E';
-    ctx.font = '400 36px Bodoni Moda, serif';
-    ctx.fillText(product ? product.fullName : 'N°01 ÉCLAT SAUVAGE', 512, 350);
-    ctx.font = 'italic 26px Bodoni Moda, serif';
-    ctx.fillStyle = '#5A4634';
-    ctx.fillText(product ? product.subtitle : 'Active botanical serum', 512, 400);
-    ctx.font = '300 20px Hanken Grotesk, sans-serif';
-    ctx.fillStyle = '#6E5844';
-    ctx.fillText('FLACON BIO-CHROMATOGRAPHIQUE', 512, 540);
-    ctx.fillText('ÉDITION LIMITÉE · 400 FLACONS', 512, 580);
-    ctx.font = '500 22px Hanken Grotesk, sans-serif';
-    ctx.fillStyle = '#1A130E';
-    ctx.fillText('50 ML · 1.7 FL. OZ', 512, 650);
-
-    const labelTex = new THREE.CanvasTexture(labelCanvas);
-    const labelMat = new THREE.MeshBasicMaterial({ map: labelTex, transparent: true, opacity: 0.96 });
-    const labelGeom = new THREE.CylinderGeometry(0.725, 0.725, 1.25, 48, 1, true, -Math.PI * 0.45, Math.PI * 0.9);
-    const labelMesh = new THREE.Mesh(labelGeom, labelMat);
-    threeBottleGroup.add(labelMesh);
-
-    threeBottleGroup.position.y = -0.35;
-    threeScene.add(threeBottleGroup);
-
-    // Animation Loop
     function animate() {
       threeAnimFrame = requestAnimationFrame(animate);
-      if (!isDragging3D && threeBottleGroup) {
-        threeBottleGroup.rotation.y += 0.0075;
+      const dt = Math.min(rig.clock.getDelta(), 0.1);
+      const t = rig.clock.elapsedTime;
+      const g = threeBottleGroup;
+      const s = rig.swap;
+
+      const [w, h] = size();
+      if (w !== threeRenderer.domElement.clientWidth || h !== threeRenderer.domElement.clientHeight) {
+        threeRenderer.setSize(w, h);
+        threeCamera.aspect = w / h;
+        threeCamera.updateProjectionMatrix();
       }
+
+      if (!isDragging3D) {
+        rig.manualRot.y += rig.velocity.x;
+        rig.manualRot.x += rig.velocity.y * 0.3;
+        rig.velocity.x *= 0.93;
+        rig.velocity.y *= 0.93;
+        if (!reduced) rig.manualRot.y += dt * 0.18;
+      }
+
+      const targetY = rig.manualRot.y + rig.pointer.x * 0.35;
+      const targetX = rig.manualRot.x - rig.pointer.y * 0.15;
+      g.rotation.y = damp(g.rotation.y, targetY, 5, dt);
+      g.rotation.x = damp(g.rotation.x, targetX, 5, dt);
+      g.position.y = damp(g.position.y, reduced ? 0 : Math.sin(t * 0.8) * 0.05, 4, dt);
+
+      if (rig.phase === 'out') {
+        const k = damp(s.scale.x, 0, 9, dt);
+        s.scale.setScalar(k);
+        s.rotation.y += dt * 8;
+        if (k < 0.03 && rig.pending) {
+          s.remove(rig.shown.mesh);
+          verenneDispose(rig.shown.mesh);
+          rig.shown = { id: rig.pending.id, mesh: verenneBottle(rig.pending) };
+          s.add(rig.shown.mesh);
+          rig.pending = null;
+          rig.phase = 'in';
+        }
+      } else {
+        const k = damp(s.scale.x, 1, 6, dt);
+        s.scale.setScalar(k);
+        s.rotation.y = damp(s.rotation.y, Math.round(s.rotation.y / (Math.PI * 2)) * Math.PI * 2, 4, dt);
+      }
+
+      rig.light.color.lerp(rig.glow, 0.04);
       threeRenderer.render(threeScene, threeCamera);
     }
     animate();

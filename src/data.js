@@ -720,8 +720,8 @@ export const RITUAL = {
     { id: 'creme-radieuse', verb: 'Veil', time: '07:05' }
   ],
   dusk: [
-    { id: 'argile-purifiante', verb: 'Dissolve', time: '22:00' },
-    { id: 'brume-botanique', verb: 'Quench', time: '22:02' },
+    { id: 'huile-soyeuse', verb: 'Dissolve', time: '22:00' },
+    { id: 'essence-fleurie', verb: 'Quench', time: '22:02' },
     { id: 'seve-doree', verb: 'Renew', time: '22:04' },
     { id: 'baume-resineux', verb: 'Seal', time: '22:06' }
   ]

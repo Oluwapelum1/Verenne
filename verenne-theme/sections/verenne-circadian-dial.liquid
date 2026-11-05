@@ -1,570 +1,599 @@
 {%- comment -%}
   Verenne Circadian Ritual
-  1:1 Replica of Ritual.jsx from https://oluwapelum1.github.io/Verenne/
-  Includes:
-  - Dawn / Dusk toggle with chronobiological routine switching
-  - Interactive 60-tick Orbital Dial with rotating face and 4 orbiting nodes
-  - Central dynamic formulation photograph matching the active step
-  - Single-click routine addition to bag with total calculation
+  1:1 port of src/components/Ritual.jsx from https://oluwapelum1.github.io/Verenne/
+  - Dawn / Dusk toggle with sliding pill; each mode has its own four products
+  - 60-tick dial that turns 180° at dusk, four orbiting step nodes
+  - Centre photograph of the active step with exit/enter transition
+  - Single-click routine addition to bag with live total
 {%- endcomment -%}
 
-<section id="ritual" class="verenne-ritual-section tone-dark" aria-labelledby="ritual-title" style="background-color: #1A130E !important; color: #FAF6EE !important;">
-  <div class="verenne-ritual-container">
-    
-    <!-- Left Column: Copy & Steps -->
-    <div class="verenne-ritual-col-left">
-      <p class="verenne-ritual-eyebrow">The ritual</p>
-      <h2 id="ritual-title" class="verenne-ritual-headline">
-        Four steps.<br>
-        <em id="ritual-mode-subtitle" class="verenne-ritual-accent-text">Every morning.</em>
+<section id="ritual" class="vr-ritual tone-dark" aria-labelledby="ritual-title" data-mode="dawn">
+  <div class="vr-ritual__glow vr-ritual__glow--dawn" aria-hidden="true"></div>
+  <div class="vr-ritual__glow vr-ritual__glow--dusk" aria-hidden="true"></div>
+
+  <div class="vr-ritual__grid">
+    <!-- Copy + steps -->
+    <div class="vr-ritual__copy">
+      <p class="vr-ritual__label">The ritual</p>
+      <h2 id="ritual-title" class="vr-ritual__title">
+        Four steps. <br>
+        <em class="vr-ritual__accent" data-ritual-subtitle>Every morning.</em>
       </h2>
 
-      <!-- Dawn / Dusk Tab Switcher -->
-      <div class="verenne-ritual-pill-tabs" role="tablist" aria-label="Time of day">
-        <button
-          type="button"
-          id="btn-ritual-dawn"
-          class="verenne-mode-btn active"
-          role="tab"
-          aria-selected="true"
-          onclick="switchRitualMode('dawn')"
-        >
-          <span class="verenne-mode-icon">☼</span>
-          <span>Dawn</span>
-        </button>
-        <button
-          type="button"
-          id="btn-ritual-dusk"
-          class="verenne-mode-btn"
-          role="tab"
-          aria-selected="false"
-          onclick="switchRitualMode('dusk')"
-        >
-          <span class="verenne-mode-icon">☾</span>
-          <span>Dusk</span>
-        </button>
-      </div>
-
-      <!-- Steps List -->
-      <ol class="verenne-steps-list" id="ritual-steps-container">
-        <!-- Rendered dynamically via JavaScript -->
-      </ol>
-
-      <!-- Bottom Routine Buy Action -->
-      <div class="verenne-ritual-footer-action">
-        <button type="button" class="verenne-btn-add-routine" id="ritual-add-all-btn" onclick="addAllRitualToBag()">
-          Add the dawn ritual — $336
-        </button>
-        <span class="verenne-ritual-ships-label">Ships together · free delivery</span>
-      </div>
-    </div>
-
-    <!-- Right Column: The 60-Tick Orbital Clock Dial -->
-    <div class="verenne-ritual-col-right">
-      <div class="verenne-dial-wrap">
-        
-        <!-- Rotating SVG Clock Face (60 ticks) -->
-        <div class="verenne-dial-svg-plate" id="verenne-dial-plate">
-          <svg viewBox="0 0 400 400" class="verenne-dial-svg" aria-hidden="true">
-            <circle cx="200" cy="200" r="196" fill="none" stroke="rgba(237,231,220,0.12)" />
-            <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(237,231,220,0.08)" stroke-dasharray="2 6" />
-            <!-- 60 ticks -->
-            {%- for i in (0..59) -%}
-              {%- assign deg = i | times: 6 -%}
-              {%- assign is_major = i | modulo: 5 -%}
-              {%- if is_major == 0 -%}
-                <line x1="200" y1="6" x2="200" y2="18" stroke="rgba(237,231,220,0.35)" transform="rotate({{ deg }} 200 200)" />
-              {%- else -%}
-                <line x1="200" y1="6" x2="200" y2="12" stroke="rgba(237,231,220,0.18)" transform="rotate({{ deg }} 200 200)" />
-              {%- endif -%}
-            {%- endfor -%}
-            <!-- Gold indicator at 12 o'clock, violet indicator at 6 o'clock -->
-            <circle cx="200" cy="5" r="5" fill="#E2B26A" />
-            <circle cx="200" cy="395" r="5" fill="#7B5CC4" />
+      <div class="vr-ritual__tabs" role="tablist" aria-label="Time of day">
+        <span class="vr-ritual__pill" aria-hidden="true"></span>
+        <button type="button" role="tab" aria-selected="true" class="vr-ritual__tab is-active" data-ritual-mode="dawn">
+          <svg class="vr-ritual__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
           </svg>
-        </div>
+          <span class="vr-ritual__tab-text">Dawn</span>
+        </button>
+        <button type="button" role="tab" aria-selected="false" class="vr-ritual__tab" data-ritual-mode="dusk">
+          <svg class="vr-ritual__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>
+          </svg>
+          <span class="vr-ritual__tab-text">Dusk</span>
+        </button>
+      </div>
 
-        <!-- 4 Orbiting Step Nodes (01, 02, 03, 04) -->
-        <div class="verenne-orbit-nodes" id="ritual-orbit-nodes">
-          <!-- Rendered dynamically via JavaScript -->
-        </div>
+      <ol class="vr-ritual__steps" data-ritual-steps></ol>
 
-        <!-- Central Square Photograph of the Active Formulation -->
-        <div class="verenne-dial-center-box">
-          <img id="ritual-center-img" src="{{ 'argile-purifiante.jpg' | asset_url }}" alt="Active ritual formulation" class="verenne-dial-center-photo" width="400" height="400">
-        </div>
-
+      <div class="vr-ritual__actions">
+        <button type="button" class="vr-ritual__add" data-ritual-add>
+          <span class="vr-ritual__add-fill" aria-hidden="true"></span>
+          <span class="vr-ritual__add-text" data-ritual-add-text>Add the dawn ritual — $336</span>
+        </button>
+        <span class="vr-ritual__label">Ships together · free delivery</span>
       </div>
     </div>
 
+    <!-- Dial -->
+    <div class="vr-ritual__dial">
+      <div class="vr-ritual__face" data-ritual-face>
+        <svg viewBox="0 0 400 400" aria-hidden="true">
+          <circle cx="200" cy="200" r="196" fill="none" stroke="rgba(237,231,220,0.12)" />
+          <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(237,231,220,0.08)" stroke-dasharray="2 6" />
+          {%- for i in (0..59) -%}
+            {%- assign deg = i | times: 6 -%}
+            {%- assign tick = i | modulo: 5 -%}
+            <line x1="200" y1="6" x2="200" y2="{% if tick == 0 %}18{% else %}12{% endif %}" stroke="rgba(237,231,220,0.25)" transform="rotate({{ deg }} 200 200)" />
+          {%- endfor -%}
+          <circle cx="200" cy="4" r="5" fill="#E2B26A" />
+          <circle cx="200" cy="396" r="5" fill="#7B5CC4" />
+        </svg>
+      </div>
+
+      <!-- Steps around the dial (not rotated, so labels stay legible) -->
+      <div data-ritual-nodes></div>
+
+      <!-- Centre -->
+      <div class="vr-ritual__center">
+        <div class="vr-ritual__frame is-in" data-ritual-frame>
+          <img
+            data-ritual-center
+            src="{{ 'argile-purifiante-600.webp' | asset_url }}"
+            alt="N°05 Argile Purifiante"
+            width="600"
+            height="750"
+            decoding="async"
+          >
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
-  .verenne-ritual-section {
+  #ritual.vr-ritual {
+    --r-bg: #1A130E;
+    --r-text-primary: #EFE7DA;
+    --r-text-secondary: #C2B5A4;
+    --r-text-muted: #A39585;
+    --r-border-subtle: rgba(239, 231, 218, 0.12);
+    --r-border-strong: rgba(239, 231, 218, 0.28);
+    --r-accent: #E0935F;
+    --r-accent-ink: #1A130E;
+    --r-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --r-serif: 'Bodoni Moda', 'Times New Roman', serif;
+    --r-sans: 'Hanken Grotesk', system-ui, sans-serif;
+
     position: relative;
     overflow: hidden;
-    background-color: #1A130E !important;
-    color: #FAF6EE !important;
     padding: 6rem 1.25rem;
+    background-color: var(--r-bg) !important;
+    color: var(--r-text-primary) !important;
+    font-family: var(--r-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   @media (min-width: 640px) {
-    .verenne-ritual-section {
-      padding: 8rem 2.5rem;
-    }
+    #ritual.vr-ritual { padding: 8rem 2.5rem; }
   }
-  .verenne-ritual-container {
+
+  #ritual .vr-ritual__glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transition: opacity 1.4s ease;
+  }
+  #ritual .vr-ritual__glow--dawn { background: radial-gradient(60% 60% at 70% 50%, rgba(224, 147, 95, 0.14), transparent 70%); }
+  #ritual .vr-ritual__glow--dusk { background: radial-gradient(60% 60% at 70% 50%, rgba(165, 82, 42, 0.2), transparent 70%); opacity: 0; }
+  #ritual[data-mode='dusk'] .vr-ritual__glow--dawn { opacity: 0; }
+  #ritual[data-mode='dusk'] .vr-ritual__glow--dusk { opacity: 1; }
+
+  #ritual .vr-ritual__grid {
+    position: relative;
     max-width: 1600px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 4rem;
+    grid-template-columns: minmax(0, 1fr);
     align-items: center;
+    gap: 4rem;
   }
   @media (min-width: 1024px) {
-    .verenne-ritual-container {
-      grid-template-columns: 5fr 7fr;
-      gap: 5rem;
-    }
+    #ritual .vr-ritual__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    #ritual .vr-ritual__copy { grid-column: span 5 / span 5; }
+    #ritual .vr-ritual__dial { grid-column: span 7 / span 7; }
   }
-  .verenne-ritual-eyebrow {
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #A39585 !important;
-    margin: 0 0 1rem 0;
-  }
-  .verenne-ritual-headline {
-    font-family: 'Bodoni Moda', serif;
-    font-size: clamp(2.6rem, 5vw, 4.5rem);
-    line-height: 0.95;
-    color: #FAF6EE !important;
+
+  #ritual .vr-ritual__label {
     margin: 0;
+    font-family: var(--r-sans);
+    font-size: 13px;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--r-text-secondary) !important;
   }
-  .verenne-ritual-accent-text {
-    font-family: 'Bodoni Moda', serif;
+
+  #ritual .vr-ritual__title {
+    margin: 1rem 0 0;
+    font-family: var(--r-serif);
+    font-size: clamp(2.6rem, 5vw, 4.5rem);
+    font-weight: 400;
+    font-style: normal;
+    font-optical-sizing: auto;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--r-text-primary) !important;
+  }
+  #ritual .vr-ritual__accent {
+    font-family: var(--r-serif);
     font-style: italic;
-    color: #E0935F !important;
+    font-weight: 400;
+    color: var(--r-accent) !important;
   }
-  .verenne-ritual-pill-tabs {
+
+  /* Dawn / Dusk */
+  #ritual .vr-ritual__tabs {
+    position: relative;
     display: inline-flex;
-    border: 1px solid rgba(239, 231, 218, 0.2);
-    border-radius: 9999px;
+    margin-top: 2rem;
     padding: 0.25rem;
-    margin: 2rem 0;
-    gap: 0.25rem;
-    background: rgba(26, 19, 14, 0.6);
+    border: 1px solid var(--r-border-subtle);
+    border-radius: 9999px;
   }
-  .verenne-mode-btn {
-    display: inline-flex;
+  #ritual .vr-ritual__pill {
+    position: absolute;
+    top: 0.25rem;
+    left: 0;
+    height: calc(100% - 0.5rem);
+    width: 0;
+    border-radius: 9999px;
+    background: var(--r-text-primary);
+    transition: transform 0.55s var(--r-ease), width 0.55s var(--r-ease);
+  }
+  #ritual .vr-ritual__tab {
+    position: relative;
+    display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1.25rem;
-    border-radius: 9999px;
-    border: none;
-    background: transparent;
-    color: #A39585;
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 0.8125rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  .verenne-mode-btn.active {
-    background: #FAF6EE !important;
-    color: #1A130E !important;
-    font-weight: 500;
-  }
-  .verenne-steps-list {
-    border-top: 1px solid rgba(239, 231, 218, 0.15);
-    list-style: none;
     margin: 0;
-    padding: 0;
-  }
-  .verenne-ritual-row {
-    display: flex;
-    align-items: baseline;
-    gap: 1.25rem;
-    padding: 1.25rem 0;
-    border-bottom: 1px solid rgba(239, 231, 218, 0.15);
+    padding: 0.5rem 1.25rem;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    font-family: var(--r-sans);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.25rem;
+    color: var(--r-text-secondary);
+    transition: color 0.3s ease;
   }
-  .verenne-row-time {
-    font-family: 'Hanken Grotesk', monospace, sans-serif;
-    font-size: 0.75rem;
-    color: #A39585 !important;
+  #ritual .vr-ritual__tab.is-active { color: var(--r-accent-ink); }
+  #ritual .vr-ritual__tab-text { position: relative; font: inherit; color: inherit; }
+  #ritual .vr-ritual__icon { position: relative; width: 14px; height: 14px; flex: none; }
+
+  /* Steps */
+  #ritual .vr-ritual__steps {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--r-border-subtle);
   }
-  .verenne-row-verb {
-    font-family: 'Bodoni Moda', serif;
-    font-size: 1.85rem;
-    color: #A39585;
-    transition: all 0.3s ease;
+  #ritual .vr-ritual__step { border-bottom: 1px solid var(--r-border-subtle); }
+  #ritual .vr-ritual__step-btn {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 1rem 0;
+    border: 0;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
   }
-  .verenne-ritual-row.active .verenne-row-verb {
-    color: #FAF6EE !important;
+  #ritual .vr-ritual__time {
+    font-family: var(--r-sans);
+    font-size: 11px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    color: var(--r-text-muted) !important;
+  }
+  #ritual .vr-ritual__verb {
+    display: inline-block;
+    font-family: var(--r-serif);
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: -0.01em;
+    color: var(--r-text-secondary) !important;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #ritual .vr-ritual__step.is-active .vr-ritual__verb {
+    transform: translateX(0.25rem);
     font-style: italic;
-    transform: translateX(4px);
+    color: var(--r-text-primary) !important;
   }
-  .verenne-row-product {
+  #ritual .vr-ritual__product {
     margin-left: auto;
     text-align: right;
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
+    font-family: var(--r-sans);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--r-text-secondary) !important;
   }
-  .verenne-product-name {
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 0.875rem;
-    color: #C2B5A4 !important;
+  #ritual .vr-ritual__price {
+    display: block;
+    font-family: var(--r-sans);
+    font-size: 11px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    color: var(--r-text-muted) !important;
   }
-  .verenne-product-price {
-    font-family: 'Hanken Grotesk', monospace, sans-serif;
-    font-size: 0.75rem;
-    color: #A39585 !important;
-  }
-  .verenne-ritual-footer-action {
-    margin-top: 2.5rem;
+
+  /* Add the ritual */
+  #ritual .vr-ritual__actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1.25rem;
+    gap: 1rem;
+    margin-top: 2rem;
   }
-  .verenne-btn-add-routine {
-    background: #99481F !important;
-    color: #FAF6EE !important;
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    padding: 0.95rem 1.75rem;
-    border-radius: 9999px;
-    border: none;
+  #ritual .vr-ritual__add {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    margin: 0;
+    padding: 1rem 1.75rem;
+    border: 0;
+    border-radius: 0;
+    background: var(--r-text-primary);
     cursor: pointer;
-    transition: background 0.3s ease;
+    color: var(--r-accent-ink);
+    transition: color 0.5s ease;
   }
-  .verenne-btn-add-routine:hover {
-    background: #b85a27 !important;
+  #ritual .vr-ritual__add-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--r-accent);
+    transform: translateY(101%);
+    transition: transform 0.5s var(--r-ease);
   }
-  .verenne-ritual-ships-label {
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #A39585 !important;
+  #ritual .vr-ritual__add:hover .vr-ritual__add-fill,
+  #ritual .vr-ritual__add:focus-visible .vr-ritual__add-fill { transform: translateY(0); }
+  #ritual .vr-ritual__add-text {
+    position: relative;
+    z-index: 1;
+    font-family: var(--r-sans);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--r-accent-ink) !important;
   }
-  /* Dial Container */
-  .verenne-dial-wrap {
+
+  #ritual .vr-ritual__tab:focus-visible,
+  #ritual .vr-ritual__step-btn:focus-visible,
+  #ritual .vr-ritual__node:focus-visible,
+  #ritual .vr-ritual__add:focus-visible {
+    outline: 1px solid var(--r-accent);
+    outline-offset: 3px;
+  }
+
+  /* Dial */
+  #ritual .vr-ritual__dial {
     position: relative;
     width: 100%;
-    max-width: 580px;
+    max-width: 600px;
     aspect-ratio: 1 / 1;
     margin: 0 auto;
   }
-  .verenne-dial-svg-plate {
+  #ritual .vr-ritual__face {
     position: absolute;
     inset: 0;
     transition: transform 1.6s cubic-bezier(0.83, 0, 0.17, 1);
   }
-  .verenne-dial-svg {
-    width: 100%;
-    height: 100%;
-  }
-  .verenne-orbit-nodes {
+  #ritual[data-mode='dusk'] .vr-ritual__face { transform: rotate(180deg); }
+  #ritual .vr-ritual__face svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  #ritual .vr-ritual__node {
     position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .verenne-orbit-node {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    background: transparent;
-    border: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
     cursor: pointer;
-    pointer-events: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.35rem;
-    transition: transform 0.4s ease;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    transition: transform 0.6s var(--r-ease), opacity 0.6s var(--r-ease);
   }
-  .verenne-orbit-node.active {
-    transform: translate(-50%, -50%) scale(1.15);
-  }
-  .verenne-node-thumb-wrap {
+  #ritual .vr-ritual__node.is-active { transform: translate(-50%, -50%) scale(1.15); }
+  #ritual .vr-ritual__node.is-entering { opacity: 0; transform: translate(-50%, -50%) scale(0.6); transition: none; }
+  #ritual .vr-ritual__thumb {
+    display: block;
     width: 3.5rem;
     height: 3.5rem;
-    border-radius: 9999px;
-    border: 2px solid rgba(239, 231, 218, 0.2);
     overflow: hidden;
-    background: #1A130E;
-    transition: border-color 0.3s ease;
+    border-radius: 9999px;
+    border: 2px solid var(--r-border-subtle);
+    transition: border-color 0.15s ease;
   }
   @media (min-width: 640px) {
-    .verenne-node-thumb-wrap {
-      width: 4rem;
-      height: 4rem;
-    }
+    #ritual .vr-ritual__thumb { width: 4rem; height: 4rem; }
   }
-  .verenne-orbit-node.active .verenne-node-thumb-wrap {
-    border-color: #FAF6EE !important;
-  }
-  .verenne-node-thumb {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .verenne-node-num {
-    font-family: 'Hanken Grotesk', monospace, sans-serif;
-    font-size: 0.6875rem;
-    letter-spacing: 0.1em;
-    color: #A39585 !important;
-  }
-  .verenne-orbit-node.active .verenne-node-num {
-    color: #FAF6EE !important;
-    font-weight: 600;
-  }
-  .verenne-dial-center-box {
+  #ritual .vr-ritual__node.is-active .vr-ritual__thumb { border-color: var(--r-text-primary); }
+  #ritual .vr-ritual__thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  #ritual .vr-ritual__num { display: block; margin-top: 0.5rem; text-align: center; }
+
+  #ritual .vr-ritual__center {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-    width: 42%;
+    width: 40%;
     height: 52%;
-    border: 1px solid rgba(239, 231, 218, 0.25);
-    background: #1A130E;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    transform: translate(-50%, -50%);
   }
-  .verenne-dial-center-photo {
+  #ritual .vr-ritual__frame {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    transition: opacity 0.4s ease;
+    overflow: hidden;
+    border: 1px solid var(--r-border-strong);
+    border-radius: 0;
+    transition: opacity 0.55s var(--r-ease), transform 0.55s var(--r-ease);
+  }
+  #ritual .vr-ritual__frame.is-in { opacity: 1; transform: translateY(0) scale(1); }
+  #ritual .vr-ritual__frame.is-out { opacity: 0; transform: translateY(-16px) scale(0.96); }
+  #ritual .vr-ritual__frame.is-pre { opacity: 0; transform: translateY(16px) scale(0.96); transition: none; }
+  #ritual .vr-ritual__frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #ritual *, #ritual *::before, #ritual *::after { transition-duration: 0.01ms !important; transition-delay: 0s !important; }
   }
 </style>
 
 <script>
-  const RITUAL_DATA = {
-    dawn: {
-      subtitle: 'Every morning.',
-      total: 336,
-      steps: [
-        {
-          id: 'argile-purifiante',
-          time: '07:00',
-          verb: 'Cleanse',
-          name: 'Argile Purifiante',
-          price: 58,
-          image: "{{ 'argile-purifiante.jpg' | asset_url }}",
-          thumb: "{{ 'argile-purifiante.jpg' | asset_url }}"
-        },
-        {
-          id: 'brume-botanique',
-          time: '07:02',
-          verb: 'Mist',
-          name: 'Brume Botanique',
-          price: 68,
-          image: "{{ 'brume-botanique.jpg' | asset_url }}",
-          thumb: "{{ 'brume-botanique.jpg' | asset_url }}"
-        },
-        {
-          id: 'eclat-sauvage',
-          time: '07:03',
-          verb: 'Illuminate',
-          name: 'Éclat Sauvage',
-          price: 118,
-          image: "{{ 'eclat-sauvage.jpg' | asset_url }}",
-          thumb: "{{ 'eclat-sauvage.jpg' | asset_url }}"
-        },
-        {
-          id: 'creme-radieuse',
-          time: '07:05',
-          verb: 'Veil',
-          name: 'Crème Radieuse',
-          price: 92,
-          image: "{{ 'creme-radieuse.jpg' | asset_url }}",
-          thumb: "{{ 'creme-radieuse.jpg' | asset_url }}"
-        }
+  (function () {
+    const section = document.getElementById('ritual');
+    if (!section || section.dataset.ready) return;
+    section.dataset.ready = 'true';
+
+    const PRODUCTS = {
+      'argile-purifiante': { name: 'Argile Purifiante', fullName: 'N°05 Argile Purifiante', price: 58, img: "{{ 'argile-purifiante-600.webp' | asset_url }}", thumb: "{{ 'argile-purifiante-320.webp' | asset_url }}" },
+      'brume-botanique': { name: 'Brume Botanique', fullName: 'N°03 Brume Botanique', price: 68, img: "{{ 'brume-botanique-600.webp' | asset_url }}", thumb: "{{ 'brume-botanique-320.webp' | asset_url }}" },
+      'eclat-sauvage': { name: 'Éclat Sauvage', fullName: 'N°01 Éclat Sauvage', price: 118, img: "{{ 'eclat-sauvage-600.webp' | asset_url }}", thumb: "{{ 'eclat-sauvage-320.webp' | asset_url }}" },
+      'creme-radieuse': { name: 'Crème Radieuse', fullName: 'N°06 Crème Radieuse', price: 92, img: "{{ 'creme-radieuse-600.webp' | asset_url }}", thumb: "{{ 'creme-radieuse-320.webp' | asset_url }}" },
+      'huile-soyeuse': { name: 'Huile Soyeuse Purifiante', fullName: 'N°09 Huile Soyeuse Purifiante', price: 72, img: "{{ 'huile-soyeuse-600.webp' | asset_url }}", thumb: "{{ 'huile-soyeuse-320.webp' | asset_url }}" },
+      'essence-fleurie': { name: 'Essence Florale Cellulaire', fullName: 'N°12 Essence Florale Cellulaire', price: 78, img: "{{ 'essence-fleurie-600.webp' | asset_url }}", thumb: "{{ 'essence-fleurie-320.webp' | asset_url }}" },
+      'seve-doree': { name: 'Sève Dorée', fullName: 'N°04 Sève Dorée', price: 135, img: "{{ 'seve-doree-600.webp' | asset_url }}", thumb: "{{ 'seve-doree-320.webp' | asset_url }}" },
+      'baume-resineux': { name: 'Baume Résineux', fullName: 'N°02 Baume Résineux', price: 94, img: "{{ 'baume-resineux-600.webp' | asset_url }}", thumb: "{{ 'baume-resineux-320.webp' | asset_url }}" }
+    };
+
+    const RITUAL = {
+      dawn: [
+        { id: 'argile-purifiante', verb: 'Cleanse', time: '07:00' },
+        { id: 'brume-botanique', verb: 'Mist', time: '07:02' },
+        { id: 'eclat-sauvage', verb: 'Illuminate', time: '07:03' },
+        { id: 'creme-radieuse', verb: 'Veil', time: '07:05' }
+      ],
+      dusk: [
+        { id: 'huile-soyeuse', verb: 'Dissolve', time: '22:00' },
+        { id: 'essence-fleurie', verb: 'Quench', time: '22:02' },
+        { id: 'seve-doree', verb: 'Renew', time: '22:04' },
+        { id: 'baume-resineux', verb: 'Seal', time: '22:06' }
       ]
-    },
-    dusk: {
-      subtitle: 'Twice at night.',
-      total: 355,
-      steps: [
-        {
-          id: 'argile-purifiante',
-          time: '22:00',
-          verb: 'Dissolve',
-          name: 'Argile Purifiante',
-          price: 58,
-          image: "{{ 'argile-purifiante.jpg' | asset_url }}",
-          thumb: "{{ 'argile-purifiante.jpg' | asset_url }}"
-        },
-        {
-          id: 'brume-botanique',
-          time: '22:02',
-          verb: 'Quench',
-          name: 'Brume Botanique',
-          price: 68,
-          image: "{{ 'brume-botanique.jpg' | asset_url }}",
-          thumb: "{{ 'brume-botanique.jpg' | asset_url }}"
-        },
-        {
-          id: 'seve-doree',
-          time: '22:04',
-          verb: 'Renew',
-          name: 'Sève Dorée',
-          price: 135,
-          image: "{{ 'seve-doree.jpg' | asset_url }}",
-          thumb: "{{ 'seve-doree.jpg' | asset_url }}"
-        },
-        {
-          id: 'baume-resineux',
-          time: '22:06',
-          verb: 'Seal',
-          name: 'Baume Résineux',
-          price: 94,
-          image: "{{ 'baume-resineux.jpg' | asset_url }}",
-          thumb: "{{ 'baume-resineux.jpg' | asset_url }}"
-        }
-      ]
-    }
-  };
+    };
 
-  let currentRitualMode = 'dawn';
-  let currentRitualStep = 0;
+    const stepsEl = section.querySelector('[data-ritual-steps]');
+    const nodesEl = section.querySelector('[data-ritual-nodes]');
+    const frame = section.querySelector('[data-ritual-frame]');
+    const centerImg = section.querySelector('[data-ritual-center]');
+    const subtitle = section.querySelector('[data-ritual-subtitle]');
+    const addBtn = section.querySelector('[data-ritual-add]');
+    const addText = section.querySelector('[data-ritual-add-text]');
+    const tabs = Array.from(section.querySelectorAll('[data-ritual-mode]'));
+    const pill = section.querySelector('.vr-ritual__pill');
 
-  function switchRitualMode(mode) {
-    currentRitualMode = mode;
-    currentRitualStep = 0;
+    let mode = 'dawn';
+    let step = 0;
+    let shownKey = 'dawn-argile-purifiante';
+    let swapTimer = null;
 
-    const isDawn = mode === 'dawn';
-    const dawnBtn = document.getElementById('btn-ritual-dawn');
-    const duskBtn = document.getElementById('btn-ritual-dusk');
-    if (dawnBtn) {
-      dawnBtn.classList.toggle('active', isDawn);
-      dawnBtn.setAttribute('aria-selected', isDawn);
-    }
-    if (duskBtn) {
-      duskBtn.classList.toggle('active', !isDawn);
-      duskBtn.setAttribute('aria-selected', !isDawn);
-    }
-
-    const plate = document.getElementById('verenne-dial-plate');
-    if (plate) {
-      plate.style.transform = isDawn ? 'rotate(0deg)' : 'rotate(180deg)';
-    }
-
-    const data = RITUAL_DATA[mode];
-    const sub = document.getElementById('ritual-mode-subtitle');
-    const addBtn = document.getElementById('ritual-add-all-btn');
-    if (sub) sub.textContent = data.subtitle;
-    if (addBtn) addBtn.textContent = 'Add the ' + mode + ' ritual — $' + data.total;
-
-    renderRitualSteps();
-    renderOrbitNodes();
-    updateRitualCenterPhoto();
-  }
-
-  function setRitualStep(idx) {
-    currentRitualStep = idx;
-    const items = document.querySelectorAll('.verenne-ritual-row');
-    items.forEach((item, i) => {
-      item.classList.toggle('active', i === idx);
+    // Warm the cache so dusk and every step swap instantly
+    Object.values(PRODUCTS).forEach((p) => {
+      new Image().src = p.img;
+      new Image().src = p.thumb;
     });
 
-    const nodes = document.querySelectorAll('.verenne-orbit-node');
-    nodes.forEach((node, i) => {
-      node.classList.toggle('active', i === idx);
-    });
-
-    updateRitualCenterPhoto();
-  }
-
-  function updateRitualCenterPhoto() {
-    const data = RITUAL_DATA[currentRitualMode];
-    const s = data.steps[currentRitualStep];
-    const img = document.getElementById('ritual-center-img');
-    if (img && s) {
-      img.src = s.image;
-      img.alt = s.verb + ' — ' + s.name;
+    function movePill(animate) {
+      const tab = tabs.find((t) => t.dataset.ritualMode === mode);
+      if (!tab || !pill) return;
+      if (!animate) pill.style.transition = 'none';
+      pill.style.width = tab.offsetWidth + 'px';
+      pill.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
+      if (!animate) {
+        pill.offsetWidth;
+        pill.style.transition = '';
+      }
     }
-  }
 
-  function renderRitualSteps() {
-    const data = RITUAL_DATA[currentRitualMode];
-    const container = document.getElementById('ritual-steps-container');
-    if (!container) return;
-    container.innerHTML = '';
+    function renderSteps() {
+      stepsEl.innerHTML = '';
+      RITUAL[mode].forEach((s, i) => {
+        const p = PRODUCTS[s.id];
+        const li = document.createElement('li');
+        li.className = 'vr-ritual__step' + (i === step ? ' is-active' : '');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'vr-ritual__step-btn';
+        btn.innerHTML =
+          '<span class="vr-ritual__time"></span><span class="vr-ritual__verb"></span>' +
+          '<span class="vr-ritual__product"><span class="vr-ritual__name"></span><span class="vr-ritual__price"></span></span>';
+        btn.querySelector('.vr-ritual__time').textContent = s.time;
+        btn.querySelector('.vr-ritual__verb').textContent = s.verb;
+        btn.querySelector('.vr-ritual__name').textContent = p.name;
+        btn.querySelector('.vr-ritual__price').textContent = '$' + p.price;
+        btn.addEventListener('click', () => setStep(i));
+        btn.addEventListener('mouseenter', () => setStep(i));
+        li.appendChild(btn);
+        stepsEl.appendChild(li);
+      });
+    }
 
-    data.steps.forEach((s, idx) => {
-      const li = document.createElement('li');
-      li.className = 'verenne-ritual-row' + (idx === currentRitualStep ? ' active' : '');
-      li.onclick = () => setRitualStep(idx);
-      li.onmouseenter = () => setRitualStep(idx);
+    function renderNodes() {
+      nodesEl.innerHTML = '';
+      RITUAL[mode].forEach((s, i) => {
+        const p = PRODUCTS[s.id];
+        const angle = (-90 + 45 + i * 90) * (Math.PI / 180);
+        const r = 41;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'vr-ritual__node is-entering' + (i === step ? ' is-active' : '');
+        btn.style.left = 50 + Math.cos(angle) * r + '%';
+        btn.style.top = 50 + Math.sin(angle) * r + '%';
+        btn.setAttribute('aria-label', s.verb + ': ' + p.fullName);
+        btn.innerHTML = '<span class="vr-ritual__thumb"><img alt="" loading="lazy" width="320" height="320"></span><span class="vr-ritual__label vr-ritual__num"></span>';
+        const img = btn.querySelector('img');
+        img.src = p.thumb;
+        img.alt = p.name;
+        btn.querySelector('.vr-ritual__num').textContent = String(i + 1).padStart(2, '0');
+        btn.addEventListener('click', () => setStep(i));
+        nodesEl.appendChild(btn);
 
-      li.innerHTML = `
-        <span class="verenne-row-time">${s.time}</span>
-        <span class="verenne-row-verb">${s.verb}</span>
-        <span class="verenne-row-product">
-          <span class="verenne-product-name">${s.name}</span>
-          <span class="verenne-product-price">$${s.price}</span>
-        </span>
-      `;
-      container.appendChild(li);
+        // Staggered entrance, then normal (undelayed) transitions for the active scale
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            btn.style.transitionDelay = 0.5 + i * 0.08 + 's';
+            btn.classList.remove('is-entering');
+            setTimeout(() => { btn.style.transitionDelay = ''; }, (1.1 + i * 0.08) * 1000);
+          });
+        });
+      });
+    }
+
+    function syncActive() {
+      stepsEl.querySelectorAll('.vr-ritual__step').forEach((el, i) => el.classList.toggle('is-active', i === step));
+      nodesEl.querySelectorAll('.vr-ritual__node').forEach((el, i) => el.classList.toggle('is-active', i === step));
+    }
+
+    // AnimatePresence mode="wait": old photo exits up, then the new one rises in
+    function updateCenter() {
+      const s = RITUAL[mode][step];
+      const key = mode + '-' + s.id;
+      if (key === shownKey) return;
+      shownKey = key;
+      clearTimeout(swapTimer);
+      frame.classList.remove('is-in', 'is-pre');
+      frame.classList.add('is-out');
+      swapTimer = setTimeout(() => {
+        const cur = RITUAL[mode][step];
+        const p = PRODUCTS[cur.id];
+        centerImg.src = p.img;
+        centerImg.alt = p.fullName;
+        const show = () => {
+          frame.classList.remove('is-out');
+          frame.classList.add('is-pre');
+          frame.offsetWidth;
+          frame.classList.remove('is-pre');
+          frame.classList.add('is-in');
+        };
+        (centerImg.decode ? centerImg.decode() : Promise.resolve()).then(show, show);
+      }, 550);
+    }
+
+    function setStep(i) {
+      if (i === step) return;
+      step = i;
+      syncActive();
+      updateCenter();
+    }
+
+    function updateTotal() {
+      const total = RITUAL[mode].reduce((sum, s) => sum + PRODUCTS[s.id].price, 0);
+      addText.textContent = 'Add the ' + mode + ' ritual — $' + total;
+    }
+
+    function switchMode(m) {
+      if (m === mode) return;
+      mode = m;
+      step = 0;
+      section.dataset.mode = m;
+      tabs.forEach((t) => {
+        const on = t.dataset.ritualMode === m;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      movePill(true);
+      subtitle.textContent = m === 'dusk' ? 'Twice at night.' : 'Every morning.';
+      updateTotal();
+      renderSteps();
+      renderNodes();
+      updateCenter();
+    }
+
+    tabs.forEach((t) => t.addEventListener('click', () => switchMode(t.dataset.ritualMode)));
+
+    addBtn.addEventListener('click', () => {
+      RITUAL[mode].forEach((s, i) => {
+        const p = PRODUCTS[s.id];
+        setTimeout(() => {
+          if (typeof window.addVerenneCartItem === 'function') {
+            window.addVerenneCartItem(p.fullName, '$' + p.price, 'Standard', p.img);
+          }
+        }, i * 120);
+      });
     });
-  }
 
-  function renderOrbitNodes() {
-    const data = RITUAL_DATA[currentRitualMode];
-    const container = document.getElementById('ritual-orbit-nodes');
-    if (!container) return;
-    container.innerHTML = '';
+    // Keep the old global API working for anything that still calls it
+    window.switchRitualMode = switchMode;
 
-    const angles = [45, 135, 225, 315];
-    const r = 41;
-
-    data.steps.forEach((s, idx) => {
-      const angleRad = (angles[idx] - 90) * (Math.PI / 180);
-      const leftPct = 50 + Math.cos(angleRad) * r;
-      const topPct = 50 + Math.sin(angleRad) * r;
-
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'verenne-orbit-node' + (idx === currentRitualStep ? ' active' : '');
-      btn.style.left = leftPct + '%';
-      btn.style.top = topPct + '%';
-      btn.setAttribute('aria-label', s.verb + ': ' + s.name);
-      btn.onclick = () => setRitualStep(idx);
-
-      const numStr = String(idx + 1).padStart(2, '0');
-      btn.innerHTML = `
-        <span class="verenne-node-thumb-wrap">
-          <img src="${s.thumb}" alt="${s.name}" class="verenne-node-thumb" loading="lazy" />
-        </span>
-        <span class="verenne-node-num">${numStr}</span>
-      `;
-      container.appendChild(btn);
-    });
-  }
-
-  function addAllRitualToBag() {
-    const data = RITUAL_DATA[currentRitualMode];
-    data.steps.forEach((s, idx) => {
-      setTimeout(() => {
-        if (typeof window.addVerenneCartItem === 'function') {
-          window.addVerenneCartItem('N°' + (idx + 1) + ' ' + s.name, '$' + s.price, 'Standard', s.image);
-        }
-      }, idx * 120);
-    });
-  }
-
-  // Initialize on Load
-  document.addEventListener('DOMContentLoaded', () => {
-    renderRitualSteps();
-    renderOrbitNodes();
-    updateRitualCenterPhoto();
-  });
+    renderSteps();
+    renderNodes();
+    updateTotal();
+    movePill(false);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => movePill(false));
+    window.addEventListener('resize', () => movePill(false));
+  })();
 </script>
 
 {% schema %}
