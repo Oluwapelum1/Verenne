@@ -13,8 +13,28 @@
 
 <section id="collection" class="verenne-collection-section tone-light" aria-labelledby="verenne-collection-heading-{{ section.id }}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
 <style>
-  .verenne-collection-section {
+  .verenne-collection-section,
+  .verenne-collection-container,
+  .verenne-collection-grid,
+  .verenne-grid-item,
+  .verenne-editorial-card,
+  .verenne-editorial-info {
     background-color: #E9E1D4 !important;
+    background: #E9E1D4 !important;
+  }
+  .verenne-collection-title {
+    font-family: 'Bodoni Moda', serif !important;
+    font-size: clamp(2.4rem, 4vw, 3.6rem) !important;
+    font-weight: 600 !important;
+    color: #1F1610 !important;
+    letter-spacing: -0.02em !important;
+    margin: 0.4rem 0 !important;
+  }
+  .verenne-collection-blurb {
+    font-family: 'Hanken Grotesk', sans-serif !important;
+    font-size: 16px !important;
+    color: #554739 !important;
+    margin: 0.5rem 0 0 0 !important;
   }
   .verenne-editorial-card {
     background: transparent !important;
@@ -31,6 +51,7 @@
     border: none !important;
     box-shadow: none !important;
     overflow: hidden !important;
+    cursor: pointer !important;
   }
   .verenne-editorial-card:hover .verenne-card-media-wrap {
     border: none !important;
@@ -38,6 +59,9 @@
   }
   .verenne-editorial-img {
     border-radius: 0px !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
     transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
   .verenne-editorial-card:hover .verenne-editorial-img {
@@ -45,21 +69,22 @@
   }
   .verenne-editorial-name {
     font-family: 'Bodoni Moda', 'Times New Roman', serif !important;
-    font-size: 22px !important;
+    font-size: 24px !important;
     font-weight: 500 !important;
     color: #1F1610 !important;
     margin: 0 !important;
+    cursor: pointer !important;
   }
   .verenne-editorial-subtitle {
     font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
-    font-size: 14px !important;
+    font-size: 15px !important;
     color: #554739 !important;
-    margin: 0.25rem 0 0.75rem 0 !important;
+    margin: 0.35rem 0 0.85rem 0 !important;
   }
   .verenne-editorial-price {
     font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
-    font-size: 15px !important;
-    font-weight: 450 !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
     color: #1F1610 !important;
   }
   .verenne-editorial-add-btn,
@@ -68,8 +93,8 @@
     border: none !important;
     padding: 0 !important;
     font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 450 !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
     color: #1F1610 !important;
     text-decoration: underline !important;
     text-underline-offset: 5px !important;
@@ -1105,7 +1130,7 @@
   // View Switcher (Bottle / On skin / View in 3D)
   function switchVerenneView(view) {
     currentModalView = view;
-    document.querySelectorAll('.verenne-view-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.verenne-modal-view-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.verenne-view-btn').forEach(b => b.classList.remove('active'));
 
     const activePanel = document.getElementById('verenne-view-' + view);
@@ -1123,7 +1148,7 @@
     }
   }
 
-  // Pointer-Driven Tactile Magnifying Lens
+  // Pointer-Driven Tactile Magnifying Lens (1:1 with GitHub Image 5)
   function handleLensZoom(e) {
     const container = document.getElementById('verenne-zoom-container');
     const magnifier = document.getElementById('verenne-magnifier');
@@ -1139,15 +1164,15 @@
       return;
     }
 
-    magnifier.style.display = 'block';
-    magnifier.style.left = x + 'px';
-    magnifier.style.top = y + 'px';
-    magnifier.style.backgroundImage = 'url(' + img.src + ')';
-    magnifier.style.backgroundSize = (rect.width * 2.8) + 'px ' + (rect.height * 2.8) + 'px';
+    const pctX = (x / rect.width) * 100;
+    const pctY = (y / rect.height) * 100;
 
-    const bgX = (x / rect.width) * 100;
-    const bgY = (y / rect.height) * 100;
-    magnifier.style.backgroundPosition = bgX + '% ' + bgY + '%';
+    magnifier.style.display = 'block';
+    magnifier.style.left = pctX + '%';
+    magnifier.style.top = pctY + '%';
+    magnifier.style.backgroundImage = 'url(' + img.src + ')';
+    magnifier.style.backgroundPosition = pctX + '% ' + pctY + '%';
+    magnifier.style.backgroundSize = '300%';
   }
 
   function handleLensTouch(e) {

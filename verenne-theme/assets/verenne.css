@@ -3978,27 +3978,84 @@ select.verenne-input option {
 /* ==========================================================================
    SMOOTH & CLEAN EDITORIAL COLLECTION CARDS (1:1 with GitHub Webapp)
    Eliminates all rounded corners, eliminates card drop-shadows and borders,
-   and ensures silky smooth flat travertine stone background.
+   replaces all white backgrounds with warm travertine (#E9E1D4),
+   and matches GitHub Product Dossier Modal 1:1.
    ========================================================================== */
+:root {
+  --bg-primary: #E9E1D4 !important;
+  --bg-secondary: #DDD3C3 !important;
+  --bg-surface: #E9E1D4 !important;
+  --bg-surface-elevated: #DDD3C3 !important;
+}
+
+html,
 body {
   background-color: #E9E1D4 !important;
+  background: #E9E1D4 !important;
   background-image: none !important;
+  color: #1F1610 !important;
 }
 
 .gradient {
+  background-color: #E9E1D4 !important;
   background: #E9E1D4 !important;
   background-image: none !important;
 }
 
 .verenne-grain {
-  display: none !important; /* Removes noisy SVG turbulence so background is completely smooth */
+  display: none !important;
 }
 
-.verenne-collection-section {
+/* Header & Navigation Background */
+.header-wrapper,
+header.header,
+.verenne-navbar,
+.verenne-header {
   background-color: #E9E1D4 !important;
+  background: #E9E1D4 !important;
+  border-bottom: 1px solid rgba(31, 22, 16, 0.14) !important;
+}
+
+.verenne-nav-link,
+.verenne-brand,
+.verenne-cart-trigger {
+  color: #1F1610 !important;
+  font-size: 14px !important;
+}
+
+/* Collection & All Light Sections */
+.verenne-collection-section,
+.verenne-collection-container,
+.verenne-collection-grid,
+.verenne-grid-item,
+.verenne-editorial-card,
+.verenne-editorial-info,
+.verenne-hero-section,
+.verenne-manifesto-section,
+.tone-light {
+  background-color: #E9E1D4 !important;
+  background: #E9E1D4 !important;
   background-image: none !important;
 }
 
+/* Category Filter Tabs */
+.verenne-cat-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #554739 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  padding: 4px 8px !important;
+  transition: color 0.2s ease !important;
+}
+
+.verenne-cat-btn.active {
+  color: #1F1610 !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid #1F1610 !important;
+}
+
+/* Product Cards */
 .verenne-editorial-card {
   background: transparent !important;
   border: none !important;
@@ -4016,6 +4073,7 @@ body {
   box-shadow: none !important;
   overflow: hidden !important;
   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
 }
 
 .verenne-editorial-card:hover .verenne-card-media-wrap {
@@ -4039,11 +4097,12 @@ body {
 
 .verenne-editorial-info {
   padding: 1rem 0 0 0 !important;
+  background: transparent !important;
 }
 
 .verenne-editorial-name {
   font-family: 'Bodoni Moda', 'Times New Roman', serif !important;
-  font-size: 22px !important;
+  font-size: 24px !important;
   font-weight: 500 !important;
   color: #1F1610 !important;
   margin: 0 !important;
@@ -4052,14 +4111,14 @@ body {
 }
 
 .verenne-grid-item.tile-large .verenne-editorial-name {
-  font-size: clamp(1.8rem, 3vw, 2.8rem) !important;
+  font-size: clamp(2rem, 3.2vw, 3rem) !important;
 }
 
 .verenne-editorial-subtitle {
   font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   color: #554739 !important;
-  margin: 0.25rem 0 0.75rem 0 !important;
+  margin: 0.35rem 0 0.85rem 0 !important;
   line-height: 1.4 !important;
 }
 
@@ -4072,8 +4131,8 @@ body {
 
 .verenne-editorial-price {
   font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
-  font-size: 15px !important;
-  font-weight: 450 !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
   color: #1F1610 !important;
 }
 
@@ -4083,8 +4142,8 @@ body {
   border: none !important;
   padding: 0 !important;
   font-family: 'Hanken Grotesk', system-ui, sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 450 !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
   color: #1F1610 !important;
   text-decoration: underline !important;
   text-underline-offset: 5px !important;
@@ -4097,3 +4156,453 @@ body {
 .tone-light .verenne-editorial-add-btn:hover {
   color: #99481F !important;
 }
+
+/* ==========================================================================
+   FORMULATION DOSSIER MODAL — EXACT 1:1 REPLICA OF GITHUB (IMAGE 5)
+   Full-sheet modal, edge-to-edge media column, cursor pointer magnifier lens,
+   clear switcher buttons, high-contrast typography, and 3D flacon.
+   ========================================================================== */
+.verenne-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(0, 0, 0, 0.75) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  display: none !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+}
+
+.verenne-modal-overlay.active {
+  display: flex !important;
+}
+
+.verenne-modal-card {
+  position: absolute !important;
+  inset-x: 0 !important;
+  bottom: 0 !important;
+  top: 1.5rem !important;
+  left: 1.5rem !important;
+  right: 1.5rem !important;
+  max-width: 1300px !important;
+  margin: 0 auto !important;
+  background-color: #1A130E !important;
+  color: #EFE7DA !important;
+  border: 1px solid rgba(239, 231, 218, 0.28) !important;
+  border-bottom: none !important;
+  border-radius: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  overflow: hidden !important;
+  box-shadow: 0 -25px 60px rgba(0, 0, 0, 0.8) !important;
+}
+
+@media (min-width: 900px) {
+  .verenne-modal-card {
+    grid-template-columns: 1.1fr 1fr !important;
+  }
+}
+
+/* Left Media Column */
+.verenne-modal-media-col {
+  position: relative !important;
+  background-color: #241B14 !important;
+  height: 100% !important;
+  min-height: 380px !important;
+  overflow: hidden !important;
+}
+
+.verenne-modal-view-panel {
+  position: absolute !important;
+  inset: 0 !important;
+  display: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.verenne-modal-view-panel.active {
+  display: block !important;
+}
+
+.verenne-bottle-zoom-wrap {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: crosshair !important;
+  overflow: hidden !important;
+}
+
+#modal-bottle-img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+#modal-skin-img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Interactive Magnifying Glass (1:1 with GitHub Image 5) */
+.verenne-magnifier-lens {
+  position: absolute !important;
+  width: 180px !important;
+  height: 180px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid #FFFFFF !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85), inset 0 0 12px rgba(255, 255, 255, 0.25) !important;
+  transform: translate(-50%, -50%) !important;
+  pointer-events: none !important;
+  background-repeat: no-repeat !important;
+  z-index: 80 !important;
+  display: none;
+}
+
+/* View Switcher Pills (Bottle / On skin / View in 3D) */
+.verenne-view-switcher {
+  position: absolute !important;
+  bottom: 1.5rem !important;
+  left: 1.5rem !important;
+  display: flex !important;
+  gap: 0.5rem !important;
+  z-index: 90 !important;
+}
+
+.verenne-view-btn {
+  background: rgba(0, 0, 0, 0.65) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  padding: 8px 18px !important;
+  font-size: 12px !important;
+  font-family: 'Hanken Grotesk', monospace, sans-serif !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.verenne-view-btn:hover {
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: #FFFFFF !important;
+}
+
+.verenne-view-btn.active {
+  background: #EFE7DA !important;
+  color: #1A130E !important;
+  border-color: #EFE7DA !important;
+  font-weight: 600 !important;
+}
+
+/* Three.js Canvas Container */
+#verenne-view-3d {
+  position: absolute !important;
+  inset: 0 !important;
+  background: #1A130E !important;
+}
+
+#verenne-three-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  cursor: grab !important;
+}
+
+.verenne-3d-hint {
+  position: absolute !important;
+  top: 1.25rem !important;
+  left: 1.25rem !important;
+  font-family: 'Hanken Grotesk', monospace, sans-serif !important;
+  font-size: 11px !important;
+  color: #A39585 !important;
+  letter-spacing: 0.05em !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+}
+
+/* Right Dossier Info Column */
+.verenne-modal-info-col {
+  padding: 2.5rem 2rem !important;
+  background-color: #1A130E !important;
+  color: #EFE7DA !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+@media (min-width: 900px) {
+  .verenne-modal-info-col {
+    padding: 3rem 3rem !important;
+  }
+}
+
+.verenne-modal-close {
+  position: absolute !important;
+  top: 1.25rem !important;
+  right: 1.25rem !important;
+  z-index: 90 !important;
+  background: #EFE7DA !important;
+  color: #1A130E !important;
+  border: none !important;
+  padding: 8px 18px !important;
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  letter-spacing: 0.05em !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.verenne-modal-close:hover {
+  background: #FFFFFF !important;
+}
+
+.verenne-eyebrow-no {
+  font-family: 'Hanken Grotesk', monospace, sans-serif !important;
+  font-size: 13px !important;
+  color: #E0935F !important;
+  font-weight: 500 !important;
+}
+
+.verenne-eyebrow-cat {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 13px !important;
+  color: #A39585 !important;
+}
+
+.verenne-modal-title {
+  font-family: 'Bodoni Moda', 'Times New Roman', serif !important;
+  font-size: clamp(2.4rem, 4vw, 3.4rem) !important;
+  font-weight: 600 !important;
+  color: #EFE7DA !important;
+  line-height: 1.1 !important;
+  margin: 0.5rem 0 0.35rem 0 !important;
+}
+
+.verenne-modal-subtitle {
+  font-family: 'Bodoni Moda', serif !important;
+  font-style: italic !important;
+  font-size: 20px !important;
+  color: #C2B5A4 !important;
+  margin: 0 0 1rem 0 !important;
+}
+
+.verenne-modal-reviews {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #E0935F !important;
+  font-size: 14px !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.verenne-stars {
+  color: #E0935F !important;
+  font-size: 15px !important;
+}
+
+/* Specs Box (pH Balance & Finish) */
+.verenne-modal-specs-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 1rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.verenne-spec-box {
+  border: 1px solid rgba(239, 231, 218, 0.16) !important;
+  background: rgba(36, 27, 20, 0.45) !important;
+  padding: 14px 18px !important;
+  border-radius: 0 !important;
+}
+
+.verenne-spec-label {
+  font-family: 'Hanken Grotesk', monospace, sans-serif !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: #A39585 !important;
+  display: block !important;
+  margin-bottom: 4px !important;
+}
+
+#modal-ph {
+  color: #E0935F !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+#modal-finish {
+  color: #EFE7DA !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+.verenne-modal-desc {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+  color: #C2B5A4 !important;
+  margin: 0 0 2rem 0 !important;
+}
+
+/* Buy Box: Sizes & Price */
+.verenne-buy-box {
+  margin-bottom: 2rem !important;
+}
+
+.verenne-buy-box-top {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.verenne-size-pills {
+  display: flex !important;
+  gap: 0.5rem !important;
+}
+
+.verenne-size-btn {
+  background: transparent !important;
+  border: 1px solid rgba(239, 231, 218, 0.22) !important;
+  color: #A39585 !important;
+  padding: 8px 18px !important;
+  font-family: 'Hanken Grotesk', monospace, sans-serif !important;
+  font-size: 12px !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.verenne-size-btn.active {
+  border-color: #EFE7DA !important;
+  color: #EFE7DA !important;
+  background: rgba(239, 231, 218, 0.08) !important;
+}
+
+.verenne-buy-price {
+  font-family: 'Bodoni Moda', serif !important;
+  font-size: 38px !important;
+  font-weight: 600 !important;
+  color: #EFE7DA !important;
+}
+
+/* Buy Actions Row (Qty, Add to bag, Wishlist) */
+.verenne-buy-box-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.verenne-qty-stepper {
+  display: flex !important;
+  align-items: center !important;
+  border: 1px solid rgba(239, 231, 218, 0.22) !important;
+  height: 50px !important;
+  padding: 0 16px !important;
+  gap: 16px !important;
+  color: #EFE7DA !important;
+  font-size: 15px !important;
+  border-radius: 0 !important;
+}
+
+.verenne-qty-stepper button {
+  background: none !important;
+  border: none !important;
+  color: #EFE7DA !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  padding: 0 4px !important;
+}
+
+.verenne-btn-add-bag {
+  flex: 1 !important;
+  height: 50px !important;
+  background-color: #EFE7DA !important;
+  color: #1A130E !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.verenne-btn-add-bag:hover {
+  background-color: #FFFFFF !important;
+}
+
+.verenne-btn-wishlist {
+  width: 50px !important;
+  height: 50px !important;
+  border: 1px solid rgba(239, 231, 218, 0.22) !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: #EFE7DA !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  font-size: 20px !important;
+}
+
+.verenne-buy-guarantee {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 12px !important;
+  color: #A39585 !important;
+  margin: 0 !important;
+}
+
+/* Accordion & Dossier Specs */
+.verenne-dossier-details {
+  border-top: 1px solid rgba(239, 231, 218, 0.16) !important;
+  padding-top: 1.5rem !important;
+}
+
+.verenne-detail-item {
+  border-bottom: 1px solid rgba(239, 231, 218, 0.12) !important;
+  padding: 1rem 0 !important;
+}
+
+.verenne-detail-label {
+  font-family: 'Hanken Grotesk', monospace, sans-serif !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: #A39585 !important;
+  display: block !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.verenne-detail-val {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-size: 15px !important;
+  color: #EFE7DA !important;
+  margin: 0 !important;
+}
+
+.verenne-tag-pill {
+  display: inline-block !important;
+  border: 1px solid rgba(239, 231, 218, 0.18) !important;
+  padding: 4px 12px !important;
+  font-size: 13px !important;
+  color: #C2B5A4 !important;
+  margin: 4px 6px 4px 0 !important;
+}
+
