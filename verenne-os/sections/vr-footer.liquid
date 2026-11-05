@@ -131,12 +131,35 @@
       </div>
 
       <div class="flex items-center gap-3 text-[11px] font-mono">
-        <div class="flex items-center gap-1 rounded-none border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-3 py-1">
+        {%- comment -%}
+          Language and country selectors. Each shows its current value; a transparent native select on top
+          opens Shopify's list, and choosing an option submits the localization form (assets/vr-app.js).
+        {%- endcomment -%}
+        {%- form 'localization', id: 'FooterLocalization', class: 'flex items-center gap-1 rounded-none border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-3 py-1', data-vr-localization: '' -%}
           {% render 'vr-icon', name: 'globe', class: 'w-3 h-3 text-[var(--text-muted)]' %}
-          <button type="button" data-vr-lang class="hover:text-[var(--accent)] transition-colors cursor-pointer">EN</button>
+          <span class="relative hover:text-[var(--accent)] transition-colors">
+            {{ localization.language.iso_code | upcase }}
+            {%- if localization.available_languages.size > 1 -%}
+              <select name="language_code" class="absolute inset-0 cursor-pointer opacity-0" aria-label="Language">
+                {%- for language in localization.available_languages -%}
+                  <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+          </span>
           <span class="text-[var(--text-muted)]">/</span>
-          <button type="button" data-vr-currency class="hover:text-[var(--accent)] transition-colors cursor-pointer">USD ($)</button>
-        </div>
+          <span class="relative hover:text-[var(--accent)] transition-colors">
+            {{ localization.country.currency.iso_code }} ({{ localization.country.currency.symbol }})
+            {%- if localization.available_countries.size > 1 -%}
+              <select name="country_code" class="absolute inset-0 cursor-pointer opacity-0" aria-label="Country or region">
+                {%- for country in localization.available_countries -%}
+                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})</option>
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+          </span>
+          <noscript><button type="submit" class="ml-1 underline">Update</button></noscript>
+        {%- endform -%}
         <span class="text-[10px] text-[var(--text-muted)]">© {{ 'now' | date: '%Y' }} {{ section.settings.copyright | default: shop.name }}</span>
       </div>
     </div>

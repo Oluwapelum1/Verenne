@@ -100,3 +100,13 @@
 }
 .vr-field::placeholder { color: var(--text-muted); }
 .vr-field:focus { outline: none; border-color: var(--text-primary); }
+
+/* Customer account button: show the theme's own label in the header's text style */
+.vr-account::part(signed-out-avatar) {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}

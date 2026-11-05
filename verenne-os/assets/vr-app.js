@@ -695,14 +695,8 @@
   function initFooter() {
     const time = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' }).format(new Date());
     $$('[data-vr-grasse-time]').forEach((el) => (el.textContent = time));
-    const lang = $('[data-vr-lang]');
-    if (lang) lang.addEventListener('click', () => (lang.textContent = lang.textContent === 'EN' ? 'FR' : 'EN'));
-    const cur = $('[data-vr-currency]');
-    if (cur)
-      cur.addEventListener('click', () => {
-        const c = cur.textContent.split(' ')[0];
-        cur.textContent = `${c === 'USD' ? 'EUR' : c === 'EUR' ? 'GBP' : 'USD'} ($)`;
-      });
+    // Country and language: choosing an option submits Shopify's localization form
+    $$('form[data-vr-localization] select').forEach((sel) => sel.addEventListener('change', () => sel.form.submit()));
   }
 
   /* ------------------------------------------------------------------ */

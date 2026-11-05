@@ -47,8 +47,16 @@
         {%- endif -%}
       </ul>
 
-      <div class="flex items-center gap-5 sm:gap-7">
-        <button type="button" data-vr-bag-open class="text-[15px] transition-colors hover:text-[var(--accent)]" aria-label="Open bag, {{ cart.item_count }} items">
+      <div class="flex items-center gap-4 sm:gap-7">
+        {%- if shop.customer_accounts_enabled -%}
+          <shopify-account menu="{{ section.settings.customer_account_menu }}" class="vr-account flex items-center text-[15px]">
+            <span slot="signed-out-avatar" class="flex items-center transition-colors hover:text-[var(--accent)]">
+              {% render 'vr-icon', name: 'user', class: 'h-[18px] w-[18px] sm:hidden' %}
+              <span class="hidden sm:inline">{{ section.settings.account_label }}</span>
+            </span>
+          </shopify-account>
+        {%- endif -%}
+        <button type="button" data-vr-bag-open class="whitespace-nowrap text-[15px] transition-colors hover:text-[var(--accent)]" aria-label="Open bag, {{ cart.item_count }} items">
           Bag (<span data-vr-bag-count>{{ cart.item_count }}</span>)
         </button>
         <button
@@ -155,6 +163,8 @@
     { "type": "text", "id": "logo_text", "label": "Logo name", "info": "Leave blank to use the store name." },
     { "type": "text", "id": "tagline", "label": "Logo tagline", "default": "Paris · Grasse" },
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu", "info": "Links to sections on the home page, such as /#ritual, scroll smoothly." },
+    { "type": "text", "id": "account_label", "label": "Account label", "default": "Account" },
+    { "type": "link_list", "id": "customer_account_menu", "label": "Customer account menu", "default": "customer-account-main-menu" },
     { "type": "collection", "id": "index_collection", "label": "Menu product index", "info": "Products listed in the full-screen menu. Defaults to all products." },
     { "type": "text", "id": "navigate_label", "label": "Menu links heading", "default": "Navigate" },
     { "type": "text", "id": "index_label", "label": "Menu product index heading", "default": "Index — 16 formulations" },
