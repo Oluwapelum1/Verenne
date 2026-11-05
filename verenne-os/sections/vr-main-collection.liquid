@@ -1,0 +1,52 @@
+{%- comment -%} Collection page: the home page grid's heading and cards, with filtering, sorting and pagination. {%- endcomment -%}
+{%- paginate collection.products by section.settings.per_page -%}
+  <section class="tone-light px-5 pb-20 pt-[185px] sm:px-10 sm:pb-28 sm:pt-[217px]" aria-labelledby="collection-title-{{ section.id }}">
+    <div class="mx-auto max-w-[1600px]">
+      <div class="border-b border-[var(--border-strong)] pb-6">
+        <h1 id="collection-title-{{ section.id }}" class="font-serif text-[clamp(2.6rem,5.5vw,5.4rem)] leading-none tracking-[-0.02em]">{{ collection.title }}</h1>
+        {%- if collection.description != blank and section.settings.show_description -%}
+          <div class="mt-4 max-w-xl text-[16px] text-[var(--text-secondary)]">{{ collection.description }}</div>
+        {%- endif -%}
+        {%- if section.settings.show_filters -%}
+          {% render 'vr-facets', results: collection, url: collection.url %}
+        {%- endif -%}
+      </div>
+
+      {%- if collection.products.size > 0 -%}
+        <ul class="mt-10 grid grid-cols-2 gap-x-4 gap-y-12 lg:grid-cols-4 lg:gap-x-6">
+          {%- for product in collection.products -%}
+            {%- if forloop.index <= 4 -%}{%- assign eager = true -%}{%- else -%}{%- assign eager = false -%}{%- endif -%}
+            {% render 'vr-product-card', product: product, eager: eager %}
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <div class="py-24 text-center">
+          <p class="font-serif text-3xl">No products found.</p>
+          <p class="mt-2 text-[14px] text-[var(--text-secondary)]">Try removing a filter.</p>
+        </div>
+      {%- endif -%}
+
+      {% render 'vr-pagination', paginate: paginate %}
+    </div>
+  </section>
+
+  <script type="application/json" data-vr-products>
+    [
+      {%- for product in collection.products -%}
+        {% render 'vr-product-json', product: product, index: forloop.index %}{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  </script>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Product grid",
+  "class": "vr-section-main-collection",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 24 },
+    { "type": "checkbox", "id": "show_description", "label": "Show collection description", "default": true },
+    { "type": "checkbox", "id": "show_filters", "label": "Show filtering and sorting", "info": "Choose filters in the Search & Discovery app.", "default": true }
+  ]
+}
+{% endschema %}

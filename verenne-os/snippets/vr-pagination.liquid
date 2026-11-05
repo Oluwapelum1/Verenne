@@ -1,0 +1,24 @@
+{%- doc -%}
+  Page links in the theme's underline style.
+
+  @param {object} paginate - The paginate object
+{%- enddoc -%}
+{%- if paginate.pages > 1 -%}
+  <nav class="mt-16 flex items-center justify-center gap-6 text-[15px]" aria-label="Pagination">
+    {%- if paginate.previous -%}
+      <a href="{{ paginate.previous.url }}" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">Previous</a>
+    {%- endif -%}
+    {%- for part in paginate.parts -%}
+      {%- if part.is_link -%}
+        <a href="{{ part.url }}" class="font-mono text-[13px] text-[var(--text-secondary)] hover:text-[var(--accent)]">{{ part.title }}</a>
+      {%- elsif part.title == paginate.current_page -%}
+        <span class="font-mono text-[13px] underline decoration-1 underline-offset-[6px]" aria-current="page">{{ part.title }}</span>
+      {%- else -%}
+        <span class="font-mono text-[13px] text-[var(--text-muted)]">{{ part.title }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if paginate.next -%}
+      <a href="{{ paginate.next.url }}" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">Next</a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

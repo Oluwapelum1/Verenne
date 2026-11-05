@@ -105,6 +105,25 @@
           {%- endfor -%}
         {%- endif -%}
       </ul>
+      {%- if section.settings.show_search -%}
+        <form action="{{ routes.search_url }}" method="get" role="search" class="relative mt-12 max-w-sm" data-vr-predictive>
+          <label for="menu-search-{{ section.id }}" class="label mb-2 block">{{ section.settings.search_label }}</label>
+          <input
+            id="menu-search-{{ section.id }}"
+            type="search"
+            name="q"
+            placeholder="{{ section.settings.search_placeholder | escape }}"
+            autocomplete="off"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="menu-predictive-{{ section.id }}"
+            class="w-full border-b border-[var(--border-strong)] bg-transparent py-2 text-[17px] placeholder:text-[var(--text-muted)] focus:border-[var(--text-primary)] focus:outline-none [&::-webkit-search-cancel-button]:appearance-none"
+            data-vr-predictive-input
+          >
+          <input type="hidden" name="options[prefix]" value="last">
+          <div id="menu-predictive-{{ section.id }}" class="absolute inset-x-0 top-full z-40 mt-2" data-vr-predictive-results hidden></div>
+        </form>
+      {%- endif -%}
     </div>
 
     <div class="lg:col-span-5">
@@ -138,7 +157,10 @@
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu", "info": "Links to sections on the home page, such as /#ritual, scroll smoothly." },
     { "type": "collection", "id": "index_collection", "label": "Menu product index", "info": "Products listed in the full-screen menu. Defaults to all products." },
     { "type": "text", "id": "navigate_label", "label": "Menu links heading", "default": "Navigate" },
-    { "type": "text", "id": "index_label", "label": "Menu product index heading", "default": "Index — 16 formulations" }
+    { "type": "text", "id": "index_label", "label": "Menu product index heading", "default": "Index — 16 formulations" },
+    { "type": "checkbox", "id": "show_search", "label": "Show search in menu", "default": true },
+    { "type": "text", "id": "search_label", "label": "Search heading", "default": "Search" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search the collection" }
   ]
 }
 {% endschema %}

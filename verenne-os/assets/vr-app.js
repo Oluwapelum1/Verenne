@@ -1528,6 +1528,81 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Collection and search pages                                         */
+  /* ------------------------------------------------------------------ */
+  // "Add to bag" on product cards outside the home page grid
+  function initCards() {
+    document.addEventListener('click', (e) => {
+      const add = e.target.closest('[data-vr-add]');
+      if (!add || add.closest('[data-vr-grid]')) return;
+      const p = PRODUCTS.find((x) => x.id === add.dataset.vrAdd);
+      if (p) addToCart(p, p.sizes[0], 1, add.getBoundingClientRect());
+    });
+  }
+
+  // Filters and sorting apply as soon as they change
+  function initFacets() {
+    $$('form[data-vr-facets]').forEach((form) => {
+      let timer = null;
+      const submit = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          // Leave empty price fields out of the URL
+          $$('input[type="number"]', form).forEach((i) => (i.disabled = i.value === ''));
+          form.requestSubmit ? form.requestSubmit() : form.submit();
+        }, 450);
+      };
+      form.addEventListener('change', submit);
+      // One filter panel open at a time; close on outside click
+      $$('details[data-vr-filter]', form).forEach((d) =>
+        d.addEventListener('toggle', () => {
+          if (d.open) $$('details[data-vr-filter]', form).forEach((o) => o !== d && (o.open = false));
+        })
+      );
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('details[data-vr-filter]')) $$('details[data-vr-filter]', form).forEach((d) => (d.open = false));
+      });
+    });
+  }
+
+  // Predictive search under any form marked data-vr-predictive
+  function initPredictive() {
+    $$('form[data-vr-predictive]').forEach((form) => {
+      const input = $('[data-vr-predictive-input]', form);
+      const box = $('[data-vr-predictive-results]', form);
+      if (!input || !box) return;
+      let timer = null;
+      let controller = null;
+      const close = () => {
+        box.hidden = true;
+        input.setAttribute('aria-expanded', 'false');
+      };
+      input.addEventListener('input', () => {
+        clearTimeout(timer);
+        const q = input.value.trim();
+        if (q.length < 2) return close();
+        timer = setTimeout(() => {
+          if (controller) controller.abort();
+          controller = new AbortController();
+          const url = `${ROUTES.predictiveSearch || '/search/suggest'}?q=${encodeURIComponent(q)}&resources[type]=product,query,collection,page,article&resources[limit]=4&resources[options][unavailable_products]=last&section_id=vr-predictive-search`;
+          fetch(url, { signal: controller.signal })
+            .then((r) => r.text())
+            .then((t) => {
+              const doc = new DOMParser().parseFromString(t, 'text/html');
+              const fresh = doc.querySelector('#shopify-section-vr-predictive-search') || doc.body;
+              box.innerHTML = fresh.innerHTML;
+              box.hidden = !box.textContent.trim();
+              input.setAttribute('aria-expanded', String(!box.hidden));
+            })
+            .catch(() => {});
+        }, 220);
+      });
+      input.addEventListener('keydown', (e) => e.key === 'Escape' && close());
+      document.addEventListener('click', (e) => !form.contains(e.target) && close());
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Boot                                                                */
   /* ------------------------------------------------------------------ */
   function syncBag() {
@@ -1551,6 +1626,9 @@
   initRitual();
   initFooter();
   initProductPage();
+  initCards();
+  initFacets();
+  initPredictive();
   initRecommendations();
   syncBag();
 

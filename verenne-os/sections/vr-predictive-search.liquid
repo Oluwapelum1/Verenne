@@ -1,0 +1,64 @@
+{%- comment -%}
+  Predictive search results, rendered by the predictive search endpoint and inserted by assets/vr-app.js
+  under any form marked data-vr-predictive.
+{%- endcomment -%}
+{%- if predictive_search.performed -%}
+  <div class="border border-[var(--border-strong)] bg-[var(--bg-primary)] p-5 shadow-2xl" data-lenis-prevent>
+    {%- liquid
+      assign products = predictive_search.resources.products
+      assign queries = predictive_search.resources.queries
+      assign collections = predictive_search.resources.collections
+      assign pages = predictive_search.resources.pages
+      assign articles = predictive_search.resources.articles
+      assign total = products.size | plus: queries.size | plus: collections.size | plus: pages.size | plus: articles.size
+    -%}
+    {%- if total > 0 -%}
+      {%- if queries.size > 0 -%}
+        <p class="label">Suggestions</p>
+        <ul class="mt-2 mb-5 flex flex-wrap gap-2" role="listbox">
+          {%- for q in queries -%}
+            <li role="option"><a href="{{ q.url }}" class="rounded-none border border-[var(--border-subtle)] px-3 py-1 text-[13px] hover:border-[var(--border-strong)]">{{ q.styled_text }}</a></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if products.size > 0 -%}
+        <p class="label">Products</p>
+        <ul class="mt-2 space-y-1" role="listbox">
+          {%- for product in products -%}
+            {%- assign first_word = product.title | split: ' ' | first -%}
+            <li role="option">
+              <a href="{{ product.url }}" class="group flex items-center gap-3 py-2">
+                {%- if product.featured_image -%}
+                  {{ product.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', class: 'h-14 w-12 shrink-0 object-cover', alt: product.title }}
+                {%- endif -%}
+                <span class="flex-1">
+                  <span class="block font-serif text-xl leading-tight group-hover:italic">{% if first_word contains 'N°' %}{{ product.title | remove_first: first_word | strip }}{% else %}{{ product.title }}{% endif %}</span>
+                  <span class="font-mono text-[11px] text-[var(--text-muted)]">{{ product.price | money_without_trailing_zeros }}</span>
+                </span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- assign others = collections | concat: pages | concat: articles -%}
+      {%- if others.size > 0 -%}
+        <p class="label mt-4">Pages</p>
+        <ul class="mt-2 space-y-1" role="listbox">
+          {%- for item in others -%}
+            <li role="option"><a href="{{ item.url }}" class="block py-1 text-[15px] hover:text-[var(--accent)]">{{ item.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&options%5Bprefix%5D=last" class="mt-5 inline-block text-[14px] underline decoration-1 underline-offset-[5px] hover:text-[var(--accent)]">See all results for “{{ predictive_search.terms }}”</a>
+    {%- else -%}
+      <p class="text-[14px] text-[var(--text-secondary)]">No results for “{{ predictive_search.terms }}”.</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Predictive search",
+  "settings": []
+}
+{% endschema %}
