@@ -5,8 +5,8 @@
       <div class="flex flex-col justify-between gap-6 border-b border-[var(--border-strong)] pb-6 lg:flex-row lg:items-end">
         <h1 id="blog-title-{{ section.id }}" class="font-serif text-[clamp(2.6rem,5.5vw,5.4rem)] leading-none tracking-[-0.02em]">{{ blog.title }}</h1>
         {%- if blog.all_tags.size > 0 and section.settings.show_tags -%}
-          <div class="flex flex-wrap gap-x-6 gap-y-2" role="group" aria-label="Filter by topic">
-            <a href="{{ blog.url }}" class="py-1 text-[15px] underline-offset-[6px] transition-colors hover:text-[var(--accent)] {% if current_tags == blank %}underline decoration-1{% else %}text-[var(--text-secondary)]{% endif %}">All</a>
+          <div class="flex flex-wrap gap-x-6 gap-y-2" role="group" aria-label="{{ 'vr.blog.topics' | t }}">
+            <a href="{{ blog.url }}" class="py-1 text-[15px] underline-offset-[6px] transition-colors hover:text-[var(--accent)] {% if current_tags == blank %}underline decoration-1{% else %}text-[var(--text-secondary)]{% endif %}">{{ 'vr.blog.all' | t }}</a>
             {%- for tag in blog.all_tags -%}
               <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="py-1 text-[15px] underline-offset-[6px] transition-colors hover:text-[var(--accent)] {% if current_tags contains tag %}underline decoration-1{% else %}text-[var(--text-secondary)]{% endif %}">{{ tag }}</a>
             {%- endfor -%}
@@ -18,7 +18,7 @@
         {%- for article in blog.articles -%}
           {% render 'vr-article-card', article: article, eager: forloop.first %}
         {%- else -%}
-          <li class="py-24 text-center sm:col-span-2 lg:col-span-3"><p class="font-serif text-3xl">No articles yet.</p></li>
+          <li class="py-24 text-center sm:col-span-2 lg:col-span-3"><p class="font-serif text-3xl">{{ 'vr.blog.empty' | t }}</p></li>
         {%- endfor -%}
       </ul>
 

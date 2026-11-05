@@ -30,6 +30,7 @@ export function admin(store) {
 
 // Storefront details stored on each product as the `verenne.details` JSON metafield
 export function productDetails(p) {
-  const { subtitle, latin, texture, notes, keyIngredients, benefits, howToUse, ph, finish, glow, glass, moment, rating, reviewsCount, synergy, description, tint } = p;
-  return { subtitle, latin, texture, notes, keyIngredients, benefits, howToUse, ph, finish, glow, glass, moment, rating, reviewsCount, synergy, description, tint };
+  // Ratings belong in Shopify's standard reviews metafields, written by a reviews app, not here
+  const { subtitle, latin, texture, notes, keyIngredients, benefits, howToUse, ph, finish, glow, glass, moment, synergy, description, tint } = p;
+  return { subtitle, latin, texture, notes, keyIngredients, benefits, howToUse, ph, finish, glow, glass, moment, synergy, description, tint };
 }

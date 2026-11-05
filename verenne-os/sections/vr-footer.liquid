@@ -30,7 +30,7 @@
               type="email"
               name="contact[email]"
               required
-              placeholder="Enter your email address..."
+              placeholder="{{ 'vr.form.email_placeholder' | t }}"
               {% if subscribed %}disabled{% endif %}
               class="w-full h-13 px-5 rounded-none border border-[var(--border-strong)] bg-[var(--bg-secondary)]/60 text-[14px] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--text-primary)] transition-colors"
             >
@@ -41,15 +41,15 @@
           >
             {%- if subscribed -%}
               {% render 'vr-icon', name: 'check', class: 'w-4 h-4 text-emerald-600' %}
-              <span>Subscribed</span>
+              <span>{{ 'vr.form.subscribed' | t }}</span>
             {%- else -%}
-              <span>Subscribe</span>
+              <span>{{ 'vr.form.subscribe' | t }}</span>
               {% render 'vr-icon', name: 'arrow-right', class: 'w-3.5 h-3.5' %}
             {%- endif -%}
           </button>
         {%- endform -%}
         <p class="mt-3 text-[11px] font-mono text-[var(--text-muted)] lg:text-right" data-vr-newsletter-note>
-          {%- if subscribed -%}Welcome to the Maison circle. Your confirmation is in flight.{%- else -%}Strict zero-spam policy. Unsubscribe at any time with a single tap.{%- endif -%}
+          {%- if subscribed -%}{{ 'vr.form.newsletter_success' | t }}{%- else -%}{{ 'vr.form.newsletter_note' | t }}{%- endif -%}
         </p>
       </div>
     </div>
@@ -140,7 +140,7 @@
           <span class="relative hover:text-[var(--accent)] transition-colors">
             {{ localization.language.iso_code | upcase }}
             {%- if localization.available_languages.size > 1 -%}
-              <select name="language_code" class="absolute inset-0 cursor-pointer opacity-0" aria-label="Language">
+              <select name="language_code" class="absolute inset-0 cursor-pointer opacity-0" aria-label="{{ 'vr.general.language' | t }}">
                 {%- for language in localization.available_languages -%}
                   <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
                 {%- endfor -%}
@@ -151,14 +151,14 @@
           <span class="relative hover:text-[var(--accent)] transition-colors">
             {{ localization.country.currency.iso_code }} ({{ localization.country.currency.symbol }})
             {%- if localization.available_countries.size > 1 -%}
-              <select name="country_code" class="absolute inset-0 cursor-pointer opacity-0" aria-label="Country or region">
+              <select name="country_code" class="absolute inset-0 cursor-pointer opacity-0" aria-label="{{ 'vr.general.country' | t }}">
                 {%- for country in localization.available_countries -%}
                   <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})</option>
                 {%- endfor -%}
               </select>
             {%- endif -%}
           </span>
-          <noscript><button type="submit" class="ml-1 underline">Update</button></noscript>
+          <noscript><button type="submit" class="ml-1 underline">{{ 'vr.general.update' | t }}</button></noscript>
         {%- endform -%}
         <span class="text-[10px] text-[var(--text-muted)]">© {{ 'now' | date: '%Y' }} {{ section.settings.copyright | default: shop.name }}</span>
       </div>

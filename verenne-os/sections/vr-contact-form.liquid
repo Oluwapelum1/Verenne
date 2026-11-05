@@ -18,11 +18,11 @@
         {%- endif -%}
         {%- if form.errors -%}<div class="text-[13px] text-red-700" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
         <div class="grid gap-3 sm:grid-cols-2">
-          <label class="block"><span class="sr-only">Name</span><input class="vr-field" type="text" name="contact[name]" placeholder="Name" value="{{ form.name }}" autocomplete="name"></label>
-          <label class="block"><span class="sr-only">Email</span><input class="vr-field" type="email" name="contact[email]" placeholder="Email" value="{{ form.email }}" required autocomplete="email"></label>
+          <label class="block"><span class="sr-only">{{ 'vr.form.name' | t }}</span><input class="vr-field" type="text" name="contact[name]" placeholder="{{ 'vr.form.name' | t }}" value="{{ form.name }}" autocomplete="name"></label>
+          <label class="block"><span class="sr-only">{{ 'vr.form.email' | t }}</span><input class="vr-field" type="email" name="contact[email]" placeholder="{{ 'vr.form.email' | t }}" value="{{ form.email }}" required autocomplete="email"></label>
         </div>
-        <label class="block"><span class="sr-only">Phone</span><input class="vr-field" type="tel" name="contact[phone]" placeholder="Phone (optional)" value="{{ form.phone }}" autocomplete="tel"></label>
-        <label class="block"><span class="sr-only">Message</span><textarea class="vr-field" name="contact[body]" rows="6" placeholder="Message" required>{{ form.body }}</textarea></label>
+        <label class="block"><span class="sr-only">{{ 'vr.form.phone' | t }}</span><input class="vr-field" type="tel" name="contact[phone]" placeholder="{{ 'vr.form.phone' | t }}" value="{{ form.phone }}" autocomplete="tel"></label>
+        <label class="block"><span class="sr-only">{{ 'vr.form.message' | t }}</span><textarea class="vr-field" name="contact[body]" rows="6" placeholder="{{ 'vr.form.message' | t }}" required>{{ form.body }}</textarea></label>
         <button type="submit" class="flex h-13 items-center justify-center gap-2 px-8 rounded-none bg-[var(--text-primary)] text-[var(--accent-ink)] font-mono text-[11px] uppercase tracking-widest font-semibold transition-all hover:bg-[var(--accent)] hover:text-black">
           {{ section.settings.button }} {% render 'vr-icon', name: 'arrow-right', class: 'w-3.5 h-3.5' %}
         </button>

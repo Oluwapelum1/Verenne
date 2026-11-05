@@ -25,6 +25,9 @@
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const CUR = window.VR_CURRENCY || '$';
+  // Shopper-facing text comes from the theme's locale files (snippets/vr-strings.liquid)
+  const STRINGS = window.VR_STRINGS || {};
+  const t = (key, vars = {}) => Object.keys(vars).reduce((str, k) => str.split(`[${k}]`).join(vars[k]), STRINGS[key] || key);
   const ROUTES = window.VR_ROUTES || { cart: '/cart', cartAdd: '/cart/add', cartChange: '/cart/change', cartUpdate: '/cart/update', root: '/' };
 
   // Optional product details live in the `verenne.details` metafield; defaults keep every view intact without it
@@ -41,6 +44,8 @@
       benefits: d.benefits || [],
       glow: d.glow || '#E0935F',
       glass: d.glass || DEFAULT_GLASS,
+      rating: raw.rating,
+      reviewsCount: raw.reviewsCount,
       sizes: raw.sizes && raw.sizes.length ? raw.sizes.map((x) => ({ ...x, size: x.size || 'Standard' })) : [{ size: 'Standard', price: raw.price }]
     };
   };
@@ -170,13 +175,6 @@
   /* ------------------------------------------------------------------ */
   const store = {
     cart: [],
-    wishlist: (() => {
-      try {
-        return JSON.parse(localStorage.getItem('verenne-wishlist')) || [];
-      } catch (e) {
-        return [];
-      }
-    })(),
     promoApplied: false,
     promoError: '',
     listeners: [],
@@ -189,9 +187,6 @@
       this.listeners.push(fn);
     },
     emit() {
-      try {
-        localStorage.setItem('verenne-wishlist', JSON.stringify(this.wishlist));
-      } catch (e) {}
       this.listeners.forEach((fn) => fn());
     },
     // Mirrors a /cart.js response into the shape the bag renders
@@ -237,10 +232,10 @@
     if (!selected.variantId) return;
     cartRequest(ROUTES.cartAdd, { items: [{ id: selected.variantId, quantity }] })
       .then(() => {
-        toast(`${product.fullName || product.name}${selected.size && selected.size !== 'Standard' ? ` · ${selected.size}` : ''} — added`);
+        toast(t('toast.added', { product: `${product.fullName || product.name}${selected.size && selected.size !== 'Standard' ? ` · ${selected.size}` : ''}` }));
         return refreshCart();
       })
-      .catch((e) => toast((e && e.description) || 'This item is unavailable'));
+      .catch((e) => toast((e && e.description) || t('toast.unavailable')));
   }
 
   function updateQuantity(cartItemId, delta) {
@@ -259,21 +254,14 @@
     cartRequest(ROUTES.cartUpdate, { discount: clean })
       .then((c) => {
         const match = (c.discount_codes || []).find((d) => d.code.toUpperCase() === clean.toUpperCase());
-        store.promoError = match && match.applicable ? '' : 'This code can\u2019t be applied to your bag.';
+        store.promoError = match && match.applicable ? '' : t('bag.code_invalid');
         store.load(c);
-        if (!store.promoError) toast(`${clean.toUpperCase()} applied`);
+        if (!store.promoError) toast(t('toast.code_applied', { code: clean.toUpperCase() }));
       })
       .catch(() => {
-        store.promoError = 'This code can\u2019t be applied to your bag.';
+        store.promoError = t('bag.code_invalid');
         store.emit();
       });
-  }
-
-  function toggleWishlist(id) {
-    const exists = store.wishlist.includes(id);
-    store.wishlist = exists ? store.wishlist.filter((w) => w !== id) : [...store.wishlist, id];
-    toast(exists ? 'Removed from wishlist' : 'Saved to botanical wishlist');
-    store.emit();
   }
 
   /* ------------------------------------------------------------------ */
@@ -388,7 +376,7 @@
     menuOpen = open;
     const toggle = $('[data-vr-menu-toggle]');
     toggle.setAttribute('aria-expanded', String(open));
-    $('[data-vr-menu-label]').textContent = open ? 'Close' : 'Menu';
+    $('[data-vr-menu-label]').textContent = open ? t('general.close') : t('general.menu');
     const a = $('[data-vr-burger="a"]');
     const b = $('[data-vr-burger="b"]');
     a.classList.toggle('top-0', !open);
@@ -438,8 +426,6 @@
   /* ------------------------------------------------------------------ */
   function initHero() {
     $$('[data-vr-enter]').forEach((el) => animate(el, [{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 900 }));
-    const from = Math.min(...PRODUCTS.map((p) => p.price));
-    $$('[data-vr-from-price] .z-10').forEach((el) => (el.textContent = `Shop from ${CUR}${from}`));
   }
 
   /* ------------------------------------------------------------------ */
@@ -469,7 +455,7 @@
         const large = editorial && i % 5 === 0;
         const right = large && i % 10 === 5;
         return `<li class="flex flex-col ${large ? 'col-span-2 lg:row-span-2' : ''} ${right ? 'lg:col-start-3' : ''}">
-          <button type="button" data-vr-open="${p.id}" class="group flex flex-1 flex-col text-left" aria-label="View ${esc(p.fullName)}">
+          <button type="button" data-vr-open="${p.id}" class="group flex flex-1 flex-col text-left" aria-label="${esc(t('product.view_named', { product: p.fullName }))}">
             <span class="relative block overflow-hidden bg-[var(--bg-secondary)] ${large ? 'aspect-[4/5] lg:aspect-auto lg:min-h-0 lg:flex-1' : 'aspect-[4/5]'}">
               ${productImage(p, {
                 sizes: large ? '(max-width: 1024px) 100vw, 50vw' : '(max-width: 1024px) 50vw, 25vw',
@@ -481,7 +467,7 @@
           </button>
           <div class="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <span class="text-[15px] tabular-nums">${CUR}${p.price}</span>
-            <button type="button" data-vr-add="${p.id}" class="text-[14px] underline decoration-1 underline-offset-[5px] hover:text-[var(--accent)]" aria-label="Add ${esc(p.name)} to bag">Add to bag</button>
+            <button type="button" data-vr-add="${p.id}" class="text-[14px] underline decoration-1 underline-offset-[5px] hover:text-[var(--accent)]" aria-label="${esc(t('product.add_named', { product: p.name }))}">${esc(t('product.add'))}</button>
           </div>
         </li>`;
       })
@@ -709,7 +695,7 @@
     if (cart || !cartRoot) return;
     lockScroll(true);
     const el = html(
-      `<div class="fixed inset-0 z-[170]" role="dialog" aria-modal="true" aria-label="Shopping bag"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-backdrop></div><aside class="absolute bottom-2 right-2 top-2 flex w-[calc(100%-1rem)] max-w-md flex-col overflow-hidden rounded-none border border-[var(--border-strong)] bg-[var(--bg-primary)]"></aside></div>`
+      `<div class="fixed inset-0 z-[170]" role="dialog" aria-modal="true" aria-label="${esc(t('bag.label'))}"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-backdrop></div><aside class="absolute bottom-2 right-2 top-2 flex w-[calc(100%-1rem)] max-w-md flex-col overflow-hidden rounded-none border border-[var(--border-strong)] bg-[var(--bg-primary)]"></aside></div>`
     );
     cartRoot.appendChild(el);
     cart = { el, step: 'cart', code: '', pct: 0, shown: new Set(store.cart.map((i) => i.cartItemId)), checkoutError: '' };
@@ -736,45 +722,43 @@
     const need = Math.max(0, store.shippingThreshold - store.subtotal);
     let body = '';
 
-    if (cart.step === 'done') {
-      body = `<div class="flex flex-1 flex-col items-center justify-center p-8 text-center"><span class="grid h-16 w-16 place-items-center rounded-full bg-[var(--accent)] text-[var(--accent-ink)]">${icon('check', 'h-7 w-7')}</span><h3 class="mt-6 font-serif text-4xl">Thank you.</h3><p class="mt-3 max-w-xs text-[14px] text-[var(--text-secondary)]">Your ritual is being packed by hand in Grasse. Tracking will follow by email.</p>${pillButton('Back to Verenne', { className: 'mt-8', attrs: 'data-close' })}</div>`;
-    } else if (cart.step === 'processing') {
-      body = `<div class="flex flex-1 flex-col items-center justify-center gap-4"><span class="h-10 w-10 animate-spin rounded-full border border-[var(--text-primary)] border-t-transparent motion-reduce:animate-none"></span><p class="label">Securing your order</p></div>`;
+    if (cart.step === 'processing') {
+      body = `<div class="flex flex-1 flex-col items-center justify-center gap-4"><span class="h-10 w-10 animate-spin rounded-full border border-[var(--text-primary)] border-t-transparent motion-reduce:animate-none"></span><p class="label">${esc(t('bag.processing'))}</p></div>`;
     } else {
       const meter = items.length
-        ? `<div class="border-b border-[var(--border-subtle)] px-6 py-4"><p class="text-[13px] text-[var(--text-secondary)]">${need > 0 ? `${CUR}${need} away from free delivery` : 'Free delivery unlocked'}</p><div class="mt-2 h-px bg-[var(--border-strong)]"><div class="h-px bg-[var(--accent)]" data-meter style="width: ${cart.pct}%"></div></div></div>`
+        ? `<div class="border-b border-[var(--border-subtle)] px-6 py-4"><p class="text-[13px] text-[var(--text-secondary)]">${esc(need > 0 ? t('bag.meter_need', { amount: `${CUR}${Math.round(need * 100) / 100}` }) : t('bag.meter_done'))}</p><div class="mt-2 h-px bg-[var(--border-strong)]"><div class="h-px bg-[var(--accent)]" data-meter style="width: ${cart.pct}%"></div></div></div>`
         : '';
       const list = items.length
         ? `<ul class="space-y-5">${items
             .map(
               (item) =>
-                `<li class="flex gap-4" data-id="${esc(item.cartItemId)}"><img src="${item.image}" alt="${esc(item.name)}" class="h-24 w-20 shrink-0 rounded-none object-cover"><div class="flex flex-1 flex-col justify-between"><div class="flex justify-between gap-3"><div><p class="font-serif text-xl leading-tight">${esc(item.name)}</p><p class="label mt-1">${esc(item.size)}</p></div><p class="font-mono text-[13px] tabular-nums">${CUR}${item.price * item.quantity}</p></div><div class="flex items-center justify-between"><div class="flex items-center rounded-full border border-[var(--border-subtle)]"><button type="button" data-qty="-1" class="grid h-8 w-8 place-items-center" aria-label="Decrease quantity">${icon('minus', 'h-3 w-3')}</button><span class="w-5 text-center font-mono text-[12px]">${item.quantity}</span><button type="button" data-qty="1" class="grid h-8 w-8 place-items-center" aria-label="Increase quantity">${icon('plus', 'h-3 w-3')}</button></div><button type="button" data-remove class="label underline-offset-4 hover:text-[var(--text-primary)] hover:underline">Remove</button></div></div></li>`
+                `<li class="flex gap-4" data-id="${esc(item.cartItemId)}"><img src="${item.image}" alt="${esc(item.name)}" class="h-24 w-20 shrink-0 rounded-none object-cover"><div class="flex flex-1 flex-col justify-between"><div class="flex justify-between gap-3"><div><p class="font-serif text-xl leading-tight">${esc(item.name)}</p><p class="label mt-1">${esc(item.size)}</p></div><p class="font-mono text-[13px] tabular-nums">${CUR}${item.price * item.quantity}</p></div><div class="flex items-center justify-between"><div class="flex items-center rounded-full border border-[var(--border-subtle)]"><button type="button" data-qty="-1" class="grid h-8 w-8 place-items-center" aria-label="${esc(t('general.decrease'))}">${icon('minus', 'h-3 w-3')}</button><span class="w-5 text-center font-mono text-[12px]">${item.quantity}</span><button type="button" data-qty="1" class="grid h-8 w-8 place-items-center" aria-label="${esc(t('general.increase'))}">${icon('plus', 'h-3 w-3')}</button></div><button type="button" data-remove class="label underline-offset-4 hover:text-[var(--text-primary)] hover:underline">${esc(t('bag.remove'))}</button></div></div></li>`
             )
             .join('')}</ul>`
-        : `<div class="flex h-full flex-col items-center justify-center text-center"><p class="font-serif text-3xl">Your bag is empty.</p><p class="mt-2 text-[14px] text-[var(--text-secondary)]">Sixteen formulations are waiting.</p>${pillButton(`Explore ${icon('arrow-right', 'h-3.5 w-3.5')}`, { className: 'mt-6', attrs: 'data-close' })}</div>`;
+        : `<div class="flex h-full flex-col items-center justify-center text-center"><p class="font-serif text-3xl">${esc(t('bag.empty'))}</p><p class="mt-2 text-[14px] text-[var(--text-secondary)]">${esc(t('bag.empty_text'))}</p>${pillButton(`${esc(t('bag.explore'))} ${icon('arrow-right', 'h-3.5 w-3.5')}`, { className: 'mt-6', attrs: 'data-close' })}</div>`;
       const suggestions =
         items.length && store.suggestions.length
-          ? `<div class="mt-10"><p class="label">Complete the ritual</p><div class="mt-3 space-y-2">${store.suggestions
+          ? `<div class="mt-10"><p class="label">${esc(t('bag.suggestions'))}</p><div class="mt-3 space-y-2">${store.suggestions
               .map(
                 (p) =>
-                  `<div class="flex items-center gap-3 rounded-none border border-[var(--border-subtle)] p-2"><img src="${imgUrl(p, '320')}" alt="${esc(p.name)}" class="h-12 w-10 rounded-none object-cover"><div class="flex-1"><p class="font-serif text-lg leading-none">${esc(p.name)}</p><p class="font-mono text-[11px] text-[var(--text-muted)]">${CUR}${p.price}</p></div><button type="button" data-suggest="${p.id}" class="mr-1 rounded-none border border-[var(--border-strong)] px-3 py-1.5 text-[11px] transition-colors hover:bg-[var(--text-primary)] hover:text-[var(--accent-ink)]">+ Add</button></div>`
+                  `<div class="flex items-center gap-3 rounded-none border border-[var(--border-subtle)] p-2"><img src="${imgUrl(p, '320')}" alt="${esc(p.name)}" class="h-12 w-10 rounded-none object-cover"><div class="flex-1"><p class="font-serif text-lg leading-none">${esc(p.name)}</p><p class="font-mono text-[11px] text-[var(--text-muted)]">${CUR}${p.price}</p></div><button type="button" data-suggest="${p.id}" class="mr-1 rounded-none border border-[var(--border-strong)] px-3 py-1.5 text-[11px] transition-colors hover:bg-[var(--text-primary)] hover:text-[var(--accent-ink)]">${esc(t('bag.add_suggestion'))}</button></div>`
               )
               .join('')}</div></div>`
           : '';
       const footer = items.length
-        ? `<footer class="space-y-4 border-t border-[var(--border-subtle)] p-6"><form class="flex gap-2" data-promo><label for="promo" class="sr-only">Promo code</label><input id="promo" value="${esc(cart.code)}" placeholder="Promo code — try BOTANICAL15" class="flex-1 rounded-none border border-[var(--border-subtle)] bg-transparent px-4 py-2.5 text-[13px] uppercase placeholder:normal-case placeholder:text-[var(--text-muted)] focus:border-[var(--border-strong)] focus:outline-none"><button type="submit" class="rounded-none border border-[var(--border-strong)] px-4 text-[12px]">Apply</button></form>${
+        ? `<footer class="space-y-4 border-t border-[var(--border-subtle)] p-6"><form class="flex gap-2" data-promo><label for="promo" class="sr-only">${esc(t('bag.code'))}</label><input id="promo" value="${esc(cart.code)}" placeholder="${esc(t('bag.code'))}" class="flex-1 rounded-none border border-[var(--border-subtle)] bg-transparent px-4 py-2.5 text-[13px] uppercase placeholder:normal-case placeholder:text-[var(--text-muted)] focus:border-[var(--border-strong)] focus:outline-none"><button type="submit" class="rounded-none border border-[var(--border-strong)] px-4 text-[12px]">${esc(t('bag.apply'))}</button></form>${
             store.promoApplied || store.promoError
-              ? `<p class="text-[12px] ${store.promoApplied ? 'text-[var(--accent)]' : 'text-red-400'}">${store.promoApplied ? 'Discount applied' : esc(store.promoError)}</p>`
+              ? `<p class="text-[12px] ${store.promoApplied ? 'text-[var(--accent)]' : 'text-red-400'}">${store.promoApplied ? esc(t('bag.code_applied')) : esc(store.promoError)}</p>`
               : ''
-          }${cart.checkoutError ? `<p class="text-[12px] text-red-400">${esc(cart.checkoutError)}</p>` : ''}<dl class="space-y-1.5 text-[14px] text-[var(--text-secondary)]"><div class="flex justify-between"><dt>Subtotal</dt><dd class="tabular-nums">${CUR}${store.subtotal.toFixed(2)}</dd></div>${
-            store.discountAmount > 0 ? `<div class="flex justify-between text-[var(--accent)]"><dt>Discount</dt><dd class="tabular-nums">−${CUR}${store.discountAmount.toFixed(2)}</dd></div>` : ''
-          }<div class="flex justify-between"><dt>Delivery</dt><dd>${store.subtotal >= store.shippingThreshold ? 'Free' : 'Calculated at checkout'}</dd></div><div class="flex items-baseline justify-between pt-2 text-[var(--text-primary)]"><dt>Total</dt><dd class="font-serif text-3xl" data-total></dd></div></dl>${pillButton(`Checkout ${icon('arrow-right', 'h-3.5 w-3.5')}`, { className: 'w-full', attrs: 'data-checkout' })}</footer>`
+          }${cart.checkoutError ? `<p class="text-[12px] text-red-400">${esc(cart.checkoutError)}</p>` : ''}<dl class="space-y-1.5 text-[14px] text-[var(--text-secondary)]"><div class="flex justify-between"><dt>${esc(t('bag.subtotal'))}</dt><dd class="tabular-nums">${CUR}${store.subtotal.toFixed(2)}</dd></div>${
+            store.discountAmount > 0 ? `<div class="flex justify-between text-[var(--accent)]"><dt>${esc(t('bag.discount'))}</dt><dd class="tabular-nums">−${CUR}${store.discountAmount.toFixed(2)}</dd></div>` : ''
+          }<div class="flex justify-between"><dt>${esc(t('bag.delivery'))}</dt><dd>${esc(store.subtotal >= store.shippingThreshold ? t('bag.free') : t('bag.delivery_later'))}</dd></div><div class="flex items-baseline justify-between pt-2 text-[var(--text-primary)]"><dt>${esc(t('bag.total'))}</dt><dd class="font-serif text-3xl" data-total></dd></div></dl>${pillButton(`${esc(t('bag.checkout'))} ${icon('arrow-right', 'h-3.5 w-3.5')}`, { className: 'w-full', attrs: 'data-checkout' })}</footer>`
         : '';
       body = `${meter}<div class="flex-1 overflow-y-auto p-6" data-lenis-prevent>${list}${suggestions}</div>${footer}`;
     }
 
     const prevTotal = $('[data-total] [data-vr-price]', aside);
-    aside.innerHTML = `<header class="flex items-center justify-between border-b border-[var(--border-subtle)] p-6"><h2 class="font-serif text-3xl">Bag <sup class="font-mono text-[11px] text-[var(--text-muted)]">${store.count}</sup></h2><button type="button" data-close class="grid h-10 w-10 place-items-center rounded-full border border-[var(--border-strong)]" aria-label="Close bag">${icon('x', 'h-4 w-4')}</button></header>${body}`;
+    aside.innerHTML = `<header class="flex items-center justify-between border-b border-[var(--border-subtle)] p-6"><h2 class="font-serif text-3xl">${esc(t('bag.title'))} <sup class="font-mono text-[11px] text-[var(--text-muted)]">${store.count}</sup></h2><button type="button" data-close class="grid h-10 w-10 place-items-center rounded-full border border-[var(--border-strong)]" aria-label="${esc(t('bag.close'))}">${icon('x', 'h-4 w-4')}</button></header>${body}`;
 
     const totalEl = $('[data-total]', aside);
     if (totalEl) {
@@ -855,74 +839,77 @@
     const cat = categoryOf(product.id);
     const pairs = PRODUCTS.filter((p) => p.id !== product.id && p.moment === product.moment).slice(0, 2);
     const others = pairs.length ? pairs : PRODUCTS.filter((p) => p.id !== product.id).slice(0, 2);
-    const views = [['product', 'Bottle'], ['portrait', 'On skin'], ...(can3D && !reduced ? [['3d', 'View in 3D']] : [])];
-    const wished = store.wishlist.includes(product.id);
+    const views = [['product', t('product.view_image')], ...(product.portrait && product.portrait !== imgUrl(product, '1200') ? [['portrait', t('product.view_skin')]] : []), ...(can3D && !reduced ? [['3d', t('product.view_3d')]] : [])];
     const size = product.sizes[0];
     const pair = product.synergy && getProduct(product.synergy.pairId);
 
     const el = html(`<div class="fixed inset-0 z-[150]" role="dialog" aria-modal="true" aria-labelledby="dossier-title">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-backdrop></div>
       <div class="absolute inset-x-0 bottom-0 top-3 overflow-hidden rounded-none border-t border-[var(--border-strong)] bg-[var(--bg-primary)] sm:inset-x-3 sm:top-6" data-sheet>
-        <button type="button" data-close class="absolute right-4 top-4 z-20 flex h-10 items-center gap-2 rounded-none bg-[var(--text-primary)] px-4 text-[12px] text-[var(--accent-ink)]">${icon('x', 'h-3.5 w-3.5')} Close</button>
+        <button type="button" data-close class="absolute right-4 top-4 z-20 flex h-10 items-center gap-2 rounded-none bg-[var(--text-primary)] px-4 text-[12px] text-[var(--accent-ink)]">${icon('x', 'h-3.5 w-3.5')} ${esc(t('general.close'))}</button>
         <div class="grid h-full grid-cols-1 overflow-y-auto lg:grid-cols-2 lg:overflow-hidden" data-lenis-prevent>
           <div class="relative min-h-[60vh] bg-[var(--bg-secondary)] lg:h-full">
             <div class="absolute inset-0 overflow-hidden" data-stage></div>
             <div class="absolute bottom-5 left-5 flex gap-2" data-views>${views
-              .map(([id, l]) => `<button type="button" data-view="${id}" class="rounded-none px-4 py-2 text-[12px] backdrop-blur-md transition-colors ${id === 'product' ? 'bg-white text-black' : 'bg-black/40 text-white hover:bg-black/60'}">${l}</button>`)
+              .map(([id, l]) => `<button type="button" data-view="${id}" class="rounded-none px-4 py-2 text-[12px] backdrop-blur-md transition-colors ${id === 'product' ? 'bg-white text-black' : 'bg-black/40 text-white hover:bg-black/60'}">${esc(l)}</button>`)
               .join('')}</div>
           </div>
           <div class="flex flex-col px-6 pb-10 pt-8 sm:px-12 sm:pt-16 lg:overflow-y-auto" data-lenis-prevent>
             <div class="flex items-center gap-3">
-              <span class="font-mono text-[12px] text-[var(--accent)]">N°${product.no}</span>
-              <span class="h-px w-8 bg-[var(--border-strong)]"></span>
-              <span class="label">${esc(cat ? cat.label : '')} · ${esc(product.category)}</span>
+              ${product.no ? `<span class="font-mono text-[12px] text-[var(--accent)]">N°${esc(product.no)}</span><span class="h-px w-8 bg-[var(--border-strong)]"></span>` : ''}
+              <span class="label">${esc([cat ? cat.label : '', product.category].filter(Boolean).join(' · '))}</span>
             </div>
             <h2 id="dossier-title" class="mt-4 font-serif text-[clamp(3rem,6vw,5.5rem)] leading-[0.9]">${esc(product.name)}</h2>
-            <p class="mt-2 font-serif text-xl italic text-[var(--text-secondary)]">${esc(product.subtitle)}</p>
-            <div class="mt-4 flex items-center gap-2 text-[13px] text-[var(--text-secondary)]">
-              <span class="flex">${icon('star', 'h-3.5 w-3.5 fill-[var(--accent)] text-[var(--accent)]').repeat(5)}</span>${product.rating} · ${product.reviewsCount} reviews
-            </div>
-            <div class="mt-6 grid grid-cols-2 gap-2 border-y border-[var(--border-subtle)] py-4 text-center">
-              <div class="rounded-none bg-[var(--bg-secondary)]/70 p-2.5"><span class="label block text-[12px]">pH Balance</span><span class="font-mono text-sm text-[var(--accent)] block mt-0.5">${esc(product.ph || '5.2')}</span></div>
-              <div class="rounded-none bg-[var(--bg-secondary)]/70 p-2.5"><span class="label block text-[12px]">Finish</span><span class="font-mono text-sm text-[var(--text-primary)] block mt-0.5">${esc(product.finish)}</span></div>
-            </div>
+            ${product.subtitle ? `<p class="mt-2 font-serif text-xl italic text-[var(--text-secondary)]">${esc(product.subtitle)}</p>` : ''}
+            ${
+              product.rating
+                ? `<div class="mt-4 flex items-center gap-2 text-[13px] text-[var(--text-secondary)]"><span class="flex">${icon('star', 'h-3.5 w-3.5 fill-[var(--accent)] text-[var(--accent)]').repeat(5)}</span>${esc(t('product.reviews', { rating: product.rating, count: product.reviewsCount || 0 }))}</div>`
+                : ''
+            }
+            ${
+              product.ph || product.finish
+                ? `<div class="mt-6 grid grid-cols-2 gap-2 border-y border-[var(--border-subtle)] py-4 text-center">
+              <div class="rounded-none bg-[var(--bg-secondary)]/70 p-2.5"><span class="label block text-[12px]">${esc(t('product.ph'))}</span><span class="font-mono text-sm text-[var(--accent)] block mt-0.5">${esc(product.ph || '')}</span></div>
+              <div class="rounded-none bg-[var(--bg-secondary)]/70 p-2.5"><span class="label block text-[12px]">${esc(t('product.finish'))}</span><span class="font-mono text-sm text-[var(--text-primary)] block mt-0.5">${esc(product.finish || '')}</span></div>
+            </div>`
+                : ''
+            }
             <p class="mt-6 max-w-lg text-[16px] leading-relaxed text-[var(--text-secondary)]">${esc(product.description)}</p>
             <div class="mt-8 rounded-none border border-[var(--border-subtle)] p-5">
               <div class="flex items-center justify-between">
-                <div class="flex gap-2" role="radiogroup" aria-label="Size">${product.sizes
+                <div class="flex gap-2" role="radiogroup" aria-label="${esc(t('product.size'))}">${product.sizes
                   .map((s, i) => `<button type="button" role="radio" aria-checked="${i === 0}" data-size="${i}" class="rounded-none border px-4 py-2 font-mono text-[11px] transition-colors ${i === 0 ? 'border-[var(--text-primary)]' : 'border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-strong)]'}">${esc(s.size)}</button>`)
                   .join('')}</div>
                 <span class="font-serif text-4xl" data-buy-price>${animatedPrice(size.price)}</span>
               </div>
               <div class="mt-5 flex gap-2">
                 <div class="flex items-center rounded-full border border-[var(--border-subtle)]">
-                  <button type="button" data-q="-1" class="grid h-12 w-10 place-items-center" aria-label="Decrease quantity">${icon('minus', 'h-3.5 w-3.5')}</button>
+                  <button type="button" data-q="-1" class="grid h-12 w-10 place-items-center" aria-label="${esc(t('general.decrease'))}">${icon('minus', 'h-3.5 w-3.5')}</button>
                   <span class="w-6 text-center font-mono text-[13px]" aria-live="polite" data-qty>1</span>
-                  <button type="button" data-q="1" class="grid h-12 w-10 place-items-center" aria-label="Increase quantity">${icon('plus', 'h-3.5 w-3.5')}</button>
+                  <button type="button" data-q="1" class="grid h-12 w-10 place-items-center" aria-label="${esc(t('general.increase'))}">${icon('plus', 'h-3.5 w-3.5')}</button>
                 </div>
-                ${pillButton('Add to bag', { className: 'flex-1', attrs: 'data-buy' })}
-                <button type="button" data-wish aria-pressed="${wished}" aria-label="Save to wishlist" class="grid h-12 w-12 place-items-center rounded-full border border-[var(--border-subtle)] transition-colors hover:border-[var(--border-strong)]">${icon('heart', `h-4 w-4 ${wished ? 'fill-[var(--accent)] text-[var(--accent)]' : ''}`)}</button>
+                ${pillButton(esc(t('product.add')), { className: 'flex-1', attrs: 'data-buy' })}
               </div>
-              <p class="label mt-4">Free delivery over $150 · 30-day returns, even opened</p>
+              ${t('product.note') ? `<p class="label mt-4">${esc(t('product.note'))}</p>` : ''}
             </div>
             <dl class="mt-10 grid grid-cols-1 border-t border-[var(--border-subtle)] sm:grid-cols-2">
-              <div class="border-b border-[var(--border-subtle)] py-5 sm:pr-6"><dt class="label">Texture</dt><dd class="mt-2 flex items-center gap-3 text-[15px]">${textureBlob(product.glow, 'h-7 w-7')} ${esc(product.texture)}</dd></div>
-              <div class="border-b border-[var(--border-subtle)] py-5"><dt class="label">Scent</dt><dd class="mt-2 text-[15px]">${esc(product.notes.join(' · '))}</dd></div>
-              <div class="border-b border-[var(--border-subtle)] py-5 sm:col-span-2"><dt class="label">Key botanicals</dt><dd class="mt-3 flex flex-wrap gap-2">${product.keyIngredients.map((k) => `<span class="rounded-none border border-[var(--border-subtle)] px-3 py-1 text-[13px]">${esc(k)}</span>`).join('')}</dd></div>
-              <div class="border-b border-[var(--border-subtle)] py-5 sm:col-span-2"><dt class="label">What it does</dt><dd class="mt-3 space-y-1.5">${product.benefits.map((b, i) => `<p class="flex gap-3 text-[15px]"><span class="font-mono text-[11px] text-[var(--text-muted)]">0${i + 1}</span>${esc(b)}</p>`).join('')}</dd></div>
-              <div class="py-5 sm:col-span-2"><dt class="label">How to use</dt><dd class="mt-2 text-[15px] text-[var(--text-secondary)]">${esc(product.howToUse)}</dd></div>
+              ${product.texture ? `<div class="border-b border-[var(--border-subtle)] py-5 sm:pr-6"><dt class="label">${esc(t('product.texture'))}</dt><dd class="mt-2 flex items-center gap-3 text-[15px]">${textureBlob(product.glow, 'h-7 w-7')} ${esc(product.texture)}</dd></div>` : ''}
+              ${product.notes.length ? `<div class="border-b border-[var(--border-subtle)] py-5"><dt class="label">${esc(t('product.scent'))}</dt><dd class="mt-2 text-[15px]">${esc(product.notes.join(' · '))}</dd></div>` : ''}
+              ${product.keyIngredients.length ? `<div class="border-b border-[var(--border-subtle)] py-5 sm:col-span-2"><dt class="label">${esc(t('product.key_ingredients'))}</dt><dd class="mt-3 flex flex-wrap gap-2">${product.keyIngredients.map((k) => `<span class="rounded-none border border-[var(--border-subtle)] px-3 py-1 text-[13px]">${esc(k)}</span>`).join('')}</dd></div>` : ''}
+              ${product.benefits.length ? `<div class="border-b border-[var(--border-subtle)] py-5 sm:col-span-2"><dt class="label">${esc(t('product.benefits'))}</dt><dd class="mt-3 space-y-1.5">${product.benefits.map((b, i) => `<p class="flex gap-3 text-[15px]"><span class="font-mono text-[11px] text-[var(--text-muted)]">0${i + 1}</span>${esc(b)}</p>`).join('')}</dd></div>` : ''}
+              ${product.howToUse ? `<div class="py-5 sm:col-span-2"><dt class="label">${esc(t('product.how_to_use'))}</dt><dd class="mt-2 text-[15px] text-[var(--text-secondary)]">${esc(product.howToUse)}</dd></div>` : ''}
             </dl>
             ${
               product.synergy
-                ? `<div class="mt-8 rounded-none border border-[var(--border-strong)] bg-[var(--bg-secondary)]/50 p-4"><div class="flex items-center justify-between"><span class="label flex items-center gap-1.5 text-[var(--accent)]">${icon('sparkles', 'h-3 w-3')} Recommended Protocol Partner</span><span class="font-mono text-[10px] text-[var(--text-muted)]">Save 10% Bundle</span></div><p class="mt-2 text-[13px] text-[var(--text-secondary)] leading-relaxed">${esc(product.synergy.benefit)}</p>${
+                ? `<div class="mt-8 rounded-none border border-[var(--border-strong)] bg-[var(--bg-secondary)]/50 p-4"><div class="flex items-center justify-between"><span class="label flex items-center gap-1.5 text-[var(--accent)]">${icon('sparkles', 'h-3 w-3')} ${esc(t('product.partner'))}</span></div><p class="mt-2 text-[13px] text-[var(--text-secondary)] leading-relaxed">${esc(product.synergy.benefit)}</p>${
                     pair
-                      ? `<button type="button" data-duo class="mt-3 flex items-center justify-between w-full rounded-none border border-[var(--border-strong)] bg-[var(--bg-surface)] px-4 py-2.5 text-[11px] font-mono uppercase tracking-wider text-[var(--text-primary)] transition-all hover:bg-[var(--text-primary)] hover:text-[var(--accent-ink)]"><span>Add ${esc(product.name)} + ${esc(pair.name)} Duo</span><span data-duo-price>${CUR}${Math.round((size.price + pair.price) * 0.9)}</span></button>`
+                      ? `<button type="button" data-duo class="mt-3 flex items-center justify-between w-full rounded-none border border-[var(--border-strong)] bg-[var(--bg-surface)] px-4 py-2.5 text-[11px] font-mono uppercase tracking-wider text-[var(--text-primary)] transition-all hover:bg-[var(--text-primary)] hover:text-[var(--accent-ink)]"><span>${esc(t('product.duo', { first: product.name, second: pair.name }))}</span><span data-duo-price>${CUR}${Math.round((size.price + pair.price) * 100) / 100}</span></button>`
                       : ''
                   }</div>`
                 : ''
             }
             <div class="mt-6">
-              <p class="label">Pairs well with</p>
+              <p class="label">${esc(t('product.pairs'))}</p>
               <div class="mt-4 grid grid-cols-2 gap-3">${others
                 .map(
                   (p) =>
@@ -968,7 +955,7 @@
       const s = product.sizes[state.sizeIdx];
       rollPrice(priceWrap(), s.price * state.qty);
       const duo = $('[data-duo-price]', el);
-      if (duo && pair) duo.textContent = `${CUR}${Math.round((s.price + pair.price) * 0.9)}`;
+      if (duo && pair) duo.textContent = `${CUR}${Math.round((s.price + pair.price) * 100) / 100}`;
     };
     $$('[data-size]', el).forEach((b) =>
       b.addEventListener('click', () => {
@@ -992,15 +979,6 @@
     $('[data-buy]', el).addEventListener('click', (e) => {
       addToCart(product, product.sizes[state.sizeIdx], state.qty, e.currentTarget.getBoundingClientRect());
       closeDossier();
-    });
-    $('[data-wish]', el).addEventListener('click', (e) => {
-      toggleWishlist(product.id);
-      const on = store.wishlist.includes(product.id);
-      const btn = e.currentTarget;
-      btn.setAttribute('aria-pressed', String(on));
-      const svg = $('svg', btn);
-      svg.classList.toggle('fill-[var(--accent)]', on);
-      svg.classList.toggle('text-[var(--accent)]', on);
     });
     const duo = $('[data-duo]', el);
     if (duo)
@@ -1036,7 +1014,7 @@
       if (state.view === 'product') {
         wrap.innerHTML = productImage(p, { eager: true, sizes: '50vw', className: 'h-full w-full object-cover' });
       } else if (state.view === '3d') {
-        wrap.innerHTML = `<div class="absolute inset-0 touch-none cursor-grab active:cursor-grabbing"><p class="grid h-full place-items-center text-[15px] text-[var(--text-secondary)]" data-loading>Loading bottle</p><p class="pointer-events-none absolute left-5 top-5 text-[14px] text-[var(--text-secondary)]">Drag to rotate</p></div>`;
+        wrap.innerHTML = `<div class="absolute inset-0 touch-none cursor-grab active:cursor-grabbing"><p class="grid h-full place-items-center text-[15px] text-[var(--text-secondary)]" data-loading>${esc(t('product.loading_3d'))}</p><p class="pointer-events-none absolute left-5 top-5 text-[14px] text-[var(--text-secondary)]">${esc(t('product.drag_3d'))}</p></div>`;
         mountGlass(wrap.firstElementChild, p);
       } else {
         wrap.innerHTML = `<img src="${p.portrait}" alt="${esc(p.fullName)} on skin" class="h-full w-full object-cover">`;
@@ -1420,7 +1398,7 @@
           }
           to.hidden = false;
           if (id === '3d') {
-            to.innerHTML = `<p class="grid h-full place-items-center text-[15px] text-[var(--text-secondary)]" data-loading>Loading bottle</p><p class="pointer-events-none absolute left-5 top-5 text-[14px] text-[var(--text-secondary)]">Drag to rotate</p>`;
+            to.innerHTML = `<p class="grid h-full place-items-center text-[15px] text-[var(--text-secondary)]" data-loading>${esc(t('product.loading_3d'))}</p><p class="pointer-events-none absolute left-5 top-5 text-[14px] text-[var(--text-secondary)]">${esc(t('product.drag_3d'))}</p>`;
             scene = mountGlass(to, product);
           }
           animate(to, [{ opacity: 0, transform: 'scale(1.05)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 700 });
@@ -1472,7 +1450,7 @@
         const available = b.dataset.available === 'true';
         if (addBtn) {
           addBtn.disabled = !available;
-          $('.z-10', addBtn).textContent = available ? addBtn.dataset.addLabel : 'Sold out';
+          $('.z-10', addBtn).textContent = available ? addBtn.dataset.addLabel : t('product.sold_out');
         }
         refreshPrice();
         const url = `${root.dataset.productUrl}?variant=${b.dataset.vrVariant}`;
@@ -1635,7 +1613,7 @@
   function syncBag() {
     $$('[data-vr-bag-count]').forEach((el) => (el.textContent = store.count));
     const bag = $('[data-vr-bag-open]');
-    if (bag) bag.setAttribute('aria-label', `Open bag, ${store.count} items`);
+    if (bag) bag.setAttribute('aria-label', t('bag.open', { count: store.count }));
     renderCart();
   }
   store.subscribe(syncBag);

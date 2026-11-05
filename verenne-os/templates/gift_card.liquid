@@ -32,7 +32,7 @@
           {%- endif -%}
 
           <p class="mt-8 text-[14px] text-[var(--text-secondary)]">{{ 'gift_card.use_at_checkout' | t }}</p>
-          <p class="mt-2 font-mono text-[18px] tracking-[0.2em]" aria-label="Gift card code">{{ gift_card.code | format_code }}</p>
+          <p class="mt-2 font-mono text-[18px] tracking-[0.2em]" aria-label="{{ 'vr.gift_card.code_label' | t }}">{{ gift_card.code | format_code }}</p>
 
           <div id="gift-card-qr" class="mx-auto mt-6 grid w-[136px] place-items-center bg-white p-2" data-identifier="{{ gift_card.qr_identifier }}"></div>
 
@@ -44,8 +44,8 @@
         </div>
 
         <div class="mt-8 flex items-center justify-center gap-6 text-[15px]">
-          <button type="button" onclick="window.print()" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">Print</button>
-          <a href="{{ shop.url }}" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">Shop at {{ shop.name }}</a>
+          <button type="button" onclick="window.print()" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">{{ 'vr.gift_card.print' | t }}</button>
+          <a href="{{ shop.url }}" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">{{ 'vr.gift_card.shop_at' | t | replace: '[shop]', shop.name }}</a>
         </div>
       </div>
     </main>

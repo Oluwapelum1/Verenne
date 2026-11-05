@@ -45,7 +45,7 @@
                       placeholder="0"
                       min="0"
                       class="w-20 border border-[var(--border-subtle)] bg-transparent px-2 py-1.5"
-                      aria-label="Minimum price"
+                      aria-label="{{ 'vr.collection.min_price' | t }}"
                     >
                   </label>
                   <span class="text-[var(--text-muted)]">–</span>
@@ -58,7 +58,7 @@
                       placeholder="{{ filter.range_max | money_without_currency | remove: ',' }}"
                       min="0"
                       class="w-20 border border-[var(--border-subtle)] bg-transparent px-2 py-1.5"
-                      aria-label="Maximum price"
+                      aria-label="{{ 'vr.collection.max_price' | t }}"
                     >
                   </label>
                 </div>
@@ -82,17 +82,18 @@
                   {%- endfor -%}
                 </ul>
             {%- endcase -%}
-            <noscript><button type="submit" class="mt-4 border border-[var(--border-strong)] px-4 py-2 text-[12px]">Apply</button></noscript>
+            <noscript><button type="submit" class="mt-4 border border-[var(--border-strong)] px-4 py-2 text-[12px]">{{ 'vr.bag.apply' | t }}</button></noscript>
           </div>
         </details>
       {%- endfor -%}
     </div>
 
     <div class="flex items-center gap-4 text-[15px]">
-      <span class="label">{{ results.products_count | default: results.results_count }} {% if results.products_count == 1 or results.results_count == 1 %}result{% else %}results{% endif %}</span>
+      {%- assign result_count = results.products_count | default: results.results_count -%}
+      <span class="label">{% if result_count == 1 %}{{ 'vr.collection.result' | t }}{% else %}{{ 'vr.collection.results' | t | replace: '[count]', result_count }}{% endif %}</span>
       <label class="flex items-center gap-2">
-        <span class="text-[var(--text-secondary)]">Sort</span>
-        <select name="sort_by" class="cursor-pointer bg-transparent py-1 underline decoration-1 underline-offset-[6px]" aria-label="Sort by">
+        <span class="text-[var(--text-secondary)]">{{ 'vr.collection.sort' | t }}</span>
+        <select name="sort_by" class="cursor-pointer bg-transparent py-1 underline decoration-1 underline-offset-[6px]" aria-label="{{ 'vr.collection.sort_label' | t }}">
           {%- for option in results.sort_options -%}
             <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>
           {%- endfor -%}
@@ -117,7 +118,7 @@
           {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
-      <a href="{{ url }}{% if terms != blank %}?q={{ terms | url_encode }}{% endif %}" class="ml-2 text-[13px] underline underline-offset-4 hover:text-[var(--accent)]">Clear all</a>
+      <a href="{{ url }}{% if terms != blank %}?q={{ terms | url_encode }}{% endif %}" class="ml-2 text-[13px] underline underline-offset-4 hover:text-[var(--accent)]">{{ 'vr.collection.clear_all' | t }}</a>
     </div>
   {%- endif -%}
 </form>

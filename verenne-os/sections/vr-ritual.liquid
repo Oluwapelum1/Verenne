@@ -15,7 +15,7 @@
         <em class="text-[var(--accent)]" data-vr-ritual-subtitle data-dawn="{{ section.settings.dawn_subtitle | escape }}" data-dusk="{{ section.settings.dusk_subtitle | escape }}">{{ section.settings.dawn_subtitle }}</em>
       </h2>
 
-      <div role="tablist" aria-label="Time of day" class="mt-8 inline-flex rounded-full border border-[var(--border-subtle)] p-1">
+      <div role="tablist" aria-label="{{ section.settings.label | escape }}" class="mt-8 inline-flex rounded-full border border-[var(--border-subtle)] p-1">
         {%- for mode in (1..2) -%}
           {%- if mode == 1 -%}{%- assign id = 'dawn' -%}{%- assign label = section.settings.dawn_label -%}{%- assign icon = 'sun' -%}{%- else -%}{%- assign id = 'dusk' -%}{%- assign label = section.settings.dusk_label -%}{%- assign icon = 'moon' -%}{%- endif -%}
           <button

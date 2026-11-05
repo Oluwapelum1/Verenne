@@ -19,7 +19,7 @@
   {%- endif -%}
   <div class="px-5 sm:px-10">
     <nav class="mx-auto flex h-[68px] max-w-[1600px] items-center justify-between" aria-label="Main">
-      <a href="{{ routes.root_url }}#top" data-vr-go="top" class="group flex shrink-0 items-center" aria-label="{{ shop.name | escape }} home">
+      <a href="{{ routes.root_url }}#top" data-vr-go="top" class="group flex shrink-0 items-center" aria-label="{{ 'vr.general.home' | t | replace: '[shop]', shop.name | escape }}">
         {% render 'vr-logo', mark_class: 'h-7 w-7', name: section.settings.logo_text, tagline: section.settings.tagline %}
       </a>
 
@@ -56,8 +56,8 @@
             </span>
           </shopify-account>
         {%- endif -%}
-        <button type="button" data-vr-bag-open class="whitespace-nowrap text-[15px] transition-colors hover:text-[var(--accent)]" aria-label="Open bag, {{ cart.item_count }} items">
-          Bag (<span data-vr-bag-count>{{ cart.item_count }}</span>)
+        <button type="button" data-vr-bag-open class="whitespace-nowrap text-[15px] transition-colors hover:text-[var(--accent)]" aria-label="{{ 'vr.bag.open' | t | replace: '[count]', cart.item_count }}">
+          {{ 'vr.bag.title' | t }} (<span data-vr-bag-count>{{ cart.item_count }}</span>)
         </button>
         <button
           type="button"
@@ -70,7 +70,7 @@
             <span data-vr-burger="a" class="absolute left-0 h-px w-full bg-current transition-all duration-500 top-0"></span>
             <span data-vr-burger="b" class="absolute left-0 h-px w-full bg-current transition-all duration-500 top-2"></span>
           </span>
-          <span data-vr-menu-label>Menu</span>
+          <span data-vr-menu-label>{{ 'vr.general.menu' | t }}</span>
         </button>
       </div>
     </nav>

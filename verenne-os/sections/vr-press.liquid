@@ -1,5 +1,5 @@
 {%- comment -%} Port of src/components/Press.jsx {%- endcomment -%}
-<section id="press" class="border-y border-[var(--border-subtle)] px-5 py-20 sm:px-10 sm:py-28" aria-label="Customer reviews">
+<section id="press" class="border-y border-[var(--border-subtle)] px-5 py-20 sm:px-10 sm:py-28" aria-label="{{ section.blocks.first.settings.author | default: shop.name | escape }}">
   <div class="mx-auto grid max-w-[1600px] grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
     {%- for block in section.blocks -%}
       <figure {{ block.shopify_attributes }}>

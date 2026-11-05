@@ -16,7 +16,7 @@
                 {%- endif -%}
               </span>
               <span class="mt-4 block font-serif text-[22px] leading-tight group-hover:italic">{{ c.title }}</span>
-              <span class="mt-1 block text-[14px] text-[var(--text-secondary)]">{{ c.products_count }} {% if c.products_count == 1 %}formulation{% else %}formulations{% endif %}</span>
+              <span class="mt-1 block text-[14px] text-[var(--text-secondary)]">{% if c.products_count == 1 %}{{ 'vr.collection.formulation' | t }}{% else %}{{ 'vr.collection.formulations' | t | replace: '[count]', c.products_count }}{% endif %}</span>
             </a>
           </li>
         {%- endfor -%}

@@ -23,7 +23,7 @@
     {%- endif -%}
 
     <div class="mx-auto mt-10 flex max-w-2xl items-center justify-between border-t border-[var(--border-strong)] pt-6 text-[15px]">
-      <a href="{{ blog.url }}" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">Back to {{ blog.title }}</a>
+      <a href="{{ blog.url }}" class="underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">{{ 'vr.blog.back' | t | replace: '[blog]', blog.title }}</a>
       <span class="flex gap-4 text-[13px] text-[var(--text-secondary)]">
         <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: article.url | url_encode }}">Facebook</a>
         <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url={{ shop.url | append: article.url | url_encode }}&text={{ article.title | url_encode }}">X</a>
@@ -32,7 +32,7 @@
 
     {%- if blog.comments_enabled? -%}
       <section class="mx-auto mt-16 max-w-2xl" aria-labelledby="comments-{{ section.id }}">
-        <h2 id="comments-{{ section.id }}" class="font-serif text-3xl">{{ article.comments_count }} {% if article.comments_count == 1 %}comment{% else %}comments{% endif %}</h2>
+        <h2 id="comments-{{ section.id }}" class="font-serif text-3xl">{% if article.comments_count == 1 %}{{ 'vr.blog.comment' | t }}{% else %}{{ 'vr.blog.comments' | t | replace: '[count]', article.comments_count }}{% endif %}</h2>
         {%- paginate article.comments by 20 -%}
           <ul class="mt-6 border-t border-[var(--border-subtle)]">
             {%- for comment in article.comments -%}
@@ -46,17 +46,17 @@
         {%- endpaginate -%}
 
         {%- form 'new_comment', article, class: 'mt-10 space-y-3' -%}
-          <h3 class="font-serif text-2xl">Leave a comment</h3>
+          <h3 class="font-serif text-2xl">{{ 'vr.blog.leave_comment' | t }}</h3>
           {%- if form.posted_successfully? -%}
-            <p class="text-[14px] text-[var(--accent)]">{% if blog.moderated? %}Thank you. Your comment will appear once approved.{% else %}Thank you for your comment.{% endif %}</p>
+            <p class="text-[14px] text-[var(--accent)]">{% if blog.moderated? %}{{ 'vr.blog.moderated' | t }}{% else %}{{ 'vr.blog.posted' | t }}{% endif %}</p>
           {%- endif -%}
           {%- if form.errors -%}<div class="text-[13px] text-red-700">{{ form.errors | default_errors }}</div>{%- endif -%}
           <div class="grid gap-3 sm:grid-cols-2">
-            <label class="block"><span class="sr-only">Name</span><input class="vr-field" type="text" name="comment[author]" placeholder="Name" value="{{ form.author }}" required autocomplete="name"></label>
-            <label class="block"><span class="sr-only">Email</span><input class="vr-field" type="email" name="comment[email]" placeholder="Email" value="{{ form.email }}" required autocomplete="email"></label>
+            <label class="block"><span class="sr-only">{{ 'vr.form.name' | t }}</span><input class="vr-field" type="text" name="comment[author]" placeholder="{{ 'vr.form.name' | t }}" value="{{ form.author }}" required autocomplete="name"></label>
+            <label class="block"><span class="sr-only">{{ 'vr.form.email' | t }}</span><input class="vr-field" type="email" name="comment[email]" placeholder="{{ 'vr.form.email' | t }}" value="{{ form.email }}" required autocomplete="email"></label>
           </div>
-          <label class="block"><span class="sr-only">Comment</span><textarea class="vr-field" name="comment[body]" rows="5" placeholder="Comment" required>{{ form.body }}</textarea></label>
-          <button type="submit" class="h-13 px-8 rounded-none bg-[var(--text-primary)] text-[var(--accent-ink)] font-mono text-[11px] uppercase tracking-widest font-semibold transition-all hover:bg-[var(--accent)]">Post comment</button>
+          <label class="block"><span class="sr-only">{{ 'vr.form.comment' | t }}</span><textarea class="vr-field" name="comment[body]" rows="5" placeholder="{{ 'vr.form.comment' | t }}" required>{{ form.body }}</textarea></label>
+          <button type="submit" class="h-13 px-8 rounded-none bg-[var(--text-primary)] text-[var(--accent-ink)] font-mono text-[11px] uppercase tracking-widest font-semibold transition-all hover:bg-[var(--accent)]">{{ 'vr.blog.post' | t }}</button>
         {%- endform -%}
       </section>
     {%- endif -%}

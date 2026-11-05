@@ -12,7 +12,7 @@
         </h1>
 
         <form action="{{ routes.search_url }}" method="get" role="search" class="relative mt-8 max-w-2xl" data-vr-predictive>
-          <label for="search-input-{{ section.id }}" class="sr-only">Search</label>
+          <label for="search-input-{{ section.id }}" class="sr-only">{{ 'vr.general.search' | t }}</label>
           <input
             id="search-input-{{ section.id }}"
             type="search"
@@ -27,7 +27,7 @@
             data-vr-predictive-input
           >
           <input type="hidden" name="options[prefix]" value="last">
-          <button type="submit" class="absolute bottom-3 right-0 text-[15px] underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">Search</button>
+          <button type="submit" class="absolute bottom-3 right-0 text-[15px] underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]">{{ 'vr.general.search' | t }}</button>
           <div id="predictive-{{ section.id }}" class="absolute inset-x-0 top-full z-40 mt-2" data-vr-predictive-results hidden></div>
         </form>
 
@@ -46,7 +46,7 @@
                 {%- else -%}
                   <li class="flex flex-col">
                     <a href="{{ item.url }}" class="group flex flex-1 flex-col border border-[var(--border-subtle)] p-5 transition-colors hover:border-[var(--border-strong)]">
-                      <span class="label">{% if item.object_type == 'article' %}Journal{% else %}Page{% endif %}</span>
+                      <span class="label">{% if item.object_type == 'article' %}{{ 'vr.search.journal' | t }}{% else %}{{ 'vr.search.page' | t }}{% endif %}</span>
                       <span class="mt-3 block font-serif text-[22px] leading-tight group-hover:italic">{{ item.title }}</span>
                       <span class="mt-2 block text-[14px] text-[var(--text-secondary)]">{{ item.content | strip_html | truncatewords: 22 }}</span>
                     </a>
@@ -56,8 +56,8 @@
           </ul>
         {%- else -%}
           <div class="py-24 text-center">
-            <p class="font-serif text-3xl">Nothing matched “{{ search.terms }}”.</p>
-            <p class="mt-2 text-[14px] text-[var(--text-secondary)]">Check the spelling or try a broader word.</p>
+            <p class="font-serif text-3xl">{{ 'vr.search.nothing_matched' | t | replace: '[terms]', search.terms }}</p>
+            <p class="mt-2 text-[14px] text-[var(--text-secondary)]">{{ 'vr.search.try_again' | t }}</p>
           </div>
         {%- endif -%}
         {% render 'vr-pagination', paginate: paginate %}

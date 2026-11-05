@@ -49,5 +49,7 @@
   "portrait": "",
   {%- endif -%}
   "description": {{ d.description | default: summary | json }},
+  "rating": {{ product.metafields.reviews.rating.value.rating | json }},
+  "reviewsCount": {{ product.metafields.reviews.rating_count.value | json }},
   "details": {{ d | json }}
 }

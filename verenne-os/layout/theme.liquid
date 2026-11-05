@@ -40,6 +40,7 @@
         root: {{ routes.root_url | json }}
       };
     </script>
+    {% render 'vr-strings' %}
     <script src="{{ 'vr-lenis.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'vr-app.js' | asset_url }}" defer="defer"></script>
 

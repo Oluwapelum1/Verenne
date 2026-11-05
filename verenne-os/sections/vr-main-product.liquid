@@ -71,12 +71,12 @@
                 when 2
                   assign view_label = section.settings.second_view_label
                 else
-                  assign view_label = 'View ' | append: forloop.index
+                  assign view_label = 'vr.product.view_n' | t | replace: '[number]', forloop.index
               endcase
               if media.media_type == 'video' or media.media_type == 'external_video'
-                assign view_label = 'Video'
+                assign view_label = 'vr.product.video' | t
               elsif media.media_type == 'model'
-                assign view_label = '3D model'
+                assign view_label = 'vr.product.model' | t
               endif
             -%}
             <button type="button" data-vr-view="{{ forloop.index0 }}" class="rounded-none px-4 py-2 text-[12px] backdrop-blur-md transition-colors {% if forloop.first %}bg-white text-black{% else %}bg-black/40 text-white hover:bg-black/60{% endif %}">{{ view_label }}</button>
@@ -108,8 +108,9 @@
             {%- endif -%}
 
           {%- when 'rating' -%}
-            {%- assign rating = product.metafields.reviews.rating.value | default: d.rating -%}
-            {%- assign rating_count = product.metafields.reviews.rating_count | default: d.reviewsCount -%}
+            {%- comment -%} Shopify's standard reviews metafields, filled in by review apps {%- endcomment -%}
+            {%- assign rating = product.metafields.reviews.rating.value -%}
+            {%- assign rating_count = product.metafields.reviews.rating_count.value | default: 0 -%}
             {%- if rating != blank -%}
               <div class="mt-4 flex items-center gap-2 text-[13px] text-[var(--text-secondary)]" {{ block.shopify_attributes }}>
                 <span class="flex">
@@ -117,7 +118,7 @@
                     {% render 'vr-icon', name: 'star', class: 'h-3.5 w-3.5 fill-[var(--accent)] text-[var(--accent)]' %}
                   {%- endfor -%}
                 </span>
-                {{ rating.rating | default: rating }} · {{ rating_count }} reviews
+                {{ 'vr.product.reviews' | t | replace: '[rating]', rating.rating | replace: '[count]', rating_count }}
               </div>
             {%- endif -%}
 
@@ -175,12 +176,12 @@
 
                 <div class="mt-5 flex gap-2">
                   <div class="flex items-center rounded-full border border-[var(--border-subtle)]">
-                    <button type="button" data-vr-pq="-1" class="grid h-12 w-10 place-items-center" aria-label="Decrease quantity">{% render 'vr-icon', name: 'minus', class: 'h-3.5 w-3.5' %}</button>
-                    <input type="number" name="quantity" value="1" min="1" class="w-6 bg-transparent text-center font-mono text-[13px] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none" aria-label="Quantity" data-vr-qty-input>
-                    <button type="button" data-vr-pq="1" class="grid h-12 w-10 place-items-center" aria-label="Increase quantity">{% render 'vr-icon', name: 'plus', class: 'h-3.5 w-3.5' %}</button>
+                    <button type="button" data-vr-pq="-1" class="grid h-12 w-10 place-items-center" aria-label="{{ 'vr.general.decrease' | t }}">{% render 'vr-icon', name: 'minus', class: 'h-3.5 w-3.5' %}</button>
+                    <input type="number" name="quantity" value="1" min="1" class="w-6 bg-transparent text-center font-mono text-[13px] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none" aria-label="{{ 'vr.general.quantity' | t }}" data-vr-qty-input>
+                    <button type="button" data-vr-pq="1" class="grid h-12 w-10 place-items-center" aria-label="{{ 'vr.general.increase' | t }}">{% render 'vr-icon', name: 'plus', class: 'h-3.5 w-3.5' %}</button>
                   </div>
                   {%- capture add_label -%}
-                    {%- if current_variant.available -%}{{ block.settings.add_label }}{%- else -%}Sold out{%- endif -%}
+                    {%- if current_variant.available -%}{{ block.settings.add_label }}{%- else -%}{{ 'vr.product.sold_out' | t }}{%- endif -%}
                   {%- endcapture -%}
                   {%- capture add_attrs -%}data-vr-add-button data-add-label="{{ block.settings.add_label | escape }}"{% unless current_variant.available %} disabled{% endunless %}{%- endcapture -%}
                   {% render 'vr-pill-button', label: add_label, type: 'submit', class: 'flex-1 disabled:opacity-50', attrs: add_attrs %}
@@ -204,9 +205,9 @@
                 <p class="flex items-center gap-2 text-[14px]">
                   {%- if first_pickup.available -%}
                     {% render 'vr-icon', name: 'check', class: 'h-3.5 w-3.5 text-[var(--accent)]' %}
-                    Pickup available at <span class="font-medium">{{ first_pickup.location.name }}</span>
+                    {{ 'vr.product.pickup_available' | t | replace: '[location]', first_pickup.location.name }}
                   {%- else -%}
-                    Pickup currently unavailable at <span class="font-medium">{{ first_pickup.location.name }}</span>
+                    {{ 'vr.product.pickup_unavailable' | t | replace: '[location]', first_pickup.location.name }}
                   {%- endif -%}
                 </p>
                 <p class="label mt-1">{{ first_pickup.pick_up_time }}</p>
@@ -217,7 +218,7 @@
             <dl class="mt-10 grid grid-cols-1 border-t border-[var(--border-subtle)] sm:grid-cols-2" {{ block.shopify_attributes }}>
               {%- if d.texture != blank -%}
                 <div class="border-b border-[var(--border-subtle)] py-5 sm:pr-6">
-                  <dt class="label">Texture</dt>
+                  <dt class="label">{{ 'vr.product.texture' | t }}</dt>
                   <dd class="mt-2 flex items-center gap-3 text-[15px]">
                     <span aria-hidden="true" data-vr-blob class="block h-7 w-7" style="background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.85) 0%, {{ d.glow }} 26%, {{ d.glow }}AA 60%, rgba(0,0,0,0.4) 100%); box-shadow: 0 0 40px {{ d.glow }}55, inset -6px -10px 18px rgba(0,0,0,0.35); border-radius: 58% 42% 55% 45% / 46% 54% 46% 54%;"></span>
                     {{ d.texture }}
@@ -226,13 +227,13 @@
               {%- endif -%}
               {%- if d.notes.size > 0 -%}
                 <div class="border-b border-[var(--border-subtle)] py-5">
-                  <dt class="label">Scent</dt>
+                  <dt class="label">{{ 'vr.product.scent' | t }}</dt>
                   <dd class="mt-2 text-[15px]">{{ d.notes | join: ' · ' }}</dd>
                 </div>
               {%- endif -%}
               {%- if d.keyIngredients.size > 0 -%}
                 <div class="border-b border-[var(--border-subtle)] py-5 sm:col-span-2">
-                  <dt class="label">Key botanicals</dt>
+                  <dt class="label">{{ 'vr.product.key_ingredients' | t }}</dt>
                   <dd class="mt-3 flex flex-wrap gap-2">
                     {%- for k in d.keyIngredients -%}
                       <span class="rounded-none border border-[var(--border-subtle)] px-3 py-1 text-[13px]">{{ k }}</span>
@@ -242,7 +243,7 @@
               {%- endif -%}
               {%- if d.benefits.size > 0 -%}
                 <div class="border-b border-[var(--border-subtle)] py-5 sm:col-span-2">
-                  <dt class="label">What it does</dt>
+                  <dt class="label">{{ 'vr.product.benefits' | t }}</dt>
                   <dd class="mt-3 space-y-1.5">
                     {%- for b in d.benefits -%}
                       <p class="flex gap-3 text-[15px]"><span class="font-mono text-[11px] text-[var(--text-muted)]">0{{ forloop.index }}</span>{{ b }}</p>
@@ -252,7 +253,7 @@
               {%- endif -%}
               {%- if d.howToUse != blank -%}
                 <div class="py-5 sm:col-span-2">
-                  <dt class="label">How to use</dt>
+                  <dt class="label">{{ 'vr.product.how_to_use' | t }}</dt>
                   <dd class="mt-2 text-[15px] text-[var(--text-secondary)]">{{ d.howToUse }}</dd>
                 </div>
               {%- endif -%}
@@ -260,7 +261,7 @@
 
           {%- when 'share' -%}
             <div class="mt-6 flex items-center gap-4 text-[13px] text-[var(--text-secondary)]" {{ block.shopify_attributes }}>
-              <span class="label">Share</span>
+              <span class="label">{{ 'vr.general.share' | t }}</span>
               <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: product.url | url_encode }}">Facebook</a>
               <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/button/?url={{ shop.url | append: product.url | url_encode }}&media={{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | url_encode }}&description={{ product.title | url_encode }}">Pinterest</a>
               <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url={{ shop.url | append: product.url | url_encode }}&text={{ product.title | url_encode }}">X</a>

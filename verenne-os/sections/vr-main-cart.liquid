@@ -31,7 +31,7 @@
           {%- if section.settings.show_meter -%}
             <div class="mb-8 border-b border-[var(--border-subtle)] pb-4">
               <p class="text-[13px] text-[var(--text-secondary)]">
-                {%- if need > 0 -%}{{ need | money_without_trailing_zeros }} away from free delivery{%- else -%}Free delivery unlocked{%- endif -%}
+                {%- if need > 0 -%}{%- assign need_money = need | money_without_trailing_zeros -%}{{ 'vr.bag.meter_need' | t | replace: '[amount]', need_money }}{%- else -%}{{ 'vr.bag.meter_done' | t }}{%- endif -%}
               </p>
               <div class="mt-2 h-px bg-[var(--border-strong)]"><div class="h-px bg-[var(--accent)]" style="width: {{ pct }}%"></div></div>
             </div>
@@ -84,17 +84,17 @@
                   </div>
                   <div class="flex items-center justify-between">
                     <div class="flex items-center rounded-full border border-[var(--border-subtle)]">
-                      <button type="button" data-vr-line-qty="-1" class="grid h-9 w-9 place-items-center" aria-label="Decrease quantity of {{ item_name | escape }}">{% render 'vr-icon', name: 'minus', class: 'h-3 w-3' %}</button>
-                      <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="w-8 bg-transparent text-center font-mono text-[12px] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none" aria-label="Quantity of {{ item_name | escape }}" data-vr-line-input>
-                      <button type="button" data-vr-line-qty="1" class="grid h-9 w-9 place-items-center" aria-label="Increase quantity of {{ item_name | escape }}">{% render 'vr-icon', name: 'plus', class: 'h-3 w-3' %}</button>
+                      <button type="button" data-vr-line-qty="-1" class="grid h-9 w-9 place-items-center" aria-label="{{ 'vr.general.decrease' | t }} — {{ item_name | escape }}">{% render 'vr-icon', name: 'minus', class: 'h-3 w-3' %}</button>
+                      <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="w-8 bg-transparent text-center font-mono text-[12px] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none" aria-label="{{ 'vr.general.quantity' | t }} — {{ item_name | escape }}" data-vr-line-input>
+                      <button type="button" data-vr-line-qty="1" class="grid h-9 w-9 place-items-center" aria-label="{{ 'vr.general.increase' | t }} — {{ item_name | escape }}">{% render 'vr-icon', name: 'plus', class: 'h-3 w-3' %}</button>
                     </div>
-                    <a href="{{ item.url_to_remove }}" class="label underline-offset-4 hover:text-[var(--text-primary)] hover:underline" data-vr-line-remove>Remove</a>
+                    <a href="{{ item.url_to_remove }}" class="label underline-offset-4 hover:text-[var(--text-primary)] hover:underline" data-vr-line-remove>{{ 'vr.bag.remove' | t }}</a>
                   </div>
                 </div>
               </li>
             {%- endfor -%}
           </ul>
-          <noscript><button type="submit" name="update" class="mt-6 border border-[var(--border-strong)] px-4 py-2 text-[12px]">Update bag</button></noscript>
+          <noscript><button type="submit" name="update" class="mt-6 border border-[var(--border-strong)] px-4 py-2 text-[12px]">{{ 'vr.bag.update' | t }}</button></noscript>
 
           {%- if section.settings.show_note -%}
             <div class="mt-10">
@@ -107,20 +107,20 @@
         <aside class="lg:col-span-4 lg:col-start-9">
           <div class="space-y-4 border border-[var(--border-subtle)] p-6 lg:sticky lg:top-[125px]">
             <dl class="space-y-1.5 text-[14px] text-[var(--text-secondary)]">
-              <div class="flex justify-between"><dt>Subtotal</dt><dd class="tabular-nums">{{ cart.items_subtotal_price | money }}</dd></div>
+              <div class="flex justify-between"><dt>{{ 'vr.bag.subtotal' | t }}</dt><dd class="tabular-nums">{{ cart.items_subtotal_price | money }}</dd></div>
               {%- for discount in cart.cart_level_discount_applications -%}
                 <div class="flex justify-between text-[var(--accent)]"><dt>{{ discount.title }}</dt><dd class="tabular-nums">−{{ discount.total_allocated_amount | money }}</dd></div>
               {%- endfor -%}
-              <div class="flex justify-between"><dt>Delivery</dt><dd>{% if need <= 0 %}Free{% else %}Calculated at checkout{% endif %}</dd></div>
+              <div class="flex justify-between"><dt>{{ 'vr.bag.delivery' | t }}</dt><dd>{% if need <= 0 %}{{ 'vr.bag.free' | t }}{% else %}{{ 'vr.bag.delivery_later' | t }}{% endif %}</dd></div>
               <div class="flex items-baseline justify-between pt-2 text-[var(--text-primary)]">
-                <dt>Total</dt>
+                <dt>{{ 'vr.bag.total' | t }}</dt>
                 <dd class="font-serif text-3xl">{{ cart.total_price | money }}</dd>
               </div>
             </dl>
             <p class="text-[12px] text-[var(--text-muted)]">{{ section.settings.tax_note }}</p>
             <button type="submit" name="checkout" class="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden px-7 py-4 text-[15px] font-medium transition-colors duration-500 bg-[var(--text-primary)] text-[var(--accent-ink)]">
               <span aria-hidden="true" class="absolute inset-0 translate-y-[101%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 bg-[var(--accent)]"></span>
-              <span class="relative z-10 inline-flex items-center gap-2">Checkout {% render 'vr-icon', name: 'arrow-right', class: 'h-3.5 w-3.5' %}</span>
+              <span class="relative z-10 inline-flex items-center gap-2">{{ 'vr.bag.checkout' | t }} {% render 'vr-icon', name: 'arrow-right', class: 'h-3.5 w-3.5' %}</span>
             </button>
             {%- if additional_checkout_buttons -%}
               <div class="vr-payment">{{ content_for_additional_checkout_buttons }}</div>
