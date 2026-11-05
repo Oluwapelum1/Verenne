@@ -334,9 +334,7 @@
       {{ 'accessibility.skip_to_text' | t }}
     </a>
 
-    {%- if settings.cart_type == 'drawer' -%}
-      {%- render 'cart-drawer' -%}
-    {%- endif -%}
+    {%- render 'verenne-cart-drawer' -%}
 
     {% sections 'header-group' %}
 
@@ -411,3 +409,4 @@
     {%- endif -%}
   </body>
 </html>
+

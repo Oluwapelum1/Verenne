@@ -1096,7 +1096,8 @@
   function handleVerenneAdd(btn, title, price, index) {
     const p = VERENNE_DATA[index];
     const sizeName = (p && p.sizes && p.sizes[0]) ? p.sizes[0].size : 'Standard';
-    postVerenneItemToCart(title, price, sizeName, 1);
+    const imgUrl = (p && p.image) ? p.image : '';
+    postVerenneItemToCart(title, price, sizeName, 1, imgUrl);
   }
 
   function addCurrentModalToBag() {
@@ -1104,20 +1105,25 @@
     if (!p) return;
     const size = (p.sizes && p.sizes[currentSelectedSizeIdx]) ? p.sizes[currentSelectedSizeIdx].size : 'Standard';
     const price = document.getElementById('modal-buy-price').textContent;
-    postVerenneItemToCart(p.fullName, price, size, currentModalQty);
+    const imgUrl = (p && p.image) ? p.image : '';
+    postVerenneItemToCart(p.fullName, price, size, currentModalQty, imgUrl);
     closeVerenneModal();
   }
 
-  function postVerenneItemToCart(title, price, size, qty) {
+  function postVerenneItemToCart(title, price, size, qty, imgUrl) {
     // Show Toast
     showVerenneToast('Added ' + title + ' (' + size + ') to bag · ' + price);
 
-    // Update Header Bag Counter
-    const bagCounts = document.querySelectorAll('.verenne-bag-count');
-    bagCounts.forEach(el => {
-      let current = parseInt(el.textContent.replace(/[^0-9]/g, '')) || 0;
-      el.textContent = current + qty;
-    });
+    // Update Header Bag Counter & Drawer
+    if (typeof window.addVerenneCartItem === 'function') {
+      window.addVerenneCartItem(title, price, size, imgUrl);
+    } else {
+      const bagCounts = document.querySelectorAll('.verenne-bag-count');
+      bagCounts.forEach(el => {
+        let current = parseInt(el.textContent.replace(/[^0-9]/g, '')) || 0;
+        el.textContent = current + qty;
+      });
+    }
 
     // Post to Shopify Cart API
     fetch(window.Shopify ? window.Shopify.routes.root + 'cart/add.js' : '/cart/add.js', {

@@ -39,7 +39,7 @@
 
     <!-- Right Actions: Bag & Mobile Menu -->
     <div class="verenne-nav-right">
-      <a href="{{ routes.cart_url }}" class="verenne-bag-trigger" id="cart-icon-bubble" aria-label="Shopping bag">
+      <a href="#bag" class="verenne-bag-trigger" onclick="openVerenneCartDrawer(); return false;" id="cart-icon-bubble" aria-label="Shopping bag">
         <span>Bag</span>
         <span class="verenne-bag-paren">(<span class="verenne-bag-count">{{ cart.item_count }}</span>)</span>
       </a>
@@ -84,3 +84,4 @@
   ]
 }
 {% endschema %}
+

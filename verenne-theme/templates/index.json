@@ -25,167 +25,9 @@
         "padding_bottom": 80
       }
     },
-    "statement": {
-      "type": "verenne-rich-text",
-      "settings": {
-        "caption": "(01) — MANIFESTO",
-        "heading": "We make sixteen formulations and nothing else.",
-        "text": "<p>Every batch is compounded by hand in Grasse, aged in violet Miron glass, and released in numbered editions of four hundred flacons. When a harvest fails to meet bio-chromatography standards, the release is cancelled.</p>",
-        "text_alignment": "center",
-        "content_width": 850,
-        "button_label": "Explore The Manifesto",
-        "button_link": "shopify://pages/about",
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
-    },
     "ritual": {
       "type": "verenne-circadian-dial",
-      "blocks": {
-        "dawn-1": {
-          "type": "step_dawn",
-          "settings": {
-            "time": "07:00",
-            "verb": "Cleanse",
-            "product_title": "N°05 Argile Purifiante",
-            "price": "$68"
-          }
-        },
-        "dawn-2": {
-          "type": "step_dawn",
-          "settings": {
-            "time": "07:15",
-            "verb": "Activate",
-            "product_title": "N°02 Brume Cellulaire",
-            "price": "$82"
-          }
-        },
-        "dawn-3": {
-          "type": "step_dawn",
-          "settings": {
-            "time": "07:20",
-            "verb": "Nourish",
-            "product_title": "N°01 Éclat Sauvage",
-            "price": "$145"
-          }
-        },
-        "dawn-4": {
-          "type": "step_dawn",
-          "settings": {
-            "time": "07:30",
-            "verb": "Shield",
-            "product_title": "N°03 Crème Céramide",
-            "price": "$115"
-          }
-        },
-        "dusk-1": {
-          "type": "step_dusk",
-          "settings": {
-            "time": "20:30",
-            "verb": "Purify",
-            "product_title": "N°06 Huile Démaquillante",
-            "price": "$74"
-          }
-        },
-        "dusk-2": {
-          "type": "step_dusk",
-          "settings": {
-            "time": "20:45",
-            "verb": "Clarify",
-            "product_title": "N°05 Argile Purifiante",
-            "price": "$68"
-          }
-        },
-        "dusk-3": {
-          "type": "step_dusk",
-          "settings": {
-            "time": "21:00",
-            "verb": "Treat",
-            "product_title": "N°04 Élixir Nocturne",
-            "price": "$160"
-          }
-        },
-        "dusk-4": {
-          "type": "step_dusk",
-          "settings": {
-            "time": "21:15",
-            "verb": "Seal",
-            "product_title": "N°07 Baume Régénérant",
-            "price": "$128"
-          }
-        }
-      },
-      "block_order": [
-        "dawn-1",
-        "dawn-2",
-        "dawn-3",
-        "dawn-4",
-        "dusk-1",
-        "dusk-2",
-        "dusk-3",
-        "dusk-4"
-      ],
-      "settings": {
-        "caption": "THE CIRCADIAN RITUAL",
-        "heading": "Four steps. ",
-        "dawn_subtitle": "Every morning.",
-        "dusk_subtitle": "Twice at night.",
-        "button_label": "Add Complete Routine",
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
-    },
-    "statutes": {
-      "type": "verenne-statutes",
-      "blocks": {
-        "statute-1": {
-          "type": "statute",
-          "settings": {
-            "number": "16",
-            "title": "A focused range",
-            "text": "Four formulas each to cleanse, treat, hydrate and restore. Nothing beyond that."
-          }
-        },
-        "statute-2": {
-          "type": "statute",
-          "settings": {
-            "number": "72h",
-            "title": "Field to still",
-            "text": "Plants are picked by hand at dawn and distilled in copper stills within 72 hours."
-          }
-        },
-        "statute-3": {
-          "type": "statute",
-          "settings": {
-            "number": "4",
-            "title": "Known origins",
-            "text": "Corsica, Morocco, the Horn of Africa and Grasse, from the same organic growers every season."
-          }
-        },
-        "statute-4": {
-          "type": "statute",
-          "settings": {
-            "number": "0",
-            "title": "Synthetic fragrance",
-            "text": "Zero silicones, parabens, phthalates or artificial colouring in any formulation."
-          }
-        }
-      },
-      "block_order": [
-        "statute-1",
-        "statute-2",
-        "statute-3",
-        "statute-4"
-      ],
-      "settings": {
-        "caption": "HAUTE-APOTHECARY STANDARDS",
-        "heading": "We make sixteen formulations and ",
-        "heading_italic": "nothing else.",
-        "subtext": "Wild plants, distilled soon after picking and bottled in violet Miron glass. Slow by design, because skin is too.",
-        "button_label": "Read The Grasse Codex",
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
+      "settings": {}
     },
     "origins": {
       "type": "verenne-botanical-origins",
@@ -321,14 +163,20 @@
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "manifesto": {
+      "type": "verenne-manifesto",
+      "settings": {
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
     "hero",
     "featured_collection",
-    "statement",
+    "manifesto",
     "ritual",
-    "statutes",
     "origins",
     "press",
     "faq"

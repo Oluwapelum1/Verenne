@@ -1,17 +1,17 @@
 {
   "sections": {
-    "main": {
-      "type": "main-list-collections",
+    "collection_list": {
+      "type": "verenne-featured-collection",
       "settings": {
-        "title": "Collections",
-        "sort": "alphabetical",
-        "image_ratio": "square",
-        "columns_desktop": 3,
-        "columns_mobile": "2"
+        "caption": "(02) — THE COMPENDIUM",
+        "title": "All 16 formulations",
+        "blurb": "Four steps, four formulas each. Pick a step or browse them all.",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     }
   },
   "order": [
-    "main"
+    "collection_list"
   ]
 }

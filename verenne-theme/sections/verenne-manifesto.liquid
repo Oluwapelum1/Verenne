@@ -1,0 +1,182 @@
+{%- comment -%}
+  Verenne Manifesto & Standards
+  1:1 Replica of Manifesto.jsx from https://oluwapelum1.github.io/Verenne/
+{%- endcomment -%}
+
+<section id="manifesto" class="verenne-manifesto-section tone-light" aria-labelledby="manifesto-title" style="padding-top: {{ section.settings.padding_top | default: 96 }}px; padding-bottom: {{ section.settings.padding_bottom | default: 96 }}px; background-color: #E9E1D4 !important; color: #1F1610 !important;">
+  <div class="verenne-manifesto-container">
+    <div class="verenne-manifesto-grid">
+      <!-- Left Column: Manifesto Headline -->
+      <div class="verenne-manifesto-left">
+        <h2 id="manifesto-title" class="verenne-manifesto-heading">
+          We make sixteen formulations and <em class="verenne-manifesto-italic">nothing else.</em>
+        </h2>
+        <p class="verenne-manifesto-subtext">
+          Wild plants, distilled soon after picking and bottled in dark glass. Slow by design, because skin is too.
+        </p>
+      </div>
+
+      <!-- Right Column: 4 Inviolable Standards -->
+      <div class="verenne-manifesto-right">
+        <ul class="verenne-manifesto-standards-list">
+          <li class="verenne-standard-row">
+            <span class="verenne-standard-num">16</span>
+            <div class="verenne-standard-detail">
+              <h3 class="verenne-standard-title">A focused range</h3>
+              <p class="verenne-standard-desc">Four formulas each to cleanse, treat, hydrate and restore. Nothing beyond that.</p>
+            </div>
+          </li>
+          <li class="verenne-standard-row">
+            <span class="verenne-standard-num">72h</span>
+            <div class="verenne-standard-detail">
+              <h3 class="verenne-standard-title">Field to still</h3>
+              <p class="verenne-standard-desc">Plants are picked by hand at dawn and distilled in copper within 72 hours.</p>
+            </div>
+          </li>
+          <li class="verenne-standard-row">
+            <span class="verenne-standard-num">4</span>
+            <div class="verenne-standard-detail">
+              <h3 class="verenne-standard-title">Known origins</h3>
+              <p class="verenne-standard-desc">Corsica, Morocco, the Horn of Africa and Grasse, from the same growers every year.</p>
+            </div>
+          </li>
+          <li class="verenne-standard-row">
+            <span class="verenne-standard-num">0</span>
+            <div class="verenne-standard-detail">
+              <h3 class="verenne-standard-title">Synthetic fragrance</h3>
+              <p class="verenne-standard-desc">No silicones, parabens, phthalates or artificial colour in any formula.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .verenne-manifesto-section {
+    position: relative;
+    border-top: 1px solid rgba(31, 22, 16, 0.14);
+    border-bottom: 1px solid rgba(31, 22, 16, 0.14);
+  }
+  .verenne-manifesto-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .verenne-manifesto-container {
+      padding: 0 2.5rem;
+    }
+  }
+  .verenne-manifesto-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @media (min-width: 1024px) {
+    .verenne-manifesto-grid {
+      grid-template-columns: 5fr 6fr;
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+  .verenne-manifesto-heading {
+    font-family: 'Bodoni Moda', serif;
+    font-size: clamp(2.6rem, 5vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: #1F1610;
+    margin: 0;
+  }
+  .verenne-manifesto-italic {
+    font-style: italic;
+    font-family: 'Bodoni Moda', serif;
+  }
+  .verenne-manifesto-subtext {
+    margin-top: 1.5rem;
+    max-width: 28rem;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #554739;
+    font-family: 'Hanken Grotesk', sans-serif;
+  }
+  .verenne-manifesto-standards-list {
+    border-top: 1px solid rgba(31, 22, 16, 0.28);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .verenne-standard-row {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(31, 22, 16, 0.28);
+    padding: 1.5rem 0;
+    align-items: baseline;
+  }
+  @media (min-width: 640px) {
+    .verenne-standard-row {
+      grid-template-columns: 8rem 1fr;
+    }
+  }
+  .verenne-standard-num {
+    font-family: 'Bodoni Moda', serif;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    line-height: 1;
+    color: #99481F;
+  }
+  .verenne-standard-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .verenne-standard-title {
+    font-size: 17px;
+    font-weight: 500;
+    color: #1F1610;
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+  }
+  .verenne-standard-desc {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #554739;
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Verenne Manifesto",
+  "class": "section-verenne-manifesto",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne Manifesto"
+    }
+  ]
+}
+{% endschema %}

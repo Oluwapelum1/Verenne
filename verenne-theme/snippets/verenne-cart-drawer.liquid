@@ -1,0 +1,445 @@
+{%- comment -%}
+  Verenne Luxury Cart Drawer
+  1:1 Replica of CartDrawer.jsx from https://oluwapelum1.github.io/Verenne/
+{%- endcomment -%}
+
+<div id="verenne-cart-drawer" class="verenne-cart-drawer-root" aria-hidden="true" style="display: none;">
+  <div class="verenne-cart-backdrop" onclick="closeVerenneCartDrawer()"></div>
+  <aside class="verenne-cart-panel" role="dialog" aria-modal="true" aria-label="Shopping bag">
+    <!-- Header -->
+    <header class="verenne-cart-header">
+      <h2 class="verenne-cart-heading">
+        Bag <sup class="verenne-cart-sup" id="verenne-cart-item-count">0</sup>
+      </h2>
+      <button type="button" class="verenne-cart-close" onclick="closeVerenneCartDrawer()" aria-label="Close bag">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Free Delivery Progress Bar -->
+    <div class="verenne-cart-threshold" id="verenne-cart-threshold" style="display: none;">
+      <p class="verenne-threshold-text" id="verenne-threshold-text">$150 away from free delivery</p>
+      <div class="verenne-threshold-track">
+        <div class="verenne-threshold-progress" id="verenne-threshold-progress" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Items Scroll Container -->
+    <div class="verenne-cart-items-wrap" id="verenne-cart-items-wrap">
+      <!-- Populated dynamically via JavaScript -->
+    </div>
+
+    <!-- Footer Checkout Tier -->
+    <footer class="verenne-cart-footer" id="verenne-cart-footer" style="display: none;">
+      <div class="verenne-cart-subtotal-row">
+        <span>Subtotal</span>
+        <span id="verenne-cart-subtotal-val">$0</span>
+      </div>
+      <p class="verenne-cart-delivery-note">Taxes & shipping calculated at checkout</p>
+      <a href="{{ routes.cart_url }}/checkout" class="verenne-cart-checkout-btn" id="verenne-cart-checkout-btn">
+        Checkout
+      </a>
+    </footer>
+  </aside>
+</div>
+
+<style>
+  .verenne-cart-drawer-root {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .verenne-cart-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 9, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .verenne-cart-drawer-root.is-open .verenne-cart-backdrop {
+    opacity: 1;
+  }
+  .verenne-cart-panel {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    height: 100%;
+    background-color: #E9E1D4;
+    color: #1F1610;
+    border-left: 1px solid rgba(31, 22, 16, 0.18);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+  .verenne-cart-drawer-root.is-open .verenne-cart-panel {
+    transform: translateX(0);
+  }
+  .verenne-cart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 1.75rem;
+    border-bottom: 1px solid rgba(31, 22, 16, 0.12);
+  }
+  .verenne-cart-heading {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+  }
+  .verenne-cart-sup {
+    font-family: 'Hanken Grotesk', monospace, sans-serif;
+    font-size: 0.75rem;
+    color: #6B5D4F;
+    top: -0.8em;
+  }
+  .verenne-cart-close {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(31, 22, 16, 0.25);
+    border-radius: 9999px;
+    background: transparent;
+    color: #1F1610;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .verenne-cart-close:hover {
+    background: #1F1610;
+    color: #FAF6EE;
+  }
+  .verenne-cart-threshold {
+    padding: 0.85rem 1.75rem;
+    border-bottom: 1px solid rgba(31, 22, 16, 0.08);
+    background: rgba(242, 236, 226, 0.5);
+  }
+  .verenne-threshold-text {
+    font-size: 0.8125rem;
+    color: #554739;
+    margin: 0 0 0.5rem 0;
+  }
+  .verenne-threshold-track {
+    height: 2px;
+    background: rgba(31, 22, 16, 0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .verenne-threshold-progress {
+    height: 100%;
+    background: #99481F;
+    transition: width 0.5s ease;
+  }
+  .verenne-cart-items-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 1.75rem;
+  }
+  .verenne-cart-empty-view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 0;
+  }
+  .verenne-cart-empty-title {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 1.85rem;
+    font-weight: 400;
+    margin: 0 0 0.5rem 0;
+  }
+  .verenne-cart-empty-sub {
+    font-size: 0.9375rem;
+    color: #554739;
+    margin: 0 0 1.5rem 0;
+  }
+  .verenne-cart-item {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(31, 22, 16, 0.08);
+  }
+  .verenne-cart-item-img {
+    width: 72px;
+    height: 90px;
+    object-fit: cover;
+    background: #DDD3C3;
+  }
+  .verenne-cart-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .verenne-cart-item-title {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin: 0;
+  }
+  .verenne-cart-item-size {
+    font-size: 0.75rem;
+    color: #6B5D4F;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .verenne-cart-item-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(31, 22, 16, 0.2);
+    border-radius: 9999px;
+    margin-top: 0.35rem;
+    width: fit-content;
+  }
+  .verenne-cart-stepper-btn {
+    background: transparent;
+    border: none;
+    padding: 0.2rem 0.55rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #1F1610;
+  }
+  .verenne-cart-stepper-qty {
+    font-family: 'Hanken Grotesk', monospace, sans-serif;
+    font-size: 0.8rem;
+    min-width: 1.25rem;
+    text-align: center;
+  }
+  .verenne-cart-item-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+  .verenne-cart-item-price {
+    font-family: 'Hanken Grotesk', monospace, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .verenne-cart-item-remove {
+    background: transparent;
+    border: none;
+    color: #A39585;
+    font-size: 0.75rem;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+  .verenne-cart-item-remove:hover {
+    color: #99481F;
+  }
+  .verenne-cart-footer {
+    padding: 1.5rem 1.75rem;
+    border-top: 1px solid rgba(31, 22, 16, 0.12);
+    background: #E9E1D4;
+  }
+  .verenne-cart-subtotal-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Bodoni Moda', serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .verenne-cart-delivery-note {
+    font-size: 0.75rem;
+    color: #6B5D4F;
+    margin: 0 0 1.25rem 0;
+  }
+  .verenne-cart-checkout-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: #1F1610;
+    color: #FAF6EE;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    padding: 1rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  .verenne-cart-checkout-btn:hover {
+    background: #99481F;
+  }
+</style>
+
+<script>
+  let verenneBagItems = [];
+
+  // Load initial cart from localStorage or Shopify cart
+  function initVerenneBag() {
+    try {
+      const stored = localStorage.getItem('verenne_bag');
+      if (stored) {
+        verenneBagItems = JSON.parse(stored);
+      }
+    } catch(e) {}
+    renderVerenneBag();
+    updateVerenneBagBadge();
+  }
+
+  function saveVerenneBag() {
+    try {
+      localStorage.setItem('verenne_bag', JSON.stringify(verenneBagItems));
+    } catch(e) {}
+    renderVerenneBag();
+    updateVerenneBagBadge();
+  }
+
+  function openVerenneCartDrawer() {
+    const root = document.getElementById('verenne-cart-drawer');
+    if (!root) return;
+    root.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      root.classList.add('is-open');
+    });
+  }
+
+  function closeVerenneCartDrawer() {
+    const root = document.getElementById('verenne-cart-drawer');
+    if (!root) return;
+    root.classList.remove('is-open');
+    document.body.style.overflow = '';
+    setTimeout(() => {
+      root.style.display = 'none';
+    }, 500);
+  }
+
+  function updateVerenneBagBadge() {
+    const count = verenneBagItems.reduce((acc, item) => acc + (item.qty || 1), 0);
+    const badges = document.querySelectorAll('.verenne-bag-count, #verenne-bag-count-badge, #verenne-cart-item-count');
+    badges.forEach(b => b.textContent = count);
+  }
+
+  function addVerenneCartItem(title, priceStr, size, imgUrl) {
+    const price = parseFloat(priceStr.replace(/[^0-9.]/g, '')) || 0;
+    const existing = verenneBagItems.find(item => item.title === title && item.size === size);
+    if (existing) {
+      existing.qty = (existing.qty || 1) + 1;
+    } else {
+      verenneBagItems.push({
+        title: title,
+        price: price,
+        size: size || '50ml',
+        img: imgUrl || "{{ 'eclat-sauvage.jpg' | asset_url }}",
+        qty: 1
+      });
+    }
+    saveVerenneBag();
+    openVerenneCartDrawer();
+  }
+
+  function updateVerenneCartQty(idx, delta) {
+    if (!verenneBagItems[idx]) return;
+    verenneBagItems[idx].qty += delta;
+    if (verenneBagItems[idx].qty <= 0) {
+      verenneBagItems.splice(idx, 1);
+    }
+    saveVerenneBag();
+  }
+
+  function removeVerenneCartItem(idx) {
+    if (!verenneBagItems[idx]) return;
+    verenneBagItems.splice(idx, 1);
+    saveVerenneBag();
+  }
+
+  function renderVerenneBag() {
+    const wrap = document.getElementById('verenne-cart-items-wrap');
+    const threshold = document.getElementById('verenne-cart-threshold');
+    const footer = document.getElementById('verenne-cart-footer');
+    if (!wrap) return;
+
+    if (verenneBagItems.length === 0) {
+      if (threshold) threshold.style.display = 'none';
+      if (footer) footer.style.display = 'none';
+      wrap.innerHTML = `
+        <div class="verenne-cart-empty-view">
+          <h3 class="verenne-cart-empty-title">Your bag is empty.</h3>
+          <p class="verenne-cart-empty-sub">Sixteen formulations are waiting.</p>
+          <button type="button" class="verenne-btn-solid" onclick="closeVerenneCartDrawer(); location.href='#collection';">
+            <span>Explore →</span>
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    if (threshold) threshold.style.display = 'block';
+    if (footer) footer.style.display = 'block';
+
+    const subtotal = verenneBagItems.reduce((acc, item) => acc + item.price * (item.qty || 1), 0);
+    const need = Math.max(0, 150 - subtotal);
+    const pct = Math.min(100, Math.round((subtotal / 150) * 100));
+
+    const threshText = document.getElementById('verenne-threshold-text');
+    const threshProg = document.getElementById('verenne-threshold-progress');
+    if (threshText) {
+      threshText.textContent = need > 0 ? '$' + need + ' away from free delivery' : 'Free delivery unlocked';
+    }
+    if (threshProg) {
+      threshProg.style.width = pct + '%';
+    }
+
+    const subtotalVal = document.getElementById('verenne-cart-subtotal-val');
+    if (subtotalVal) subtotalVal.textContent = '$' + subtotal.toFixed(0);
+
+    let html = '';
+    verenneBagItems.forEach((item, idx) => {
+      html += `
+        <div class="verenne-cart-item">
+          <img src="${item.img}" alt="${item.title}" class="verenne-cart-item-img" />
+          <div class="verenne-cart-item-info">
+            <h4 class="verenne-cart-item-title">${item.title}</h4>
+            <span class="verenne-cart-item-size">${item.size}</span>
+            <div class="verenne-cart-item-stepper">
+              <button type="button" class="verenne-cart-stepper-btn" onclick="updateVerenneCartQty(${idx}, -1)">−</button>
+              <span class="verenne-cart-stepper-qty">${item.qty}</span>
+              <button type="button" class="verenne-cart-stepper-btn" onclick="updateVerenneCartQty(${idx}, 1)">+</button>
+            </div>
+          </div>
+          <div class="verenne-cart-item-right">
+            <span class="verenne-cart-item-price">$${(item.price * item.qty).toFixed(0)}</span>
+            <button type="button" class="verenne-cart-item-remove" onclick="removeVerenneCartItem(${idx})">Remove</button>
+          </div>
+        </div>
+      `;
+    });
+
+    wrap.innerHTML = html;
+  }
+
+  // Intercept Shopify theme bag clicks globally
+  document.addEventListener('DOMContentLoaded', () => {
+    initVerenneBag();
+    document.querySelectorAll('[href*="/cart"], #cart-icon-bubble').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openVerenneCartDrawer();
+      });
+    });
+  });
+
+  // Expose global helpers
+  window.openVerenneCartDrawer = openVerenneCartDrawer;
+  window.closeVerenneCartDrawer = closeVerenneCartDrawer;
+  window.addVerenneCartItem = addVerenneCartItem;
+</script>
