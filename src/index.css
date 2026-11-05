@@ -5,11 +5,16 @@
 @source "../verenne-theme/sections/vr-*.liquid";
 @source "../verenne-theme/snippets/vr-*.liquid";
 @source "../verenne-theme/assets/vr-app.js";
+/* …and the Theme Store edition (verenne-os) */
+@source "../verenne-os/layout/*.liquid";
+@source "../verenne-os/sections/*.liquid";
+@source "../verenne-os/snippets/*.liquid";
+@source "../verenne-os/assets/vr-app.js";
 
 @theme {
   --font-serif: 'Bodoni Moda', 'Times New Roman', serif;
-  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
-  --font-mono: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-sans: 'Figtree', system-ui, sans-serif;
+  --font-mono: 'Figtree', system-ui, sans-serif;
 
   --color-ink: #0A0A09;
   --color-ink-2: #111110;

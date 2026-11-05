@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    {% render 'meta-tags' %}
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif -%}
+      {%- if current_page != 1 %} &ndash; {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    <link rel="canonical" href="{{ canonical_url }}">
+    <meta name="theme-color" content="{{ settings.light_background }}">
+    <meta name="color-scheme" content="dark">
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {{ settings.type_heading_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {{ settings.type_body_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+
+    {{ 'vr-app.css' | asset_url | stylesheet_tag }}
+    {% render 'css-variables' %}
+    {%- unless template.name == 'index' -%}
+      {{ 'base.css' | asset_url | stylesheet_tag }}
+    {%- endunless -%}
+
+    <script>
+      window.VR_CURRENCY = {{ cart.currency.symbol | default: '$' | json }};
+      window.VR_FREE_SHIPPING = {{ settings.free_shipping_threshold | default: 120 }};
+      window.VR_THREE_URL = {{ 'three.min.js' | asset_url | json }};
+      window.VR_ROUTES = {
+        cart: {{ routes.cart_url | json }},
+        cartAdd: {{ routes.cart_add_url | json }},
+        cartChange: {{ routes.cart_change_url | json }},
+        cartUpdate: {{ routes.cart_update_url | json }},
+        root: {{ routes.root_url | json }}
+      };
+    </script>
+    <script src="{{ 'vr-lenis.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'vr-app.js' | asset_url }}" defer="defer"></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="antialiased">
+    <div class="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
+      {%- if settings.show_grain -%}
+        <div class="grain" aria-hidden="true"></div>
+      {%- endif -%}
+
+      {% sections 'header-group' %}
+
+      <main id="MainContent">
+        {{ content_for_layout }}
+      </main>
+
+      {% sections 'footer-group' %}
+
+      <div data-vr-cart-root></div>
+      <div data-vr-dossier-root></div>
+      <div data-vr-fly class="pointer-events-none fixed inset-0 z-[9999] overflow-hidden" hidden></div>
+      <div class="pointer-events-none fixed bottom-5 left-1/2 z-[250] -translate-x-1/2" role="status" aria-live="polite" data-vr-toast-root></div>
+    </div>
+  </body>
+</html>

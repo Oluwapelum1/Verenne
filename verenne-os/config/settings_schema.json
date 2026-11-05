@@ -1,0 +1,84 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Verenne",
+    "theme_version": "1.0.0",
+    "theme_author": "Oluwapelumi Olusanya",
+    "theme_documentation_url": "https://oluwapelum1.github.io/Verenne/",
+    "theme_support_url": "https://oluwapelum1.github.io/Verenne/"
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Heading font",
+        "default": "bodoni_moda_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "figtree_n4"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Dark scheme"
+      },
+      { "type": "color", "id": "dark_background", "label": "Background", "default": "#1A130E" },
+      { "type": "color", "id": "dark_background_secondary", "label": "Secondary background", "default": "#241B14" },
+      { "type": "color", "id": "dark_surface", "label": "Surface background", "default": "#2C2119" },
+      { "type": "color", "id": "dark_text", "label": "Text", "default": "#EFE7DA" },
+      { "type": "color", "id": "dark_text_secondary", "label": "Secondary text", "default": "#C2B5A4" },
+      { "type": "color", "id": "dark_text_muted", "label": "Muted text", "default": "#A39585" },
+      { "type": "color", "id": "dark_accent", "label": "Accent", "default": "#E0935F" },
+      { "type": "color", "id": "dark_accent_text", "label": "Text on accent", "default": "#1A130E" },
+      {
+        "type": "header",
+        "content": "Light scheme"
+      },
+      { "type": "color", "id": "light_background", "label": "Background", "default": "#E9E1D4" },
+      { "type": "color", "id": "light_background_secondary", "label": "Secondary background", "default": "#DDD3C3" },
+      { "type": "color", "id": "light_surface", "label": "Surface background", "default": "#F2ECE2" },
+      { "type": "color", "id": "light_text", "label": "Text", "default": "#1F1610" },
+      { "type": "color", "id": "light_text_secondary", "label": "Secondary text", "default": "#554739" },
+      { "type": "color", "id": "light_text_muted", "label": "Muted text", "default": "#6B5D4F" },
+      { "type": "color", "id": "light_accent", "label": "Accent", "default": "#99481F" },
+      { "type": "color", "id": "light_accent_text", "label": "Text on accent", "default": "#F2ECE2" }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free delivery threshold",
+        "info": "Shown as a progress meter in the bag. Set the real rate under Settings > Shipping and delivery.",
+        "default": 120
+      },
+      {
+        "type": "checkbox",
+        "id": "show_grain",
+        "label": "Show film grain texture",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image"
+      }
+    ]
+  }
+]

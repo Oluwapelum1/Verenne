@@ -1,0 +1,320 @@
+{
+  "sections": {
+    "hero": {
+      "type": "vr-hero",
+      "settings": {
+        "image": "shopify://shop_images/model_oil_glow.jpg",
+        "price_collection": "verenne-all"
+      }
+    },
+    "collection": {
+      "type": "vr-collection",
+      "settings": {
+        "collection": "verenne-all"
+      },
+      "blocks": {
+        "category_cleanse": {
+          "type": "category",
+          "settings": {
+            "collection": "verenne-cleanse",
+            "label": "Cleanse",
+            "title": "Purify & Clarify",
+            "blurb": "Remove impurities and sunscreen without stripping your skin."
+          }
+        },
+        "category_treat": {
+          "type": "category",
+          "settings": {
+            "collection": "verenne-treat",
+            "label": "Treat",
+            "title": "Targeted treatments",
+            "blurb": "Concentrated serums, peptides and overnight treatments."
+          }
+        },
+        "category_hydrate": {
+          "type": "category",
+          "settings": {
+            "collection": "verenne-hydrate",
+            "label": "Hydrate",
+            "title": "Hydration Veils",
+            "blurb": "Mists, lotions and a weightless daily SPF."
+          }
+        },
+        "category_restore": {
+          "type": "category",
+          "settings": {
+            "collection": "verenne-restore",
+            "label": "Restore",
+            "title": "Barrier Cocoon",
+            "blurb": "Rich balms, night butters and eye care."
+          }
+        }
+      },
+      "block_order": [
+        "category_cleanse",
+        "category_treat",
+        "category_hydrate",
+        "category_restore"
+      ]
+    },
+    "manifesto": {
+      "type": "vr-manifesto",
+      "blocks": {
+        "standard_1": {
+          "type": "standard",
+          "settings": {
+            "num": "16",
+            "title": "A focused range",
+            "text": "Four formulas each to cleanse, treat, hydrate and restore. Nothing beyond that."
+          }
+        },
+        "standard_2": {
+          "type": "standard",
+          "settings": {
+            "num": "72h",
+            "title": "Field to still",
+            "text": "Plants are picked by hand at dawn and distilled in copper within 72 hours."
+          }
+        },
+        "standard_3": {
+          "type": "standard",
+          "settings": {
+            "num": "4",
+            "title": "Known origins",
+            "text": "Corsica, Morocco, the Horn of Africa and Grasse, from the same growers every year."
+          }
+        },
+        "standard_4": {
+          "type": "standard",
+          "settings": {
+            "num": "0",
+            "title": "Synthetic fragrance",
+            "text": "No silicones, parabens, phthalates or artificial colour in any formula."
+          }
+        }
+      },
+      "block_order": [
+        "standard_1",
+        "standard_2",
+        "standard_3",
+        "standard_4"
+      ],
+      "settings": {}
+    },
+    "ritual": {
+      "type": "vr-ritual",
+      "settings": {},
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "mode": "dawn",
+            "product": "argile-purifiante",
+            "verb": "Cleanse",
+            "time": "07:00"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "mode": "dawn",
+            "product": "brume-botanique",
+            "verb": "Mist",
+            "time": "07:02"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "mode": "dawn",
+            "product": "eclat-sauvage",
+            "verb": "Illuminate",
+            "time": "07:03"
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "mode": "dawn",
+            "product": "creme-radieuse",
+            "verb": "Veil",
+            "time": "07:05"
+          }
+        },
+        "step_5": {
+          "type": "step",
+          "settings": {
+            "mode": "dusk",
+            "product": "huile-soyeuse",
+            "verb": "Dissolve",
+            "time": "22:00"
+          }
+        },
+        "step_6": {
+          "type": "step",
+          "settings": {
+            "mode": "dusk",
+            "product": "essence-fleurie",
+            "verb": "Quench",
+            "time": "22:02"
+          }
+        },
+        "step_7": {
+          "type": "step",
+          "settings": {
+            "mode": "dusk",
+            "product": "seve-doree",
+            "verb": "Renew",
+            "time": "22:04"
+          }
+        },
+        "step_8": {
+          "type": "step",
+          "settings": {
+            "mode": "dusk",
+            "product": "baume-resineux",
+            "verb": "Seal",
+            "time": "22:06"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4",
+        "step_5",
+        "step_6",
+        "step_7",
+        "step_8"
+      ]
+    },
+    "origins": {
+      "type": "vr-origins",
+      "blocks": {
+        "botanical_1": {
+          "type": "botanical",
+          "settings": {
+            "common": "Immortelle",
+            "latin": "Helichrysum stoechas",
+            "origin": "Corsica",
+            "harvest": "July, by hand at dawn",
+            "story": "Its golden heads never wither after picking. We distil them the same afternoon, on the island."
+          }
+        },
+        "botanical_2": {
+          "type": "botanical",
+          "settings": {
+            "common": "Blue Tansy",
+            "latin": "Tanacetum annuum",
+            "origin": "Northern Morocco",
+            "harvest": "Late summer",
+            "story": "Steam turns its oil a startling indigo — a sign of chamazulene, the compound skin finds so calming."
+          }
+        },
+        "botanical_3": {
+          "type": "botanical",
+          "settings": {
+            "common": "Frankincense",
+            "latin": "Boswellia carterii",
+            "origin": "Horn of Africa",
+            "harvest": "Resin tears, dry season",
+            "story": "Gathered by cooperatives who have tapped the same trees for generations. Fair price, set in advance."
+          }
+        },
+        "botanical_4": {
+          "type": "botanical",
+          "settings": {
+            "common": "Bitter Orange Blossom",
+            "latin": "Citrus aurantium",
+            "origin": "Grasse, France",
+            "harvest": "Two weeks in May",
+            "story": "One tonne of blossom gives one litre of hydrosol. Distilled in copper within hours of picking."
+          }
+        }
+      },
+      "block_order": [
+        "botanical_1",
+        "botanical_2",
+        "botanical_3",
+        "botanical_4"
+      ],
+      "settings": {}
+    },
+    "press": {
+      "type": "vr-press",
+      "blocks": {
+        "quote_1": {
+          "type": "quote",
+          "settings": {
+            "quote": "Éclat Sauvage replaced three steps in my routine. My skin has never looked calmer.",
+            "author": "Elena R.",
+            "role": "Customer, Zürich"
+          }
+        },
+        "quote_2": {
+          "type": "quote",
+          "settings": {
+            "quote": "The first balm that actually survived a Swiss winter on my face.",
+            "author": "Mara K.",
+            "role": "Customer, Geneva"
+          }
+        }
+      },
+      "block_order": [
+        "quote_1",
+        "quote_2"
+      ],
+      "settings": {}
+    },
+    "faq": {
+      "type": "vr-faq",
+      "blocks": {
+        "question_1": {
+          "type": "question",
+          "settings": {
+            "question": "Are Verenne formulas suitable for sensitive skin?",
+            "answer": "Every formula is fragrance-free of synthetic perfume and patch-tested. Sève Dorée and Baume Résineux were designed with reactive skin in mind. As with any new product, patch test first."
+          }
+        },
+        "question_2": {
+          "type": "question",
+          "settings": {
+            "question": "How long does a bottle last?",
+            "answer": "Used daily, a 30 ml serum lasts roughly 10–12 weeks. Mist and lotion around 8 weeks. Balm, a full season."
+          }
+        },
+        "question_3": {
+          "type": "question",
+          "settings": {
+            "question": "Do you ship worldwide?",
+            "answer": "Yes — carbon-neutral delivery to 40+ countries. Free on orders over $150."
+          }
+        },
+        "question_4": {
+          "type": "question",
+          "settings": {
+            "question": "Can I return an opened product?",
+            "answer": "Within 30 days, opened or not. We would rather you find the right ritual than keep the wrong one."
+          }
+        }
+      },
+      "block_order": [
+        "question_1",
+        "question_2",
+        "question_3",
+        "question_4"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "collection",
+    "manifesto",
+    "ritual",
+    "origins",
+    "press",
+    "faq"
+  ]
+}

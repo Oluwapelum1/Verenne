@@ -1,0 +1,53 @@
+{%- doc -%}
+  Outputs one product as a JSON object for assets/vr-app.js.
+  Optional details (subtitle, texture, notes, glass colours for the 3D view, …) come from the
+  product metafield `verenne.details` (JSON); every field falls back to standard product data.
+
+  @param {product} product - The product to serialise
+  @param {number} [index] - Position used for the "N°" number when the title has none
+{%- enddoc -%}
+{%- liquid
+  assign d = product.metafields.verenne.details.value
+  assign first_word = product.title | split: ' ' | first
+  if first_word contains 'N°'
+    assign number = first_word | remove: 'N°'
+    assign name = product.title | remove_first: first_word | strip
+  else
+    assign position = index | default: 1
+    assign number = position | prepend: '0' | slice: -2, 2
+    assign name = product.title
+  endif
+  assign image = product.featured_image
+  assign portrait = product.images[1] | default: image
+  assign summary = product.description | strip_html | strip_newlines | truncatewords: 40
+-%}
+{
+  "id": {{ product.handle | json }},
+  "no": {{ number | json }},
+  "name": {{ name | json }},
+  "fullName": {{ product.title | json }},
+  "url": {{ product.url | json }},
+  "category": {{ product.type | default: '' | json }},
+  "subtitle": {{ d.subtitle | default: product.type | default: '' | json }},
+  "price": {{ product.price | divided_by: 100.0 | json }},
+  "sizes": [
+    {%- for variant in product.variants -%}
+      {"size": {{ variant.title | replace: 'Default Title', '' | default: '' | json }}, "price": {{ variant.price | divided_by: 100.0 | json }}, "variantId": {{ variant.id }}, "available": {{ variant.available | json }}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ],
+  {%- if image -%}
+  "images": {
+    "320": {{ image | image_url: width: 320 | json }},
+    "600": {{ image | image_url: width: 600 | json }},
+    "1200": {{ image | image_url: width: 1200 | json }}
+  },
+  "imageAlt": {{ image.alt | default: product.title | json }},
+  "portrait": {{ portrait | image_url: width: 1200 | json }},
+  {%- else -%}
+  "images": {},
+  "imageAlt": {{ product.title | json }},
+  "portrait": "",
+  {%- endif -%}
+  "description": {{ d.description | default: summary | json }},
+  "details": {{ d | json }}
+}

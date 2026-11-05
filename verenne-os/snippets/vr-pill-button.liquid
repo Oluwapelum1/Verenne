@@ -1,0 +1,15 @@
+{%- comment -%}
+  PillButton from src/components/ui.jsx — a liquid fill wipes up on hover.
+  Usage: {% render 'vr-pill-button', label: 'Shop', variant: 'solid', class: '', attrs: 'data-x' %}
+{%- endcomment -%}
+{%- if variant == 'outline' -%}
+  {%- assign tone = 'border border-[var(--border-strong)] text-[var(--text-primary)] hover:text-[var(--accent-ink)]' -%}
+  {%- assign fill = 'bg-[var(--text-primary)]' -%}
+{%- else -%}
+  {%- assign tone = 'bg-[var(--text-primary)] text-[var(--accent-ink)]' -%}
+  {%- assign fill = 'bg-[var(--accent)]' -%}
+{%- endif -%}
+<button type="{{ type | default: 'button' }}" {{ attrs }} class="group relative inline-flex items-center justify-center gap-2 overflow-hidden px-7 py-4 text-[15px] font-medium transition-colors duration-500 {{ tone }} {{ class }}">
+  <span aria-hidden="true" class="absolute inset-0 translate-y-[101%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 {{ fill }}"></span>
+  <span class="relative z-10 inline-flex items-center gap-2">{{ label }}</span>
+</button>

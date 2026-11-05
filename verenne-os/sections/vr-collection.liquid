@@ -1,0 +1,80 @@
+{%- comment -%} Product grid with category filters. The grid is drawn by assets/vr-app.js from the JSON below. {%- endcomment -%}
+{%- liquid
+  assign main_collection = section.settings.collection | default: collections.all
+-%}
+<section id="collection" class="tone-light px-5 py-20 sm:px-10 sm:py-28" aria-labelledby="collection-title">
+  <div class="mx-auto max-w-[1600px]">
+    <div class="flex flex-col justify-between gap-6 border-b border-[var(--border-strong)] pb-6 lg:flex-row lg:items-end">
+      <div>
+        <h2 id="collection-title" data-vr-cat-title class="font-serif text-[clamp(2.6rem,5.5vw,5.4rem)] leading-none tracking-[-0.02em]">{{ section.settings.title }}</h2>
+        <p data-vr-cat-blurb class="mt-4 max-w-xl text-[16px] text-[var(--text-secondary)]">{{ section.settings.blurb }}</p>
+      </div>
+
+      <div class="flex flex-wrap gap-x-6 gap-y-2" role="group" aria-label="Filter by category" data-vr-cat-filters></div>
+    </div>
+
+    <ul class="mt-10 grid grid-cols-2 gap-x-4 gap-y-12 [grid-auto-flow:dense] lg:grid-cols-4 lg:gap-x-6" data-vr-grid>
+      {%- comment -%} Server-rendered list for crawlers and no-JS visitors; replaced by the interactive grid {%- endcomment -%}
+      {%- for product in main_collection.products limit: 50 -%}
+        <li><a href="{{ product.url }}">{{ product.title }} — {{ product.price | money }}</a></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+<script type="application/json" data-vr-categories>
+  [
+    {
+      "id": "all",
+      "label": {{ section.settings.all_label | json }},
+      "title": {{ section.settings.title | json }},
+      "blurb": {{ section.settings.blurb | json }},
+      "ids": [{% for product in main_collection.products limit: 50 %}{{ product.handle | json }}{% unless forloop.last %},{% endunless %}{% endfor %}]
+    }
+    {%- for block in section.blocks -%}
+      {%- if block.settings.collection != blank -%}
+        ,{
+          "id": {{ block.id | json }},
+          "label": {{ block.settings.label | json }},
+          "title": {{ block.settings.title | default: block.settings.label | json }},
+          "blurb": {{ block.settings.blurb | json }},
+          "ids": [{% for product in block.settings.collection.products limit: 50 %}{{ product.handle | json }}{% unless forloop.last %},{% endunless %}{% endfor %}]
+        }
+      {%- endif -%}
+    {%- endfor -%}
+  ]
+</script>
+
+<script type="application/json" data-vr-products>
+  [
+    {%- for product in main_collection.products limit: 50 -%}
+      {% render 'vr-product-json', product: product, index: forloop.index %}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+</script>
+
+{% schema %}
+{
+  "name": "Product collection",
+  "class": "vr-section-collection",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Defaults to all products." },
+    { "type": "text", "id": "title", "label": "Heading", "default": "All 16 formulations" },
+    { "type": "textarea", "id": "blurb", "label": "Text", "default": "Four steps, four formulas each. Pick a step or browse them all." },
+    { "type": "text", "id": "all_label", "label": "All products filter label", "default": "All" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Filter",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "label", "label": "Filter label", "default": "Cleanse" },
+        { "type": "text", "id": "title", "label": "Heading when selected", "default": "Purify & Clarify" },
+        { "type": "textarea", "id": "blurb", "label": "Text when selected", "default": "Remove impurities and sunscreen without stripping your skin." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Product collection" }]
+}
+{% endschema %}

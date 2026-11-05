@@ -1,0 +1,17 @@
+{%- doc -%}
+  Brand mark with wordmark and tagline.
+
+  @param {string} [mark_class] - Size classes for the mark
+  @param {string} [name] - Wordmark text, defaults to the store name
+  @param {string} [tagline] - Small line under the wordmark
+{%- enddoc -%}
+<div class="inline-flex items-center gap-2.5 ">
+  {%- assign mark = mark_class | default: 'h-6 w-6' | append: ' text-[var(--accent)] shrink-0' -%}
+  {% render 'vr-mark', class: mark %}
+  <div class="flex flex-col text-left">
+    <span class="font-serif text-[1.35rem] tracking-[0.06em] leading-none text-[var(--text-primary)] font-normal uppercase">{{ name | default: shop.name }}</span>
+    {%- if tagline != blank -%}
+      <span class="font-mono text-[7.5px] uppercase tracking-[0.28em] text-[var(--accent)] mt-0.5 leading-none opacity-85">{{ tagline }}</span>
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,51 @@
+{%- comment -%}
+  Maps theme settings onto the design tokens used by assets/vr-app.css
+  (the shared stylesheet compiled from the web app). Defaults reproduce the original design exactly.
+{%- endcomment -%}
+{%- liquid
+  assign heading = settings.type_heading_font
+  assign body = settings.type_body_font
+-%}
+{% style %}
+  {{ heading | font_face: font_display: 'swap' }}
+  {{ heading | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ heading | font_modify: 'weight', '500' | font_face: font_display: 'swap' }}
+  {{ heading | font_modify: 'weight', '600' | font_face: font_display: 'swap' }}
+  {{ body | font_face: font_display: 'swap' }}
+  {{ body | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ body | font_modify: 'weight', '300' | font_face: font_display: 'swap' }}
+  {{ body | font_modify: 'weight', '500' | font_face: font_display: 'swap' }}
+  {{ body | font_modify: 'weight', '600' | font_face: font_display: 'swap' }}
+
+  :root, :host {
+    --font-serif: {{ heading.family }}, {{ heading.fallback_families }};
+    --font-sans: {{ body.family }}, {{ body.fallback_families }};
+    --font-mono: {{ body.family }}, {{ body.fallback_families }};
+  }
+
+  :root {
+    --bg-primary: {{ settings.dark_background }};
+    --bg-secondary: {{ settings.dark_background_secondary }};
+    --bg-surface: {{ settings.dark_surface }};
+    --text-primary: {{ settings.dark_text }};
+    --text-secondary: {{ settings.dark_text_secondary }};
+    --text-muted: {{ settings.dark_text_muted }};
+    --border-subtle: {{ settings.dark_text | color_modify: 'alpha', 0.12 }};
+    --border-strong: {{ settings.dark_text | color_modify: 'alpha', 0.28 }};
+    --accent: {{ settings.dark_accent }};
+    --accent-ink: {{ settings.dark_accent_text }};
+  }
+
+  .tone-light {
+    --bg-primary: {{ settings.light_background }};
+    --bg-secondary: {{ settings.light_background_secondary }};
+    --bg-surface: {{ settings.light_surface }};
+    --text-primary: {{ settings.light_text }};
+    --text-secondary: {{ settings.light_text_secondary }};
+    --text-muted: {{ settings.light_text_muted }};
+    --border-subtle: {{ settings.light_text | color_modify: 'alpha', 0.14 }};
+    --border-strong: {{ settings.light_text | color_modify: 'alpha', 0.32 }};
+    --accent: {{ settings.light_accent }};
+    --accent-ink: {{ settings.light_accent_text }};
+  }
+{% endstyle %}

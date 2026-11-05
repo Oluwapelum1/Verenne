@@ -1,0 +1,77 @@
+{%- liquid
+  assign cheapest = section.settings.price_collection.products | default: collections.all.products | sort: 'price' | first
+-%}
+<section id="top" class="tone-light grid min-h-[100svh] grid-cols-1 pt-[104px] lg:grid-cols-12" aria-labelledby="hero-title-{{ section.id }}">
+  <div
+    data-vr-enter
+    class="flex flex-col justify-between gap-12 px-5 py-10 sm:px-10 sm:py-14 lg:col-span-7"
+    style="opacity: 0; transform: translateY(24px);"
+  >
+    <h1 id="hero-title-{{ section.id }}" class="font-serif text-[clamp(3.4rem,8.6vw,9rem)] leading-[0.94] tracking-[-0.03em]">
+      {{ section.settings.heading }} <em class="block">{{ section.settings.heading_italic }}</em>
+    </h1>
+
+    <div class="grid gap-8 border-t border-[var(--border-strong)] pt-6 sm:grid-cols-2">
+      <p class="max-w-md text-[17px] leading-relaxed text-[var(--text-secondary)]">{{ section.settings.text }}</p>
+      <div class="flex flex-wrap items-center gap-6 sm:justify-end">
+        {%- liquid
+          assign label = section.settings.button_label
+          if cheapest and label contains '[price]'
+            assign price = cheapest.price | money_without_trailing_zeros
+            assign label = label | replace: '[price]', price
+          endif
+          assign target = section.settings.button_target | remove: '#'
+          assign attrs = 'data-vr-go="' | append: target | append: '" data-vr-offset="-40"'
+        -%}
+        {% render 'vr-pill-button', label: label, attrs: attrs %}
+        {%- if section.settings.link_label != blank -%}
+          {%- assign link_target = section.settings.link_target | remove: '#' -%}
+          <button
+            type="button"
+            data-vr-go="{{ link_target }}"
+            data-vr-offset="-40"
+            class="text-[15px] underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]"
+          >
+            {{ section.settings.link_label }}
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="relative min-h-[70vh] overflow-hidden lg:col-span-5 lg:min-h-0">
+    {%- if section.settings.image != blank -%}
+      {{
+        section.settings.image
+        | image_url: width: 1600
+        | image_tag:
+          widths: '600, 900, 1200, 1600',
+          sizes: '(min-width: 1024px) 42vw, 100vw',
+          fetchpriority: 'high',
+          loading: 'eager',
+          class: 'absolute inset-0 h-full w-full origin-[62%_72%] scale-[1.28] object-cover'
+      }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'absolute inset-0 h-full w-full bg-[var(--bg-secondary)] text-[var(--text-muted)]' }}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "class": "vr-section-hero",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Botanical skincare," },
+    { "type": "text", "id": "heading_italic", "label": "Heading second line", "info": "Shown in italics.", "default": "made slowly." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Sixteen plant-based formulas to cleanse, treat, hydrate and restore your skin. Distilled in small batches in Grasse." },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "button_label", "label": "Button label", "info": "Use [price] to show the lowest product price.", "default": "Shop from [price]" },
+    { "type": "text", "id": "button_target", "label": "Button scrolls to section", "info": "Section anchor on this page, such as collection.", "default": "collection" },
+    { "type": "collection", "id": "price_collection", "label": "Collection for lowest price" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "See the routine" },
+    { "type": "text", "id": "link_target", "label": "Link scrolls to section", "default": "ritual" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

@@ -1,0 +1,144 @@
+{%- comment -%} Header: announcement bar, navigation, bag and the full-screen index menu. Behaviour lives in assets/vr-app.js. {%- endcomment -%}
+{%- liquid
+  assign menu = section.settings.menu
+  assign index_collection = section.settings.index_collection | default: collections.all
+  if menu.links.size > 0
+    assign use_menu = true
+  else
+    assign use_menu = false
+    assign fallback_links = 'collection:Collection,ritual:Ritual,origins:Origins,faq:FAQ' | split: ','
+  endif
+-%}
+<header
+  data-vr-header
+  class="tone-light fixed inset-x-0 top-0 z-[120] border-b border-[var(--border-strong)]"
+  style="transform: translateY(-80px);"
+>
+  {%- if section.settings.announcement != blank -%}
+    <div class="w-full bg-[#1A130E] px-4 py-2 text-center text-[13px] text-[#EFE7DA]">{{ section.settings.announcement }}</div>
+  {%- endif -%}
+  <div class="px-5 sm:px-10">
+    <nav class="mx-auto flex h-[68px] max-w-[1600px] items-center justify-between" aria-label="Main">
+      <a href="{{ routes.root_url }}#top" data-vr-go="top" class="group flex shrink-0 items-center" aria-label="{{ shop.name | escape }} home">
+        {% render 'vr-logo', mark_class: 'h-7 w-7', name: section.settings.logo_text, tagline: section.settings.tagline %}
+      </a>
+
+      <ul class="hidden items-center gap-7 lg:flex">
+        {%- if use_menu -%}
+          {%- for link in menu.links -%}
+            {%- assign anchor = link.url | split: '#' | last -%}
+            <li>
+              <a href="{{ link.url }}" {% if link.url contains '#' %}data-vr-go="{{ anchor }}"{% endif %} class="group relative text-[15px] transition-colors hover:text-[var(--accent)]">
+                {{- link.title -}}
+                <span class="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100"></span>
+              </a>
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for link in fallback_links -%}
+            {%- assign parts = link | split: ':' -%}
+            <li>
+              <a href="{{ routes.root_url }}#{{ parts[0] }}" data-vr-go="{{ parts[0] }}" class="group relative text-[15px] transition-colors hover:text-[var(--accent)]">
+                {{- parts[1] -}}
+                <span class="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100"></span>
+              </a>
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+
+      <div class="flex items-center gap-5 sm:gap-7">
+        <button type="button" data-vr-bag-open class="text-[15px] transition-colors hover:text-[var(--accent)]" aria-label="Open bag, {{ cart.item_count }} items">
+          Bag (<span data-vr-bag-count>{{ cart.item_count }}</span>)
+        </button>
+        <button
+          type="button"
+          data-vr-menu-toggle
+          aria-expanded="false"
+          aria-controls="site-menu"
+          class="flex items-center gap-2 text-[15px] transition-colors hover:text-[var(--accent)]"
+        >
+          <span class="relative block h-2 w-3.5">
+            <span data-vr-burger="a" class="absolute left-0 h-px w-full bg-current transition-all duration-500 top-0"></span>
+            <span data-vr-burger="b" class="absolute left-0 h-px w-full bg-current transition-all duration-500 top-2"></span>
+          </span>
+          <span data-vr-menu-label>Menu</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div
+  id="site-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site menu"
+  class="fixed inset-0 z-[110] overflow-y-auto bg-[var(--bg-primary)]"
+  style="clip-path: inset(0 0 100% 0);"
+  data-lenis-prevent
+  hidden
+>
+  <div class="mx-auto grid min-h-full max-w-[1600px] grid-cols-1 gap-10 px-5 pb-10 pt-28 sm:px-10 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <p class="label mb-6">{{ section.settings.navigate_label }}</p>
+      <ul class="space-y-1">
+        {%- if use_menu -%}
+          {%- for link in menu.links -%}
+            {%- assign anchor = link.url | split: '#' | last -%}
+            <li class="overflow-hidden">
+              <a href="{{ link.url }}" {% if link.url contains '#' %}data-vr-go="{{ anchor }}"{% endif %} data-vr-menu-link class="group flex items-baseline gap-3 font-serif text-5xl leading-[1.05] transition-colors hover:text-[var(--accent)] sm:text-6xl" style="transform: translateY(100%);">
+                <span class="font-mono text-[11px] text-[var(--text-muted)]">0{{ forloop.index }}</span>
+                <span class="transition-transform duration-500 group-hover:translate-x-2 group-hover:italic">{{ link.title }}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for link in fallback_links -%}
+            {%- assign parts = link | split: ':' -%}
+            <li class="overflow-hidden">
+              <a href="{{ routes.root_url }}#{{ parts[0] }}" data-vr-go="{{ parts[0] }}" data-vr-menu-link class="group flex items-baseline gap-3 font-serif text-5xl leading-[1.05] transition-colors hover:text-[var(--accent)] sm:text-6xl" style="transform: translateY(100%);">
+                <span class="font-mono text-[11px] text-[var(--text-muted)]">0{{ forloop.index }}</span>
+                <span class="transition-transform duration-500 group-hover:translate-x-2 group-hover:italic">{{ parts[1] }}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+    </div>
+
+    <div class="lg:col-span-5">
+      <p class="label mb-6">{{ section.settings.index_label }}</p>
+      <ul class="border-t border-[var(--border-subtle)]" data-vr-menu-index></ul>
+    </div>
+
+    <div class="relative hidden lg:col-span-3 lg:block">
+      <div class="sticky top-28 aspect-[3/4] overflow-hidden rounded-none border border-[var(--border-subtle)] bg-[var(--bg-secondary)]" data-vr-menu-preview></div>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" data-vr-products>
+  [
+    {%- for product in index_collection.products limit: 50 -%}
+      {% render 'vr-product-json', product: product, index: forloop.index %}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+</script>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "vr-section-header",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "text", "id": "announcement", "label": "Announcement", "default": "Free shipping on orders over $150" },
+    { "type": "text", "id": "logo_text", "label": "Logo name", "info": "Leave blank to use the store name." },
+    { "type": "text", "id": "tagline", "label": "Logo tagline", "default": "Paris · Grasse" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu", "info": "Links to sections on the home page, such as /#ritual, scroll smoothly." },
+    { "type": "collection", "id": "index_collection", "label": "Menu product index", "info": "Products listed in the full-screen menu. Defaults to all products." },
+    { "type": "text", "id": "navigate_label", "label": "Menu links heading", "default": "Navigate" },
+    { "type": "text", "id": "index_label", "label": "Menu product index heading", "default": "Index — 16 formulations" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,15 @@
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "header": {
+      "type": "vr-header",
+      "settings": {
+        "index_collection": "verenne-all"
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

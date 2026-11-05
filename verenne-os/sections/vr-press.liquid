@@ -1,0 +1,37 @@
+{%- comment -%} Port of src/components/Press.jsx {%- endcomment -%}
+<section id="press" class="border-y border-[var(--border-subtle)] px-5 py-20 sm:px-10 sm:py-28" aria-label="Customer reviews">
+  <div class="mx-auto grid max-w-[1600px] grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
+    {%- for block in section.blocks -%}
+      <figure {{ block.shopify_attributes }}>
+        <blockquote class="font-serif text-[clamp(1.9rem,3.4vw,3.2rem)] leading-[1.1]">“{{ block.settings.quote }}”</blockquote>
+        <figcaption class="mt-5 text-[15px] text-[var(--text-secondary)]">{{ block.settings.author }}, {{ block.settings.role }}</figcaption>
+      </figure>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Verenne press",
+  "blocks": [
+    {
+      "type": "quote",
+      "name": "Quote",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "author", "label": "Author" },
+        { "type": "text", "id": "role", "label": "Role" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne press",
+      "blocks": [
+        { "type": "quote", "settings": { "quote": "Éclat Sauvage replaced three steps in my routine. My skin has never looked calmer.", "author": "Elena R.", "role": "Customer, Zürich" } },
+        { "type": "quote", "settings": { "quote": "The first balm that actually survived a Swiss winter on my face.", "author": "Mara K.", "role": "Customer, Geneva" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

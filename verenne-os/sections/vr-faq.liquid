@@ -1,0 +1,76 @@
+{%- comment -%} Port of src/components/FAQ.jsx (wrapped in .tone-light as in App.jsx) {%- endcomment -%}
+<div class="tone-light">
+  <section id="faq" class="px-5 py-24 sm:px-10 sm:py-32" aria-labelledby="faq-title">
+    <div class="mx-auto grid max-w-[1600px] grid-cols-1 gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <p class="label">{{ section.settings.label }}</p>
+        <h2 id="faq-title" class="mt-4 font-serif text-[clamp(2.6rem,5vw,4.5rem)] leading-[0.95]">
+          {{ section.settings.heading }} <em class="text-[var(--accent)]">{{ section.settings.heading_italic }}</em>
+        </h2>
+      </div>
+      <div class="border-t border-[var(--border-subtle)] lg:col-span-8">
+        {%- for block in section.blocks -%}
+          <details name="faq" class="group border-b border-[var(--border-subtle)]" {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 [&::-webkit-details-marker]:hidden">
+              <span class="font-serif text-2xl sm:text-3xl">{{ block.settings.question }}</span>
+              <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[var(--border-strong)] transition-transform duration-500 group-open:rotate-45">
+                {% render 'vr-icon', name: 'plus', class: 'h-4 w-4' %}
+              </span>
+            </summary>
+            <p class="max-w-2xl pb-8 text-[15px] leading-relaxed text-[var(--text-secondary)]">{{ block.settings.answer }}</p>
+          </details>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Verenne FAQ",
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne FAQ"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Eyebrow",
+      "default": "Questions"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Asked,"
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading ending",
+      "info": "Shown in italics in the accent color.",
+      "default": "answered."
+    }
+  ]
+}
+{% endschema %}

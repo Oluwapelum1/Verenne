@@ -32,4 +32,11 @@ fs.writeFileSync(
 // 3. Smooth scroll library (same version as the web app)
 fs.copyFileSync(path.join(root, 'node_modules', 'lenis', 'dist', 'lenis.min.js'), path.join(assets, 'vr-lenis.js'));
 
+// 4. The Theme Store edition (verenne-os) shares the stylesheet and scroll library; its data comes from Shopify
+const osAssets = path.join(root, 'verenne-os', 'assets');
+if (fs.existsSync(osAssets)) {
+  fs.copyFileSync(path.join(distAssets, css), path.join(osAssets, 'vr-app.css'));
+  fs.copyFileSync(path.join(root, 'node_modules', 'lenis', 'dist', 'lenis.min.js'), path.join(osAssets, 'vr-lenis.js'));
+}
+
 console.log(`Shopify assets updated from ${css}`);
