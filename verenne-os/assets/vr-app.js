@@ -513,7 +513,14 @@
     let shownKey = null;
     let swapping = null;
 
-    PRODUCTS.forEach((p) => imgUrl(p, '600') && (new Image().src = imgUrl(p, '600')));
+    // Warm the cache for the ritual's photos once the page has loaded, so they don't compete with the hero
+    const warm = () => {
+      const ids = new Set([...RITUAL.dawn, ...RITUAL.dusk].map((x) => x.id));
+      PRODUCTS.filter((p) => ids.has(p.id)).forEach((p) => imgUrl(p, '600') && (new Image().src = imgUrl(p, '600')));
+    };
+    const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 1500));
+    if (document.readyState === 'complete') idle(warm);
+    else window.addEventListener('load', () => idle(warm), { once: true });
 
     const GLOWS = { dawn: [224, 147, 95, 0.14], dusk: [165, 82, 42, 0.2] };
     let glowNow = GLOWS.dawn.slice();
