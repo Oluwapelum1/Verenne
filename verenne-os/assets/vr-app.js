@@ -1101,6 +1101,7 @@
       .catch(() => {
         container.innerHTML = productImage(product, { eager: true, sizes: '50vw', className: 'h-full w-full object-cover' });
       });
+    return handle;
   }
 
   const SHAPES = {
@@ -1380,6 +1381,153 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Product page (sections/vr-main-product.liquid)                      */
+  /* ------------------------------------------------------------------ */
+  function initProductPage() {
+    const root = $('[data-vr-product-page]');
+    if (!root) return;
+    const handle = readJson('script[data-vr-product-page-data]')[0];
+    const product = PRODUCTS.find((p) => p.id === handle);
+    const stage = $('[data-vr-stage]', root);
+    const lens = $('[data-vr-lens]', root);
+    const views = $$('[data-vr-view]', root);
+    const panel = (id) => $(`[data-vr-media="${id}"]`, stage);
+    let current = '0';
+    let scene = null;
+    startBlobs(root);
+
+    // The glass bottle is offered where it can run smoothly, as in the dossier
+    const view3d = views.find((b) => b.dataset.vrView === '3d');
+    if (view3d && product && can3D && !reduced) view3d.hidden = false;
+
+    // Same fade as the dossier's view switcher
+    views.forEach((b) =>
+      b.addEventListener('click', () => {
+        const id = b.dataset.vrView;
+        if (id === current) return;
+        const from = panel(current);
+        const to = panel(id);
+        current = id;
+        views.forEach((o) => {
+          const on = o === b;
+          o.classList.toggle('bg-white', on);
+          o.classList.toggle('text-black', on);
+          o.classList.toggle('bg-black/40', !on);
+          o.classList.toggle('text-white', !on);
+          o.classList.toggle('hover:bg-black/60', !on);
+        });
+        animate(from, [{ opacity: 1 }, { opacity: 0 }], { duration: 700 }).finished.then(() => {
+          from.hidden = true;
+          $$('video', from).forEach((v) => v.pause());
+          if (scene && from.dataset.vrMedia === '3d') {
+            scene.dispose();
+            scene = null;
+            from.innerHTML = '';
+          }
+          to.hidden = false;
+          if (id === '3d') {
+            to.innerHTML = `<p class="grid h-full place-items-center text-[15px] text-[var(--text-secondary)]" data-loading>Loading bottle</p><p class="pointer-events-none absolute left-5 top-5 text-[14px] text-[var(--text-secondary)]">Drag to rotate</p>`;
+            scene = mountGlass(to, product);
+          }
+          animate(to, [{ opacity: 0, transform: 'scale(1.05)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 700 });
+        });
+      })
+    );
+
+    // Magnifier over photos
+    stage.addEventListener('pointermove', (e) => {
+      const img = $('img[data-zoom]', panel(current));
+      if (!img || e.pointerType === 'touch') return (lens.hidden = true);
+      const r = stage.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      lens.hidden = false;
+      lens.style.left = `${x}%`;
+      lens.style.top = `${y}%`;
+      lens.style.backgroundImage = `url(${img.dataset.zoom})`;
+      lens.style.backgroundSize = '300%';
+      lens.style.backgroundPosition = `${x}% ${y}%`;
+    });
+    stage.addEventListener('pointerleave', () => (lens.hidden = true));
+
+    // Buy box
+    const form = $('form[data-vr-product-form]', root);
+    if (!form) return;
+    const input = $('[data-vr-variant-input]', form);
+    const qtyInput = $('[data-vr-qty-input]', form);
+    const addBtn = $('[data-vr-add-button]', form);
+    const priceWrap = () => $('[data-vr-buy-price] [data-vr-price]', form);
+    const variantButtons = $$('[data-vr-variant]', form);
+    const unitPrice = () => {
+      const active = variantButtons.find((b) => b.getAttribute('aria-checked') === 'true');
+      return active ? Number(active.dataset.price) : product ? product.sizes[0].price : 0;
+    };
+    const qty = () => Math.max(1, parseInt(qtyInput.value, 10) || 1);
+    const refreshPrice = () => rollPrice(priceWrap(), Math.round(unitPrice() * qty() * 100) / 100);
+
+    variantButtons.forEach((b) =>
+      b.addEventListener('click', () => {
+        variantButtons.forEach((o) => {
+          const on = o === b;
+          o.setAttribute('aria-checked', String(on));
+          o.classList.toggle('border-[var(--text-primary)]', on);
+          ['border-[var(--border-subtle)]', 'text-[var(--text-muted)]', 'hover:border-[var(--border-strong)]'].forEach((c) => o.classList.toggle(c, !on));
+        });
+        input.value = b.dataset.vrVariant;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        const available = b.dataset.available === 'true';
+        if (addBtn) {
+          addBtn.disabled = !available;
+          $('.z-10', addBtn).textContent = available ? addBtn.dataset.addLabel : 'Sold out';
+        }
+        refreshPrice();
+        const url = `${root.dataset.productUrl}?variant=${b.dataset.vrVariant}`;
+        history.replaceState(null, '', url);
+        // Pickup availability depends on the variant
+        fetch(`${url}&section_id=${root.dataset.sectionId}`)
+          .then((r) => r.text())
+          .then((t) => {
+            const fresh = new DOMParser().parseFromString(t, 'text/html').querySelector('[data-vr-pickup]');
+            const old = $('[data-vr-pickup]', root);
+            if (fresh && old) old.replaceWith(fresh);
+          })
+          .catch(() => {});
+      })
+    );
+
+    $$('[data-vr-pq]', form).forEach((b) =>
+      b.addEventListener('click', () => {
+        qtyInput.value = Math.max(1, qty() + Number(b.dataset.vrPq));
+        refreshPrice();
+      })
+    );
+    qtyInput.addEventListener('change', refreshPrice);
+
+    form.addEventListener('submit', (e) => {
+      if (!product) return;
+      e.preventDefault();
+      const size = product.sizes.find((x) => String(x.variantId) === input.value) || product.sizes[0];
+      addToCart(product, size, qty(), (addBtn || form).getBoundingClientRect());
+    });
+  }
+
+  // Related and complementary products load after the page, from the recommendations endpoint
+  function initRecommendations() {
+    $$('[data-vr-recommendations]').forEach((el) => {
+      fetch(el.dataset.url)
+        .then((r) => r.text())
+        .then((t) => {
+          const fresh = new DOMParser().parseFromString(t, 'text/html').querySelector('[data-vr-recommendations]');
+          if (fresh && fresh.innerHTML.trim()) {
+            el.innerHTML = fresh.innerHTML;
+            el.hidden = false;
+          }
+        })
+        .catch(() => {});
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Boot                                                                */
   /* ------------------------------------------------------------------ */
   function syncBag() {
@@ -1402,6 +1550,8 @@
   initCollection();
   initRitual();
   initFooter();
+  initProductPage();
+  initRecommendations();
   syncBag();
 
   refreshCart().catch(() => {});

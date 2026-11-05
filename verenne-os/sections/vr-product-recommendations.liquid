@@ -1,0 +1,57 @@
+{%- comment -%}
+  Related or complementary products in the dossier's "Pairs well with" style.
+  Loaded after the page by assets/vr-app.js from the product recommendations endpoint.
+{%- endcomment -%}
+{%- liquid
+  assign limit = section.settings.limit
+  assign intent = section.settings.intent
+-%}
+<section
+  class="border-t border-[var(--border-subtle)] px-6 py-12 sm:px-12"
+  data-vr-recommendations
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limit }}&intent={{ intent }}"
+  {% unless recommendations.performed and recommendations.products_count > 0 %}hidden{% endunless %}
+>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <div class="mx-auto max-w-[1600px]">
+      <p class="label">{{ section.settings.heading }}</p>
+      <div class="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {%- for rec in recommendations.products -%}
+          <a href="{{ rec.url }}" class="group flex items-center gap-3 rounded-none border border-[var(--border-subtle)] p-2 text-left transition-colors hover:border-[var(--border-strong)]">
+            {%- if rec.featured_image -%}
+              {{ rec.featured_image | image_url: width: 320 | image_tag: loading: 'lazy', class: 'h-16 w-14 rounded-none object-cover', alt: rec.title }}
+            {%- endif -%}
+            <span>
+              {%- assign rec_first = rec.title | split: ' ' | first -%}
+              <span class="block font-serif text-lg leading-tight group-hover:italic">{% if rec_first contains 'N°' %}{{ rec.title | remove_first: rec_first | strip }}{% else %}{{ rec.title }}{% endif %}</span>
+              <span class="font-mono text-[11px] text-[var(--text-muted)]">{{ rec.price | money_without_trailing_zeros }}</span>
+            </span>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "class": "vr-section-recommendations",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Pairs well with" },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Products to show",
+      "options": [
+        { "value": "related", "label": "Related" },
+        { "value": "complementary", "label": "Complementary" }
+      ],
+      "default": "related",
+      "info": "Complementary products are chosen in the Search & Discovery app."
+    },
+    { "type": "range", "id": "limit", "label": "Number of products", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ],
+  "presets": [{ "name": "Product recommendations" }]
+}
+{% endschema %}

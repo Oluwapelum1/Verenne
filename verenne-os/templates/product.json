@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "main": {
+      "type": "vr-main-product",
+      "blocks": {
+        "eyebrow": { "type": "eyebrow", "settings": {} },
+        "title": { "type": "title", "settings": {} },
+        "rating": { "type": "rating", "settings": {} },
+        "specs": { "type": "specs", "settings": {} },
+        "description": { "type": "description", "settings": {} },
+        "buy_buttons": { "type": "buy_buttons", "settings": {} },
+        "pickup": { "type": "pickup", "settings": {} },
+        "details": { "type": "details", "settings": {} },
+        "share": { "type": "share", "settings": {} }
+      },
+      "block_order": ["eyebrow", "title", "rating", "specs", "description", "buy_buttons", "pickup", "details", "share"],
+      "settings": {}
+    },
+    "complementary": {
+      "type": "vr-product-recommendations",
+      "settings": { "heading": "Complete the ritual", "intent": "complementary", "limit": 4 }
+    },
+    "related": {
+      "type": "vr-product-recommendations",
+      "settings": { "heading": "Pairs well with", "intent": "related", "limit": 4 }
+    }
+  },
+  "order": ["main", "complementary", "related"]
+}

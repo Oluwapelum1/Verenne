@@ -1,0 +1,346 @@
+{%- comment -%}
+  Product page: the product dossier as a full page. Left: media with magnifier and view switcher
+  (photos, videos, 3D models and the glass bottle). Right: product information blocks.
+  Behaviour lives in assets/vr-app.js (initProductPage).
+{%- endcomment -%}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign d = product.metafields.verenne.details.value
+  assign first_word = product.title | split: ' ' | first
+  if first_word contains 'N°'
+    assign number = first_word
+    assign name = product.title | remove_first: first_word | strip
+  else
+    assign number = ''
+    assign name = product.title
+  endif
+  assign category = collection.title
+  for c in product.collections
+    unless c.handle contains 'all'
+      assign category = c.title
+      break
+    endunless
+  endfor
+-%}
+<section
+  class="pt-[105px]"
+  data-vr-product-page
+  data-section-id="{{ section.id }}"
+  data-product-url="{{ product.url }}"
+>
+  <div class="grid grid-cols-1 lg:grid-cols-2">
+    {%- comment -%} Media {%- endcomment -%}
+    <div class="relative min-h-[60vh] bg-[var(--bg-secondary)] lg:sticky lg:top-[105px] lg:h-[calc(100svh-105px)]">
+      <div class="absolute inset-0 overflow-hidden" data-vr-stage>
+        {%- for media in product.media -%}
+          <div class="absolute inset-0" data-vr-media="{{ forloop.index0 }}" {% unless forloop.first %}hidden{% endunless %}>
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- assign zoom_src = media | image_url: width: 1800 -%}
+                {%- if forloop.first -%}{%- assign img_loading = 'eager' -%}{%- else -%}{%- assign img_loading = 'lazy' -%}{%- endif -%}
+                {{
+                  media
+                  | image_url: width: 1600
+                  | image_tag:
+                    widths: '600, 900, 1200, 1600',
+                    sizes: '(min-width: 1024px) 50vw, 100vw',
+                    loading: img_loading,
+                    class: 'h-full w-full object-cover select-none',
+                    data-zoom: zoom_src
+                }}
+              {%- when 'video', 'external_video' -%}
+                {{ media | media_tag: image_size: '1600x', class: 'h-full w-full object-cover', autoplay: false, loop: true, controls: true }}
+              {%- when 'model' -%}
+                {{ media | media_tag: image_size: '1600x', class: 'h-full w-full', toggleable: false }}
+            {%- endcase -%}
+          </div>
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'h-full w-full text-[var(--text-muted)]' }}
+        {%- endfor -%}
+        <div class="absolute inset-0 touch-none cursor-grab active:cursor-grabbing" data-vr-media="3d" hidden></div>
+        <div class="pointer-events-none absolute h-44 w-44 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full border border-white/40 shadow-2xl" data-vr-lens hidden></div>
+      </div>
+
+      {%- if product.media.size > 1 or section.settings.show_3d -%}
+        <div class="absolute bottom-5 left-5 flex flex-wrap gap-2" data-vr-views>
+          {%- for media in product.media limit: 4 -%}
+            {%- liquid
+              case forloop.index
+                when 1
+                  assign view_label = section.settings.first_view_label
+                when 2
+                  assign view_label = section.settings.second_view_label
+                else
+                  assign view_label = 'View ' | append: forloop.index
+              endcase
+              if media.media_type == 'video' or media.media_type == 'external_video'
+                assign view_label = 'Video'
+              elsif media.media_type == 'model'
+                assign view_label = '3D model'
+              endif
+            -%}
+            <button type="button" data-vr-view="{{ forloop.index0 }}" class="rounded-none px-4 py-2 text-[12px] backdrop-blur-md transition-colors {% if forloop.first %}bg-white text-black{% else %}bg-black/40 text-white hover:bg-black/60{% endif %}">{{ view_label }}</button>
+          {%- endfor -%}
+          {%- if section.settings.show_3d -%}
+            <button type="button" data-vr-view="3d" hidden class="rounded-none px-4 py-2 text-[12px] backdrop-blur-md transition-colors bg-black/40 text-white hover:bg-black/60">{{ section.settings.view_3d_label }}</button>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Information {%- endcomment -%}
+    <div class="flex flex-col px-6 pb-16 pt-8 sm:px-12 sm:pt-16">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'eyebrow' -%}
+            <div class="flex items-center gap-3" {{ block.shopify_attributes }}>
+              {%- if number != blank -%}
+                <span class="font-mono text-[12px] text-[var(--accent)]">{{ number }}</span>
+                <span class="h-px w-8 bg-[var(--border-strong)]"></span>
+              {%- endif -%}
+              <span class="label">{{ category }}{% if category != blank and product.type != blank %} · {% endif %}{{ product.type }}</span>
+            </div>
+
+          {%- when 'title' -%}
+            <h1 class="mt-4 font-serif text-[clamp(3rem,6vw,5.5rem)] leading-[0.9]" {{ block.shopify_attributes }}>{{ name }}</h1>
+            {%- if d.subtitle != blank -%}
+              <p class="mt-2 font-serif text-xl italic text-[var(--text-secondary)]">{{ d.subtitle }}</p>
+            {%- endif -%}
+
+          {%- when 'rating' -%}
+            {%- assign rating = product.metafields.reviews.rating.value | default: d.rating -%}
+            {%- assign rating_count = product.metafields.reviews.rating_count | default: d.reviewsCount -%}
+            {%- if rating != blank -%}
+              <div class="mt-4 flex items-center gap-2 text-[13px] text-[var(--text-secondary)]" {{ block.shopify_attributes }}>
+                <span class="flex">
+                  {%- for i in (1..5) -%}
+                    {% render 'vr-icon', name: 'star', class: 'h-3.5 w-3.5 fill-[var(--accent)] text-[var(--accent)]' %}
+                  {%- endfor -%}
+                </span>
+                {{ rating.rating | default: rating }} · {{ rating_count }} reviews
+              </div>
+            {%- endif -%}
+
+          {%- when 'specs' -%}
+            {%- if d.ph != blank or d.finish != blank -%}
+              <div class="mt-6 grid grid-cols-2 gap-2 border-y border-[var(--border-subtle)] py-4 text-center" {{ block.shopify_attributes }}>
+                <div class="rounded-none bg-[var(--bg-secondary)]/70 p-2.5"><span class="label block text-[12px]">{{ block.settings.first_label }}</span><span class="font-mono text-sm text-[var(--accent)] block mt-0.5">{{ d.ph }}</span></div>
+                <div class="rounded-none bg-[var(--bg-secondary)]/70 p-2.5"><span class="label block text-[12px]">{{ block.settings.second_label }}</span><span class="font-mono text-sm text-[var(--text-primary)] block mt-0.5">{{ d.finish }}</span></div>
+              </div>
+            {%- endif -%}
+
+          {%- when 'description' -%}
+            <div class="mt-6 max-w-lg text-[16px] leading-relaxed text-[var(--text-secondary)] [&_p+p]:mt-3" {{ block.shopify_attributes }}>
+              {%- if d.description != blank and block.settings.short -%}
+                <p>{{ d.description }}</p>
+              {%- else -%}
+                {{ product.description }}
+              {%- endif -%}
+            </div>
+
+          {%- when 'buy_buttons' -%}
+            <div class="mt-8 rounded-none border border-[var(--border-subtle)] p-5" {{ block.shopify_attributes }}>
+              {%- form 'product', product, data-vr-product-form: '', novalidate: 'novalidate' -%}
+                <input type="hidden" name="id" value="{{ current_variant.id }}" data-vr-variant-input>
+                <div class="flex items-center justify-between gap-4">
+                  {%- unless product.has_only_default_variant -%}
+                    <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ product.options.first | escape }}">
+                      {%- for variant in product.variants -%}
+                        <button
+                          type="button"
+                          role="radio"
+                          aria-checked="{% if variant == current_variant %}true{% else %}false{% endif %}"
+                          data-vr-variant="{{ variant.id }}"
+                          data-price="{{ variant.price | divided_by: 100.0 }}"
+                          data-available="{{ variant.available }}"
+                          class="rounded-none border px-4 py-2 font-mono text-[11px] transition-colors {% if variant == current_variant %}border-[var(--text-primary)]{% else %}border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--border-strong)]{% endif %}"
+                        >
+                          {{- variant.title -}}
+                        </button>
+                      {%- endfor -%}
+                    </div>
+                  {%- endunless -%}
+                  <span class="font-serif text-4xl" data-vr-buy-price>
+                    <span class="inline-flex items-baseline overflow-hidden" data-vr-price="{{ current_variant.price | divided_by: 100.0 }}"><span class="mr-[0.08em] text-[0.6em] opacity-70">{{ cart.currency.symbol }}</span><span class="inline-block tabular-nums">{{ current_variant.price | money_without_currency | remove: '.00' }}</span></span>
+                  </span>
+                </div>
+                {%- if current_variant.compare_at_price > current_variant.price -%}
+                  <p class="mt-2 text-right text-[13px] text-[var(--text-muted)] line-through">{{ current_variant.compare_at_price | money }}</p>
+                {%- endif -%}
+                {%- if current_variant.unit_price_measurement -%}
+                  <p class="mt-2 text-right text-[12px] text-[var(--text-muted)]" data-vr-unit-price>
+                    {{ current_variant.unit_price | money }}/{% if current_variant.unit_price_measurement.reference_value != 1 %}{{ current_variant.unit_price_measurement.reference_value }}{% endif %}{{ current_variant.unit_price_measurement.reference_unit }}
+                  </p>
+                {%- endif -%}
+
+                <div class="mt-5 flex gap-2">
+                  <div class="flex items-center rounded-full border border-[var(--border-subtle)]">
+                    <button type="button" data-vr-pq="-1" class="grid h-12 w-10 place-items-center" aria-label="Decrease quantity">{% render 'vr-icon', name: 'minus', class: 'h-3.5 w-3.5' %}</button>
+                    <input type="number" name="quantity" value="1" min="1" class="w-6 bg-transparent text-center font-mono text-[13px] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none" aria-label="Quantity" data-vr-qty-input>
+                    <button type="button" data-vr-pq="1" class="grid h-12 w-10 place-items-center" aria-label="Increase quantity">{% render 'vr-icon', name: 'plus', class: 'h-3.5 w-3.5' %}</button>
+                  </div>
+                  {%- capture add_label -%}
+                    {%- if current_variant.available -%}{{ block.settings.add_label }}{%- else -%}Sold out{%- endif -%}
+                  {%- endcapture -%}
+                  {%- capture add_attrs -%}data-vr-add-button data-add-label="{{ block.settings.add_label | escape }}"{% unless current_variant.available %} disabled{% endunless %}{%- endcapture -%}
+                  {% render 'vr-pill-button', label: add_label, type: 'submit', class: 'flex-1 disabled:opacity-50', attrs: add_attrs %}
+                </div>
+
+                {%- if block.settings.show_dynamic_checkout -%}
+                  <div class="vr-payment mt-3">{{ form | payment_button }}</div>
+                {%- endif -%}
+                <div class="vr-payment-terms mt-4 text-[13px] text-[var(--text-secondary)]">{{ form | payment_terms }}</div>
+              {%- endform -%}
+              {%- if block.settings.note != blank -%}
+                <p class="label mt-4">{{ block.settings.note }}</p>
+              {%- endif -%}
+            </div>
+
+          {%- when 'pickup' -%}
+            <div class="mt-6" data-vr-pickup {{ block.shopify_attributes }}>
+              {%- assign pickups = current_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+              {%- if pickups.size > 0 -%}
+                {%- assign first_pickup = pickups.first -%}
+                <p class="flex items-center gap-2 text-[14px]">
+                  {%- if first_pickup.available -%}
+                    {% render 'vr-icon', name: 'check', class: 'h-3.5 w-3.5 text-[var(--accent)]' %}
+                    Pickup available at <span class="font-medium">{{ first_pickup.location.name }}</span>
+                  {%- else -%}
+                    Pickup currently unavailable at <span class="font-medium">{{ first_pickup.location.name }}</span>
+                  {%- endif -%}
+                </p>
+                <p class="label mt-1">{{ first_pickup.pick_up_time }}</p>
+              {%- endif -%}
+            </div>
+
+          {%- when 'details' -%}
+            <dl class="mt-10 grid grid-cols-1 border-t border-[var(--border-subtle)] sm:grid-cols-2" {{ block.shopify_attributes }}>
+              {%- if d.texture != blank -%}
+                <div class="border-b border-[var(--border-subtle)] py-5 sm:pr-6">
+                  <dt class="label">Texture</dt>
+                  <dd class="mt-2 flex items-center gap-3 text-[15px]">
+                    <span aria-hidden="true" data-vr-blob class="block h-7 w-7" style="background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.85) 0%, {{ d.glow }} 26%, {{ d.glow }}AA 60%, rgba(0,0,0,0.4) 100%); box-shadow: 0 0 40px {{ d.glow }}55, inset -6px -10px 18px rgba(0,0,0,0.35); border-radius: 58% 42% 55% 45% / 46% 54% 46% 54%;"></span>
+                    {{ d.texture }}
+                  </dd>
+                </div>
+              {%- endif -%}
+              {%- if d.notes.size > 0 -%}
+                <div class="border-b border-[var(--border-subtle)] py-5">
+                  <dt class="label">Scent</dt>
+                  <dd class="mt-2 text-[15px]">{{ d.notes | join: ' · ' }}</dd>
+                </div>
+              {%- endif -%}
+              {%- if d.keyIngredients.size > 0 -%}
+                <div class="border-b border-[var(--border-subtle)] py-5 sm:col-span-2">
+                  <dt class="label">Key botanicals</dt>
+                  <dd class="mt-3 flex flex-wrap gap-2">
+                    {%- for k in d.keyIngredients -%}
+                      <span class="rounded-none border border-[var(--border-subtle)] px-3 py-1 text-[13px]">{{ k }}</span>
+                    {%- endfor -%}
+                  </dd>
+                </div>
+              {%- endif -%}
+              {%- if d.benefits.size > 0 -%}
+                <div class="border-b border-[var(--border-subtle)] py-5 sm:col-span-2">
+                  <dt class="label">What it does</dt>
+                  <dd class="mt-3 space-y-1.5">
+                    {%- for b in d.benefits -%}
+                      <p class="flex gap-3 text-[15px]"><span class="font-mono text-[11px] text-[var(--text-muted)]">0{{ forloop.index }}</span>{{ b }}</p>
+                    {%- endfor -%}
+                  </dd>
+                </div>
+              {%- endif -%}
+              {%- if d.howToUse != blank -%}
+                <div class="py-5 sm:col-span-2">
+                  <dt class="label">How to use</dt>
+                  <dd class="mt-2 text-[15px] text-[var(--text-secondary)]">{{ d.howToUse }}</dd>
+                </div>
+              {%- endif -%}
+            </dl>
+
+          {%- when 'share' -%}
+            <div class="mt-6 flex items-center gap-4 text-[13px] text-[var(--text-secondary)]" {{ block.shopify_attributes }}>
+              <span class="label">Share</span>
+              <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: product.url | url_encode }}">Facebook</a>
+              <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/button/?url={{ shop.url | append: product.url | url_encode }}&media={{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | url_encode }}&description={{ product.title | url_encode }}">Pinterest</a>
+              <a class="underline underline-offset-4 hover:text-[var(--text-primary)]" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url={{ shop.url | append: product.url | url_encode }}&text={{ product.title | url_encode }}">X</a>
+            </div>
+
+          {%- when 'text' -%}
+            <div class="mt-6 text-[15px] leading-relaxed text-[var(--text-secondary)]" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+
+          {%- when 'custom_liquid' -%}
+            <div class="mt-6" {{ block.shopify_attributes }}>{{ block.settings.custom_liquid }}</div>
+
+          {%- when '@app' -%}
+            <div class="mt-6">{% render block %}</div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script type="application/json" data-vr-products>
+  [{% render 'vr-product-json', product: product %}]
+</script>
+<script type="application/json" data-vr-product-page-data>{{ product.handle | json }}</script>
+
+{% schema %}
+{
+  "name": "Product information",
+  "class": "vr-section-main-product",
+  "settings": [
+    { "type": "checkbox", "id": "show_3d", "label": "Show glass bottle view", "info": "Draws a 3D bottle from the product's details metafield.", "default": true },
+    { "type": "text", "id": "view_3d_label", "label": "Glass bottle view label", "default": "View in 3D" },
+    { "type": "text", "id": "first_view_label", "label": "First image label", "default": "Bottle" },
+    { "type": "text", "id": "second_view_label", "label": "Second image label", "default": "On skin" }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    { "type": "eyebrow", "name": "Number and category", "limit": 1 },
+    { "type": "title", "name": "Title", "limit": 1 },
+    { "type": "rating", "name": "Rating", "limit": 1 },
+    {
+      "type": "specs",
+      "name": "Specifications",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "first_label", "label": "First label", "default": "pH Balance" },
+        { "type": "text", "id": "second_label", "label": "Second label", "default": "Finish" }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "short", "label": "Use short description when available", "default": true }
+      ]
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "add_label", "label": "Add to bag label", "default": "Add to bag" },
+        { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout buttons", "default": true },
+        { "type": "text", "id": "note", "label": "Note", "default": "Free delivery over $150 · 30-day returns, even opened" }
+      ]
+    },
+    { "type": "pickup", "name": "Pickup availability", "limit": 1 },
+    { "type": "details", "name": "Product details", "limit": 1 },
+    { "type": "share", "name": "Share", "limit": 1 },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [{ "type": "richtext", "id": "text", "label": "Text", "default": "<p>Add a short note about this product.</p>" }]
+    },
+    {
+      "type": "custom_liquid",
+      "name": "Custom Liquid",
+      "settings": [{ "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid" }]
+    }
+  ],
+  "presets": [{ "name": "Product information" }]
+}
+{% endschema %}

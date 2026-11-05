@@ -1,0 +1,38 @@
+/*
+ * Theme-only styles for markup the theme doesn't own (Shopify's checkout buttons, payment terms).
+ * Everything else comes from vr-app.css, the stylesheet shared with the Verenne web app.
+ */
+
+/* Dynamic checkout: "Buy it now" in the outline pill style */
+.vr-payment .shopify-payment-button__button {
+  min-height: 54px;
+  border-radius: 0 !important;
+}
+
+.vr-payment .shopify-payment-button__button--unbranded {
+  border: 1px solid var(--border-strong);
+  background-color: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.vr-payment .shopify-payment-button__button--unbranded:hover:not([disabled]) {
+  background-color: var(--text-primary);
+  color: var(--accent-ink);
+}
+
+.vr-payment .shopify-payment-button__more-options {
+  margin-top: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Shop Pay Installments message */
+.vr-payment-terms shopify-payment-terms {
+  color: var(--text-secondary);
+}

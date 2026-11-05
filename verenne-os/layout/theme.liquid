@@ -23,8 +23,11 @@
     {{ settings.type_body_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
 
     {{ 'vr-app.css' | asset_url | stylesheet_tag }}
+    {{ 'vr-theme.css' | asset_url | stylesheet_tag }}
     {% render 'css-variables' %}
-    {%- unless template.name == 'index' -%}
+    {%- comment -%} Skeleton's starter styles, only for pages that still use its plain templates {%- endcomment -%}
+    {%- assign designed_templates = 'index,product' | split: ',' -%}
+    {%- unless designed_templates contains template.name -%}
       {{ 'base.css' | asset_url | stylesheet_tag }}
     {%- endunless -%}
 
