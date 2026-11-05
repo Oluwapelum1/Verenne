@@ -1,180 +1,184 @@
 {
+  "layout": "vr-app",
   "sections": {
     "hero": {
-      "type": "verenne-hero",
-      "settings": {
-        "caption": "HAUTE-BOTANIQUE FORMULATIONS",
-        "heading": "Botanical skincare,",
-        "heading_italic": "made slowly.",
-        "subtext": "Sixteen plant-based formulas to cleanse, treat, hydrate and restore your skin. Distilled in small batches in Grasse.",
-        "button_text": "Shop from $56",
-        "button_link": "#collection",
-        "secondary_text": "See the routine",
-        "secondary_link": "#ritual",
-        "padding_top": 80,
-        "padding_bottom": 80
-      }
+      "type": "vr-hero",
+      "settings": {}
     },
-    "featured_collection": {
-      "type": "verenne-featured-collection",
-      "settings": {
-        "caption": "(02) — THE COMPENDIUM",
-        "title": "All 16 formulations",
-        "blurb": "Four steps, four formulas each. Pick a step or browse them all.",
-        "padding_top": 80,
-        "padding_bottom": 80
-      }
+    "collection": {
+      "type": "vr-collection",
+      "settings": {}
+    },
+    "manifesto": {
+      "type": "vr-manifesto",
+      "blocks": {
+        "standard_1": {
+          "type": "standard",
+          "settings": {
+            "num": "16",
+            "title": "A focused range",
+            "text": "Four formulas each to cleanse, treat, hydrate and restore. Nothing beyond that."
+          }
+        },
+        "standard_2": {
+          "type": "standard",
+          "settings": {
+            "num": "72h",
+            "title": "Field to still",
+            "text": "Plants are picked by hand at dawn and distilled in copper within 72 hours."
+          }
+        },
+        "standard_3": {
+          "type": "standard",
+          "settings": {
+            "num": "4",
+            "title": "Known origins",
+            "text": "Corsica, Morocco, the Horn of Africa and Grasse, from the same growers every year."
+          }
+        },
+        "standard_4": {
+          "type": "standard",
+          "settings": {
+            "num": "0",
+            "title": "Synthetic fragrance",
+            "text": "No silicones, parabens, phthalates or artificial colour in any formula."
+          }
+        }
+      },
+      "block_order": [
+        "standard_1",
+        "standard_2",
+        "standard_3",
+        "standard_4"
+      ],
+      "settings": {}
     },
     "ritual": {
-      "type": "verenne-circadian-dial",
+      "type": "vr-ritual",
       "settings": {}
     },
     "origins": {
-      "type": "verenne-botanical-origins",
+      "type": "vr-origins",
       "blocks": {
-        "origin-1": {
+        "botanical_1": {
           "type": "botanical",
           "settings": {
-            "common_name": "Immortelle de Corse",
-            "latin_name": "Helichrysum italicum",
-            "origin": "Balagne, Corsica",
-            "harvest": "Late June, at midday",
-            "story": "Gathered on granite slopes overlooking the Mediterranean. Distilled on-site within six hours of cutting to capture fleeting neryl acetate esters."
+            "common": "Immortelle",
+            "latin": "Helichrysum stoechas",
+            "origin": "Corsica",
+            "harvest": "July, by hand at dawn",
+            "story": "Its golden heads never wither after picking. We distil them the same afternoon, on the island."
           }
         },
-        "origin-2": {
+        "botanical_2": {
           "type": "botanical",
           "settings": {
-            "common_name": "Atlas Cedarwood",
-            "latin_name": "Cedrus atlantica",
-            "origin": "Middle Atlas, Morocco",
-            "harvest": "Autumn windfalls",
-            "story": "Steam-distilled solely from naturally fallen highland heartwood. High himachalene concentration provides anti-inflammatory cellular resilience."
+            "common": "Blue Tansy",
+            "latin": "Tanacetum annuum",
+            "origin": "Northern Morocco",
+            "harvest": "Late summer",
+            "story": "Steam turns its oil a startling indigo — a sign of chamazulene, the compound skin finds so calming."
           }
         },
-        "origin-3": {
+        "botanical_3": {
           "type": "botanical",
           "settings": {
-            "common_name": "Wild Frankincense",
-            "latin_name": "Boswellia carterii",
-            "origin": "Sanaag, Horn of Africa",
-            "harvest": "Dry-season tap",
-            "story": "Harvested from wild trees tended by nomadic clans for nine generations. Hydro-distilled in glass for pure alpha-pinene clarity."
+            "common": "Frankincense",
+            "latin": "Boswellia carterii",
+            "origin": "Horn of Africa",
+            "harvest": "Resin tears, dry season",
+            "story": "Gathered by cooperatives who have tapped the same trees for generations. Fair price, set in advance."
           }
         },
-        "origin-4": {
+        "botanical_4": {
           "type": "botanical",
           "settings": {
-            "common_name": "Grasse Rose de Mai",
-            "latin_name": "Rosa centifolia",
-            "origin": "Plaines de Grasse, France",
-            "harvest": "May dawn, 05:00–08:00",
-            "story": "Every petal hand-plucked before sunrise while dew holds volatile terpene alcohols intact. Extracted into cold cellular waters."
+            "common": "Bitter Orange Blossom",
+            "latin": "Citrus aurantium",
+            "origin": "Grasse, France",
+            "harvest": "Two weeks in May",
+            "story": "One tonne of blossom gives one litre of hydrosol. Distilled in copper within hours of picking."
           }
         }
       },
       "block_order": [
-        "origin-1",
-        "origin-2",
-        "origin-3",
-        "origin-4"
+        "botanical_1",
+        "botanical_2",
+        "botanical_3",
+        "botanical_4"
       ],
-      "settings": {
-        "caption": "BOTANICAL PROVENANCE",
-        "heading": "Four places, ",
-        "heading_italic": "one harvest each.",
-        "subtext": "We purchase from the same independent regenerative growers every year, at a fixed fair price contracted prior to the spring thaw.",
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
+      "settings": {}
     },
     "press": {
-      "type": "verenne-press-quotes",
+      "type": "vr-press",
       "blocks": {
-        "press-1": {
+        "quote_1": {
           "type": "quote",
           "settings": {
-            "quote": "The purest active botanical serum we have evaluated in a decade of clinical trials. The lipid barrier restoration is palpable.",
-            "author": "Dr. Hélène Rousseau",
-            "role": "Director of Clinical Dermatology, Geneva"
+            "quote": "Éclat Sauvage replaced three steps in my routine. My skin has never looked calmer.",
+            "author": "Elena R.",
+            "role": "Customer, Zürich"
           }
         },
-        "press-2": {
+        "quote_2": {
           "type": "quote",
           "settings": {
-            "quote": "Compounded by hand in Grasse in editions of four hundred. An uncompromising apothecarial triumph.",
-            "author": "Financial Times",
-            "role": "How to Spend It"
+            "quote": "The first balm that actually survived a Swiss winter on my face.",
+            "author": "Mara K.",
+            "role": "Customer, Geneva"
           }
         }
       },
       "block_order": [
-        "press-1",
-        "press-2"
+        "quote_1",
+        "quote_2"
       ],
-      "settings": {
-        "padding_top": 80,
-        "padding_bottom": 80
-      }
+      "settings": {}
     },
     "faq": {
-      "type": "verenne-faq",
+      "type": "vr-faq",
       "blocks": {
-        "faq-1": {
-          "type": "faq_item",
+        "question_1": {
+          "type": "question",
           "settings": {
-            "question": "Why are formulations aged in violet Miron glass?",
-            "answer": "Violet glass acts as a natural botanical filter: it blocks the entire spectrum of visible light except for violet and infrared frequencies, preventing photo-oxidation of delicate terpenes without requiring synthetic chemical preservatives."
+            "question": "Are Verenne formulas suitable for sensitive skin?",
+            "answer": "Every formula is fragrance-free of synthetic perfume and patch-tested. Sève Dorée and Baume Résineux were designed with reactive skin in mind. As with any new product, patch test first."
           }
         },
-        "faq-2": {
-          "type": "faq_item",
+        "question_2": {
+          "type": "question",
           "settings": {
-            "question": "How often are new editions released?",
-            "answer": "Each formula is compounded only after annual harvests. We produce strictly four hundred flacons per edition. Once an edition is fully allocated, the formula remains unavailable until the subsequent year's harvest."
+            "question": "How long does a bottle last?",
+            "answer": "Used daily, a 30 ml serum lasts roughly 10–12 weeks. Mist and lotion around 8 weeks. Balm, a full season."
           }
         },
-        "faq-3": {
-          "type": "faq_item",
+        "question_3": {
+          "type": "question",
           "settings": {
-            "question": "Are your botanical extracts certified organic?",
-            "answer": "Every plant is either certified organic or gathered by permitted wildcrafting in protected alpine reserves. Every harvest undergoes gas-chromatography mass-spectrometry before extraction."
+            "question": "Do you ship worldwide?",
+            "answer": "Yes — carbon-neutral delivery to 40+ countries. Free on orders over $150."
           }
         },
-        "faq-4": {
-          "type": "faq_item",
+        "question_4": {
+          "type": "question",
           "settings": {
-            "question": "Can I combine the Dawn and Dusk rituals?",
-            "answer": "The formulas are compounded chronobiologically to respect skin pH and cellular regeneration rhythms. Dawn prepares the antioxidant shield; Dusk triggers lipid layer restoration."
+            "question": "Can I return an opened product?",
+            "answer": "Within 30 days, opened or not. We would rather you find the right ritual than keep the wrong one."
           }
         }
       },
       "block_order": [
-        "faq-1",
-        "faq-2",
-        "faq-3",
-        "faq-4"
+        "question_1",
+        "question_2",
+        "question_3",
+        "question_4"
       ],
-      "settings": {
-        "caption": "DISPENSATION & SCIENCE",
-        "heading": "Questions, ",
-        "heading_italic": "clarified.",
-        "subtext": "Everything concerning our cold-extraction methods, violet Miron glass stability, and small-batch allocation protocol.",
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
-    },
-    "manifesto": {
-      "type": "verenne-manifesto",
-      "settings": {
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
+      "settings": {}
     }
   },
   "order": [
     "hero",
-    "featured_collection",
+    "collection",
     "manifesto",
     "ritual",
     "origins",

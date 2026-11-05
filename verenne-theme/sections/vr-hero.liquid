@@ -1,0 +1,48 @@
+{%- comment -%} Port of src/components/Hero.jsx {%- endcomment -%}
+<section id="top" class="tone-light grid min-h-[100svh] grid-cols-1 pt-[104px] lg:grid-cols-12" aria-labelledby="hero-title">
+  <div
+    data-vr-enter
+    class="flex flex-col justify-between gap-12 px-5 py-10 sm:px-10 sm:py-14 lg:col-span-7"
+    style="opacity: 0; transform: translateY(24px);"
+  >
+    <h1 id="hero-title" class="font-serif text-[clamp(3.4rem,8.6vw,9rem)] leading-[0.94] tracking-[-0.03em]">
+      Botanical skincare, <em class="block">made slowly.</em>
+    </h1>
+
+    <div class="grid gap-8 border-t border-[var(--border-strong)] pt-6 sm:grid-cols-2">
+      <p class="max-w-md text-[17px] leading-relaxed text-[var(--text-secondary)]">
+        Sixteen plant-based formulas to cleanse, treat, hydrate and restore your skin. Distilled in small batches in Grasse.
+      </p>
+      <div class="flex flex-wrap items-center gap-6 sm:justify-end">
+        {% render 'vr-pill-button', label: 'Shop from $56', attrs: 'data-vr-go="collection" data-vr-offset="-40" data-vr-from-price' %}
+        <button
+          type="button"
+          data-vr-go="ritual"
+          data-vr-offset="-40"
+          class="text-[15px] underline decoration-1 underline-offset-[6px] hover:text-[var(--accent)]"
+        >
+          See the routine
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative min-h-[70vh] overflow-hidden lg:col-span-5 lg:min-h-0">
+    <img
+      src="{{ 'model_oil_glow.jpg' | asset_url }}"
+      alt="A woman pressing a golden facial oil into her cheek"
+      width="1200"
+      height="1500"
+      fetchpriority="high"
+      class="absolute inset-0 h-full w-full origin-[62%_72%] scale-[1.28] object-cover"
+    >
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Verenne hero",
+  "settings": [],
+  "presets": [{ "name": "Verenne hero" }]
+}
+{% endschema %}

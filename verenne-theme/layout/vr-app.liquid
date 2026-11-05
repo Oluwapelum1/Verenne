@@ -1,0 +1,68 @@
+{%- comment -%}
+  Verenne storefront layout — mirrors index.html + src/App.jsx of the web app.
+  It loads only the web app's compiled stylesheet (vr-app.css, built by `npm run build:shopify`),
+  so the page renders with exactly the same typography, spacing and colour as the GitHub site.
+{%- endcomment -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      {{ page_title }}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    <meta name="theme-color" content="#E9E1D4">
+    <meta name="color-scheme" content="dark">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+    {% render 'meta-tags' %}
+
+    {% comment %}theme-check-disable RemoteAsset{% endcomment %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&family=Hanken+Grotesk:wght@300..600&display=swap" rel="stylesheet">
+    {% comment %}theme-check-enable RemoteAsset{% endcomment %}
+    {% comment %}theme-check-disable AssetPreload{% endcomment %}
+    <link rel="preload" as="image" href="{{ 'model_oil_glow.jpg' | asset_url }}" fetchpriority="high">
+    {% comment %}theme-check-enable AssetPreload{% endcomment %}
+
+    {{ 'vr-app.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      window.VR_ASSET_BASE = "{{ 'vr-app.css' | asset_url | split: 'vr-app.css' | first }}";
+      window.VR_THREE_URL = "{{ 'three.min.js' | asset_url }}";
+    </script>
+    <script src="{{ 'vr-data.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'vr-lenis.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'vr-app.js' | asset_url }}" defer="defer"></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="antialiased">
+    <div class="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
+      <div class="grain" aria-hidden="true"></div>
+
+      {% section 'vr-navbar' %}
+
+      <main>
+        {{ content_for_layout }}
+      </main>
+
+      {% section 'vr-footer' %}
+
+      {% render 'vr-cart-drawer' %}
+      {% render 'vr-product-modal' %}
+
+      <div data-vr-fly class="pointer-events-none fixed inset-0 z-[9999] overflow-hidden" hidden></div>
+
+      <div class="pointer-events-none fixed bottom-5 left-1/2 z-[250] -translate-x-1/2" role="status" aria-live="polite" data-vr-toast-root></div>
+    </div>
+  </body>
+</html>

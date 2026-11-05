@@ -1,0 +1,23 @@
+{%- comment -%} Port of src/components/Collection.jsx — grid and filters are rendered by assets/vr-app.js from vr-data.js. {%- endcomment -%}
+<section id="collection" class="tone-light px-5 py-20 sm:px-10 sm:py-28" aria-labelledby="collection-title">
+  <div class="mx-auto max-w-[1600px]">
+    <div class="flex flex-col justify-between gap-6 border-b border-[var(--border-strong)] pb-6 lg:flex-row lg:items-end">
+      <div>
+        <h2 id="collection-title" data-vr-cat-title class="font-serif text-[clamp(2.6rem,5.5vw,5.4rem)] leading-none tracking-[-0.02em]">All 16 formulations</h2>
+        <p data-vr-cat-blurb class="mt-4 max-w-xl text-[16px] text-[var(--text-secondary)]">Four steps, four formulas each. Pick a step or browse them all.</p>
+      </div>
+
+      <div class="flex flex-wrap gap-x-6 gap-y-2" role="group" aria-label="Filter by category" data-vr-cat-filters></div>
+    </div>
+
+    <ul class="mt-10 grid grid-cols-2 gap-x-4 gap-y-12 [grid-auto-flow:dense] lg:grid-cols-4 lg:gap-x-6" data-vr-grid></ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Verenne collection",
+  "settings": [],
+  "presets": [{ "name": "Verenne collection" }]
+}
+{% endschema %}

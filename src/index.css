@@ -1,5 +1,10 @@
 @import "tailwindcss";
 @source not "../_backup_v1_src";
+/* The Shopify port (verenne-theme vr-* files) reuses this stylesheet, so its classes are generated here too */
+@source "../verenne-theme/layout/vr-*.liquid";
+@source "../verenne-theme/sections/vr-*.liquid";
+@source "../verenne-theme/snippets/vr-*.liquid";
+@source "../verenne-theme/assets/vr-app.js";
 
 @theme {
   --font-serif: 'Bodoni Moda', 'Times New Roman', serif;

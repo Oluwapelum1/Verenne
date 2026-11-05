@@ -24,3 +24,6 @@ _backup_v1_src/
 *.njsproj
 *.sln
 *.sw?
+
+# Personal Claude Code settings
+.claude/settings.local.json

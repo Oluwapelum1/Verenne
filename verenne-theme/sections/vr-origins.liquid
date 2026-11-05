@@ -1,0 +1,63 @@
+{%- comment -%} Port of src/components/Origins.jsx {%- endcomment -%}
+<section id="origins" class="tone-light px-5 py-20 sm:px-10 sm:py-32" aria-labelledby="origins-title">
+  <div class="mx-auto max-w-[1600px]">
+    <h2 id="origins-title" class="font-serif text-[clamp(2.6rem,5.5vw,5.4rem)] leading-none tracking-[-0.02em]">
+      Four places, <em>one harvest each.</em>
+    </h2>
+    <p class="mt-5 max-w-xl text-[17px] text-[var(--text-secondary)]">
+      We buy from the same growers every year, at a price agreed before the season.
+    </p>
+
+    <ul class="mt-12 border-t border-[var(--border-strong)]">
+      {%- for block in section.blocks -%}
+        <li class="grid grid-cols-1 gap-3 border-b border-[var(--border-strong)] py-7 lg:grid-cols-12 lg:gap-6" {{ block.shopify_attributes }}>
+          <div class="lg:col-span-4">
+            <h3 class="font-serif text-[clamp(1.8rem,3vw,2.8rem)] leading-tight">{{ block.settings.common }}</h3>
+            <p class="mt-1 text-[15px] italic text-[var(--text-secondary)]">{{ block.settings.latin }}</p>
+          </div>
+          <dl class="grid grid-cols-2 gap-4 text-[15px] lg:col-span-4">
+            <div>
+              <dt class="label">Origin</dt>
+              <dd class="mt-1">{{ block.settings.origin }}</dd>
+            </div>
+            <div>
+              <dt class="label">Harvest</dt>
+              <dd class="mt-1">{{ block.settings.harvest }}</dd>
+            </div>
+          </dl>
+          <p class="text-[15px] leading-relaxed text-[var(--text-secondary)] lg:col-span-4">{{ block.settings.story }}</p>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Verenne origins",
+  "blocks": [
+    {
+      "type": "botanical",
+      "name": "Botanical",
+      "settings": [
+        { "type": "text", "id": "common", "label": "Common name" },
+        { "type": "text", "id": "latin", "label": "Latin name" },
+        { "type": "text", "id": "origin", "label": "Origin" },
+        { "type": "text", "id": "harvest", "label": "Harvest" },
+        { "type": "textarea", "id": "story", "label": "Story" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne origins",
+      "blocks": [
+        { "type": "botanical", "settings": { "common": "Immortelle", "latin": "Helichrysum stoechas", "origin": "Corsica", "harvest": "July, by hand at dawn", "story": "Its golden heads never wither after picking. We distil them the same afternoon, on the island." } },
+        { "type": "botanical", "settings": { "common": "Blue Tansy", "latin": "Tanacetum annuum", "origin": "Northern Morocco", "harvest": "Late summer", "story": "Steam turns its oil a startling indigo — a sign of chamazulene, the compound skin finds so calming." } },
+        { "type": "botanical", "settings": { "common": "Frankincense", "latin": "Boswellia carterii", "origin": "Horn of Africa", "harvest": "Resin tears, dry season", "story": "Gathered by cooperatives who have tapped the same trees for generations. Fair price, set in advance." } },
+        { "type": "botanical", "settings": { "common": "Bitter Orange Blossom", "latin": "Citrus aurantium", "origin": "Grasse, France", "harvest": "Two weeks in May", "story": "One tonne of blossom gives one litre of hydrosol. Distilled in copper within hours of picking." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

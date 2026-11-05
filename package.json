@@ -1,14 +1,15 @@
 {
   "name": "verenne-luxury-skincare-template",
   "version": "1.0.0",
-  "description": "Verenne \u2014 Luxury Haute-Botanique eCommerce & Editorial Lookbook React Template",
+  "description": "Verenne — Luxury Haute-Botanique eCommerce & Editorial Lookbook React Template",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:shopify": "vite build && node scripts/build-shopify.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

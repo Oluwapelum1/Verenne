@@ -1,0 +1,53 @@
+{%- comment -%} Port of src/components/Manifesto.jsx {%- endcomment -%}
+<section id="manifesto" class="px-5 py-20 sm:px-10 sm:py-32" aria-labelledby="manifesto-title">
+  <div class="mx-auto grid max-w-[1600px] grid-cols-1 gap-12 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <h2 id="manifesto-title" class="font-serif text-[clamp(2.6rem,5vw,5rem)] leading-[1.02] tracking-[-0.02em]">
+        We make sixteen formulations and <em>nothing else.</em>
+      </h2>
+      <p class="mt-6 max-w-md text-[17px] leading-relaxed text-[var(--text-secondary)]">
+        Wild plants, distilled soon after picking and bottled in dark glass. Slow by design, because skin is too.
+      </p>
+    </div>
+
+    <ul class="border-t border-[var(--border-strong)] lg:col-span-6 lg:col-start-7">
+      {%- for block in section.blocks -%}
+        <li class="grid grid-cols-[5.5rem_1fr] gap-4 border-b border-[var(--border-strong)] py-6 sm:grid-cols-[8rem_1fr]" {{ block.shopify_attributes }}>
+          <p class="font-serif text-[clamp(2.4rem,4vw,3.6rem)] leading-none text-[var(--accent)]">{{ block.settings.num }}</p>
+          <div>
+            <h3 class="text-[17px] font-medium">{{ block.settings.title }}</h3>
+            <p class="mt-1 text-[15px] leading-relaxed text-[var(--text-secondary)]">{{ block.settings.text }}</p>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Verenne manifesto",
+  "blocks": [
+    {
+      "type": "standard",
+      "name": "Standard",
+      "settings": [
+        { "type": "text", "id": "num", "label": "Number" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Verenne manifesto",
+      "blocks": [
+        { "type": "standard", "settings": { "num": "16", "title": "A focused range", "text": "Four formulas each to cleanse, treat, hydrate and restore. Nothing beyond that." } },
+        { "type": "standard", "settings": { "num": "72h", "title": "Field to still", "text": "Plants are picked by hand at dawn and distilled in copper within 72 hours." } },
+        { "type": "standard", "settings": { "num": "4", "title": "Known origins", "text": "Corsica, Morocco, the Horn of Africa and Grasse, from the same growers every year." } },
+        { "type": "standard", "settings": { "num": "0", "title": "Synthetic fragrance", "text": "No silicones, parabens, phthalates or artificial colour in any formula." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

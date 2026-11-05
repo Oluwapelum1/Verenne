@@ -1,0 +1,78 @@
+{%- comment -%} Port of src/components/Ritual.jsx — steps, orbit nodes and centre photo are driven by assets/vr-app.js. {%- endcomment -%}
+<section id="ritual" class="relative overflow-hidden px-5 py-24 sm:px-10 sm:py-32" aria-labelledby="ritual-title" data-vr-ritual>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0"
+    data-vr-ritual-glow
+    style="background: radial-gradient(60% 60% at 70% 50%, rgba(224,147,95,0.14), transparent 70%); transition: background 1.4s;"
+  ></div>
+
+  <div class="relative mx-auto grid max-w-[1600px] grid-cols-1 items-center gap-16 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <p class="label">The ritual</p>
+      <h2 id="ritual-title" class="mt-4 font-serif text-[clamp(2.6rem,5vw,4.5rem)] leading-[0.95]">
+        Four steps. <br>
+        <em class="text-[var(--accent)]" data-vr-ritual-subtitle>Every morning.</em>
+      </h2>
+
+      <div role="tablist" aria-label="Time of day" class="mt-8 inline-flex rounded-full border border-[var(--border-subtle)] p-1">
+        {%- for mode in (1..2) -%}
+          {%- if mode == 1 -%}{%- assign id = 'dawn' -%}{%- assign label = 'Dawn' -%}{%- assign icon = 'sun' -%}{%- else -%}{%- assign id = 'dusk' -%}{%- assign label = 'Dusk' -%}{%- assign icon = 'moon' -%}{%- endif -%}
+          <button
+            type="button"
+            role="tab"
+            aria-selected="{% if mode == 1 %}true{% else %}false{% endif %}"
+            data-vr-ritual-mode="{{ id }}"
+            class="relative flex items-center gap-2 rounded-none px-5 py-2 text-[13px] transition-colors {% if mode == 1 %}text-[var(--accent-ink)]{% else %}text-[var(--text-secondary)]{% endif %}"
+          >
+            {%- if mode == 1 -%}
+              <span data-vr-ritual-pill class="absolute inset-0 rounded-full bg-[var(--text-primary)]"></span>
+            {%- endif -%}
+            {% render 'vr-icon', name: icon, class: 'relative h-3.5 w-3.5' %}
+            <span class="relative">{{ label }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <ol class="mt-10 border-t border-[var(--border-subtle)]" data-vr-ritual-steps></ol>
+
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        {%- capture label -%}<span data-vr-ritual-add-label>Add the dawn ritual — $336</span>{%- endcapture -%}
+        {% render 'vr-pill-button', label: label, attrs: 'data-vr-ritual-add' %}
+        <span class="label">Ships together · free delivery</span>
+      </div>
+    </div>
+
+    <div class="relative mx-auto aspect-square w-full max-w-[600px] lg:col-span-7">
+      <div class="absolute inset-0" data-vr-ritual-face style="transition: transform 1.6s cubic-bezier(0.83, 0, 0.17, 1);">
+        <svg viewBox="0 0 400 400" class="absolute inset-0 h-full w-full" aria-hidden="true">
+          <circle cx="200" cy="200" r="196" fill="none" stroke="rgba(237,231,220,0.12)"></circle>
+          <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(237,231,220,0.08)" stroke-dasharray="2 6"></circle>
+          {%- for i in (0..59) -%}
+            {%- assign deg = i | times: 6 -%}
+            {%- assign tick = i | modulo: 5 -%}
+            <line x1="200" y1="6" x2="200" y2="{% if tick == 0 %}18{% else %}12{% endif %}" stroke="rgba(237,231,220,0.25)" transform="rotate({{ deg }} 200 200)"></line>
+          {%- endfor -%}
+          <circle cx="200" cy="4" r="5" fill="#E2B26A"></circle>
+          <circle cx="200" cy="396" r="5" fill="#7B5CC4"></circle>
+        </svg>
+      </div>
+
+      <div data-vr-ritual-nodes></div>
+
+      <div class="absolute left-1/2 top-1/2 h-[52%] w-[40%] -translate-x-1/2 -translate-y-1/2">
+        <div data-vr-ritual-frame class="h-full w-full overflow-hidden rounded-none border border-[var(--border-strong)]">
+          <img data-vr-ritual-img src="{{ 'argile-purifiante-600.webp' | asset_url }}" alt="N°05 Argile Purifiante" width="600" height="750" class="h-full w-full object-cover">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Verenne ritual",
+  "settings": [],
+  "presets": [{ "name": "Verenne ritual" }]
+}
+{% endschema %}

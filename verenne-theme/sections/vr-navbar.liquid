@@ -1,0 +1,100 @@
+{%- comment -%} Port of src/components/Navbar.jsx + AnnouncementBar.jsx. Behaviour lives in assets/vr-app.js. {%- endcomment -%}
+{%- liquid
+  assign links = 'collection:Collection,ritual:Ritual,origins:Origins,faq:FAQ' | split: ','
+-%}
+<header
+  data-vr-header
+  class="tone-light fixed inset-x-0 top-0 z-[120] border-b border-[var(--border-strong)]"
+  style="transform: translateY(-80px);"
+>
+  <div class="w-full bg-[#1A130E] px-4 py-2 text-center text-[13px] text-[#EFE7DA]">Free shipping on orders over $150</div>
+  <div class="px-5 sm:px-10">
+    <nav class="mx-auto flex h-[68px] max-w-[1600px] items-center justify-between" aria-label="Main">
+      <a href="#top" data-vr-go="top" class="group flex shrink-0 items-center" aria-label="Verenne home">
+        {% render 'vr-logo', mark_class: 'h-7 w-7' %}
+      </a>
+
+      <ul class="hidden items-center gap-7 lg:flex">
+        {%- for link in links -%}
+          {%- assign parts = link | split: ':' -%}
+          <li>
+            <a href="#{{ parts[0] }}" data-vr-go="{{ parts[0] }}" class="group relative text-[15px] transition-colors hover:text-[var(--accent)]">
+              {{- parts[1] -}}
+              <span class="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100"></span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <div class="flex items-center gap-5 sm:gap-7">
+        <button type="button" data-vr-bag-open class="text-[15px] transition-colors hover:text-[var(--accent)]" aria-label="Open bag, 0 items">
+          Bag (<span data-vr-bag-count>0</span>)
+        </button>
+        <button
+          type="button"
+          data-vr-menu-toggle
+          aria-expanded="false"
+          aria-controls="site-menu"
+          class="flex items-center gap-2 text-[15px] transition-colors hover:text-[var(--accent)]"
+        >
+          <span class="relative block h-2 w-3.5">
+            <span data-vr-burger="a" class="absolute left-0 h-px w-full bg-current transition-all duration-500 top-0"></span>
+            <span data-vr-burger="b" class="absolute left-0 h-px w-full bg-current transition-all duration-500 top-2"></span>
+          </span>
+          <span data-vr-menu-label>Menu</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+{%- comment -%} Full-screen index {%- endcomment -%}
+<div
+  id="site-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site menu"
+  class="fixed inset-0 z-[110] overflow-y-auto bg-[var(--bg-primary)]"
+  style="clip-path: inset(0 0 100% 0);"
+  data-lenis-prevent
+  hidden
+>
+  <div class="mx-auto grid min-h-full max-w-[1600px] grid-cols-1 gap-10 px-5 pb-10 pt-28 sm:px-10 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <p class="label mb-6">Navigate</p>
+      <ul class="space-y-1">
+        {%- for link in links -%}
+          {%- assign parts = link | split: ':' -%}
+          <li class="overflow-hidden">
+            <a
+              href="#{{ parts[0] }}"
+              data-vr-go="{{ parts[0] }}"
+              data-vr-menu-link
+              class="group flex items-baseline gap-3 font-serif text-5xl leading-[1.05] transition-colors hover:text-[var(--accent)] sm:text-6xl"
+              style="transform: translateY(100%);"
+            >
+              <span class="font-mono text-[11px] text-[var(--text-muted)]">0{{ forloop.index }}</span>
+              <span class="transition-transform duration-500 group-hover:translate-x-2 group-hover:italic">{{ parts[1] }}</span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    <div class="lg:col-span-5">
+      <p class="label mb-6">Index — 16 formulations</p>
+      <ul class="border-t border-[var(--border-subtle)]" data-vr-menu-index></ul>
+    </div>
+
+    <div class="relative hidden lg:col-span-3 lg:block">
+      <div class="sticky top-28 aspect-[3/4] overflow-hidden rounded-none border border-[var(--border-subtle)] bg-[var(--bg-secondary)]" data-vr-menu-preview></div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Verenne navbar",
+  "settings": []
+}
+{% endschema %}
